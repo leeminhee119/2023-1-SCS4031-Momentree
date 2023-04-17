@@ -35,10 +35,12 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <RecoilRoot>
             <GlobalStyle />
-            <AppLayout>
-              <Routes>
-                <Route path="/" element={<MainPage />}/>
-              </Routes>
+              <AppLayout>
+              <Suspense fallback={<h1>로딩중입니다.</h1>}>
+                <Routes>
+                  <Route path="/" element={<MainPage />}/>
+                </Routes>
+              </Suspense>
             </AppLayout>
           </RecoilRoot>
         </ThemeProvider>
