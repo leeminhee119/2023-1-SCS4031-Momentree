@@ -1,12 +1,50 @@
-import React from 'react';
-import styled from 'styled-components';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { RecoilRoot } from 'recoil';
+import GlobalStyle from './styles/globalStyle';
+import { ThemeProvider } from 'styled-components';
+import theme from './styles/theme';
+import { lazy, Suspense } from 'react';
 
-const MainTitle = styled.h1`
-  color: blue;
-`;
+const MainPage = lazy(() => import('./pages/Main'));
 
-function App() {
-  return <MainTitle>데이트 버즈</MainTitle>;
+import AppLayout from 'components/layout/AppLayout';
+
+export default function App() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        retry: 0,
+      },
+    },
+  });
+
+  function setScreenSize() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+  useEffect(() => {
+    setScreenSize();
+  });
+
+  return (
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider theme={theme}>
+          <RecoilRoot>
+            <GlobalStyle />
+              <AppLayout>
+              <Suspense fallback={<h1>로딩중입니다.</h1>}>
+                <Routes>
+                  <Route path="/" element={<MainPage />}/>
+                </Routes>
+              </Suspense>
+            </AppLayout>
+          </RecoilRoot>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
+  );
 }
-
-export default App;
