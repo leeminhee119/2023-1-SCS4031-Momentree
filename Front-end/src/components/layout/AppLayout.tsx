@@ -14,7 +14,7 @@ const Root = styled.section`
   min-height: 100vh;
   min-height: calc(var(--vh) * 100);
   margin: 0 auto;
-  padding: 4.7rem 1.6rem 3.2rem;
+  padding: 47px 1.6rem 3.2rem;
 
   @media (max-width: 430px) {
     width: 100%;

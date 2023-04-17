@@ -1,6 +1,5 @@
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
-import theme from './theme';
 
 const GlobalStyle = createGlobalStyle`
   ${reset};
@@ -15,7 +14,6 @@ const GlobalStyle = createGlobalStyle`
   body {
     width: 100%;
     height: 100%;
-    background-color: {${theme.colors.gray500};
   }
 
   :root{
