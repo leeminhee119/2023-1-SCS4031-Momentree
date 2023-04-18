@@ -12,11 +12,11 @@ const colors = {
   gray200: '#F7F8FA',
   gray100: '#FFFFFF',
   border: '#E5E8EB',
-  system : '#F04452'
+  system: '#F04452',
 } as const;
 
 interface Font {
-  weight: 400 | 500 | 700;
+  weight: 400 | 700;
   size: number;
   lineHeight: number;
 }
@@ -31,19 +31,19 @@ function FONT({ weight, size, lineHeight }: Font): string {
 }
 
 const fonts = {
-  heading1 : FONT({ weight: 700, size: 2.4, lineHeight: 36 }),
-  heading2 : FONT({ weight: 700, size: 2.2, lineHeight: 33 }),
-  
-  suubtitle1 : FONT({ weight: 700, size: 1.8, lineHeight: 27 }),
-  suubtitle2 : FONT({ weight: 700, size: 1.3, lineHeight: 19.5 }),
-  
-  body1 : FONT({ weight: 700, size: 16, lineHeight: 24 }),
-  body2 : FONT({ weight: 400, size: 16, lineHeight: 24 }),
-  body3 : FONT({ weight: 700, size: 14, lineHeight: 21 }),
-  body4 :  FONT({ weight: 400, size: 14, lineHeight: 21 }),
+  heading1: FONT({ weight: 700, size: 2.4, lineHeight: 36 }),
+  heading2: FONT({ weight: 700, size: 2.2, lineHeight: 33 }),
 
-  caption1 : FONT({ weight: 700, size: 12, lineHeight: 18 }),
-  caption2 :  FONT({ weight: 400, size: 12, lineHeight: 18 }),
+  suubtitle1: FONT({ weight: 700, size: 1.8, lineHeight: 27 }),
+  suubtitle2: FONT({ weight: 700, size: 1.3, lineHeight: 19.5 }),
+
+  body1: FONT({ weight: 700, size: 1.6, lineHeight: 24 }),
+  body2: FONT({ weight: 400, size: 1.6, lineHeight: 24 }),
+  body3: FONT({ weight: 700, size: 1.4, lineHeight: 21 }),
+  body4: FONT({ weight: 400, size: 1.4, lineHeight: 21 }),
+
+  caption1: FONT({ weight: 700, size: 1.2, lineHeight: 18 }),
+  caption2: FONT({ weight: 400, size: 1.2, lineHeight: 18 }),
 } as const;
 
 const theme = {
