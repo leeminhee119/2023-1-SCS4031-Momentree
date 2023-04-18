@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import Header from 'components/main/Header';
+import Search from 'components/main/Search';
+import Margin from 'components/main/Margin';
 
 const MainContainer = styled.main`
   display: flex;
@@ -10,6 +12,8 @@ const Main = () => {
   return (
     <MainContainer>
       <Header />
+      <Search />
+      <Margin />
     </MainContainer>
   );
 };
