@@ -8,6 +8,7 @@ import theme from './styles/theme';
 import { lazy, Suspense } from 'react';
 
 const MainPage = lazy(() => import('./pages/Main'));
+const SelectTags = lazy(() => import('./pages/SelectTags'));
 
 import AppLayout from 'components/layout/AppLayout';
 
@@ -22,7 +23,7 @@ export default function App() {
   });
 
   function setScreenSize() {
-    let vh = window.innerHeight * 0.01;
+    const vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
   }
   useEffect(() => {
@@ -39,6 +40,7 @@ export default function App() {
               <Suspense fallback={<h1>로딩중입니다.</h1>}>
                 <Routes>
                   <Route path="/" element={<MainPage />}/>
+                  <Route path="/selectTags" element={<SelectTags />}/>
                 </Routes>
               </Suspense>
             </AppLayout>
