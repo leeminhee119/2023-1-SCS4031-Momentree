@@ -6,7 +6,6 @@ const Margin = () => {
 
 export default Margin;
 
-
 const MarginContainer = styled.section`
   height: 10px;
   z-index: 1;

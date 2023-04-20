@@ -36,11 +36,11 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <RecoilRoot>
             <GlobalStyle />
-              <AppLayout>
+            <AppLayout>
               <Suspense fallback={<h1>로딩중입니다.</h1>}>
                 <Routes>
-                  <Route path="/" element={<MainPage />}/>
-                  <Route path="/selectTags" element={<SelectTags />}/>
+                  <Route path="/" element={<MainPage />} />
+                  <Route path="/selectTags" element={<SelectTags />} />
                 </Routes>
               </Suspense>
             </AppLayout>
