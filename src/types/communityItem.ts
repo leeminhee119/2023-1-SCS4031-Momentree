@@ -3,4 +3,6 @@ export interface CommunityItemProps {
   bookMarkStatus: boolean;
   likeCnt: number;
   bookmarkCnt: number;
+  place : string[];
+  tags: string[];
 }
