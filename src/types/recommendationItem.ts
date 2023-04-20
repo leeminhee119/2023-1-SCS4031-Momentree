@@ -3,5 +3,5 @@ export interface RecommendationItemProps {
   bookMarkStatus: boolean;
   likeCnt: number;
   bookmarkCnt: number;
-  place : string[];
+  place: string[];
 }
