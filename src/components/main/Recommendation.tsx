@@ -8,24 +8,28 @@ const Recommendation = () => {
       bookMarkStatus: false,
       likeCnt: 134,
       bookmarkCnt: 13,
+      place : ["중구"]
     },
     {
       title: '강남 데이트 추천',
       bookMarkStatus: true,
       likeCnt: 300,
       bookmarkCnt: 45,
+      place : ["강남구", "서초구"]
     },
     {
       title: '롯데월드 데이트',
       bookMarkStatus: true,
       likeCnt: 176,
       bookmarkCnt: 22,
+      place : ["잠실", "삼성"],
     },
     {
       title: '뚝섬 데이트',
       bookMarkStatus: false,
       likeCnt: 143,
       bookmarkCnt: 12,
+      place : ["강남구", "서초구"],
     },
   ];
 
@@ -40,6 +44,7 @@ const Recommendation = () => {
               bookMarkStatus={data.bookMarkStatus}
               likeCnt={data.likeCnt}
               bookmarkCnt={data.bookmarkCnt}
+              place = {data.place}
               key={index}></RecommendationItem>
           );
         })}

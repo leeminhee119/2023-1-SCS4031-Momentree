@@ -12,6 +12,19 @@ const Community = () => {
       likeStatus: false,
       likeCnt: 134,
       bookmarkCnt: 13,
+      place : ["강남구", "서초구"],
+      tags : ["편안함", "신나는", "즐거운"]
+    },
+    {
+      record_id: 2,
+      title: '남산 데이트 코스',
+      record_content: '너무 즐거웠어요',
+      bookMarkStatus: false,
+      likeStatus: false,
+      likeCnt: 203,
+      bookmarkCnt: 34,
+      place : ["중구"],
+      tags : ["활동적인", "액티비티", "등산", "활기찬"]
     },
   ];
 
@@ -32,6 +45,8 @@ const Community = () => {
               bookMarkStatus={data.bookMarkStatus}
               likeCnt={data.likeCnt}
               bookmarkCnt={data.bookmarkCnt}
+              tags= {data.tags}
+              place = {data.place}
               key={index}></CommunityItem>
           );
         })}

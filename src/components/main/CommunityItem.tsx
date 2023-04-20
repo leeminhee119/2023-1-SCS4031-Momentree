@@ -6,7 +6,7 @@ import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { CommunityItemProps } from '../../types/communityItem';
 
-const CommunityItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt }: CommunityItemProps) => {
+const CommunityItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, tags }: CommunityItemProps) => {
   const [isbookmarked, setIsbookmarked] = useState<boolean>(bookMarkStatus);
 
   return (
@@ -18,13 +18,20 @@ const CommunityItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt }: Communit
         <BookmarkIcon src={unclickbookmarkIcon} alt="북마크 하지 않은 아이콘" onClick={() => setIsbookmarked(true)} />
       )}
       <h1>{title}</h1>
-      <p>중구, 강남구, </p>
+      <PlaceContainer>
+            {place.map((item, index) => {
+              return(
+                <article key={index}>{item}</article>
+              )
+            })}
+        </PlaceContainer>
       <CommunityItemInfo>
         <TagContainer>
-          <div>편안함</div>
-          <div>안락함</div>
-          <div>신나는</div>
-          <div>안락함</div>
+            {tags.map((item, index) => {
+              return(
+                <article key={index}>{item}</article>
+              )
+            })}
         </TagContainer>
         <IconContainer>
           <Icon src={heartIcon} alt="좋아요 아이콘" onClick={() => setIsbookmarked(true)} /> <p>{likeCnt}</p>
@@ -43,12 +50,6 @@ const CommunityItemContainer = styled.section`
   position: relative;
   width: 100%;
   margin-bottom: 2rem;
-
-  p {
-    color: ${({ theme }) => theme.colors.gray600};
-    ${({ theme }) => theme.fonts.body4};
-    margin-bottom: 0.6rem;
-  }
 
   h1 {
     color: ${({ theme }) => theme.colors.gray900};
@@ -69,7 +70,7 @@ const Map = styled.article`
 const BookmarkIcon = styled.img`
   position: absolute;
   top: 0;
-  left: 31.3rem;
+  right: 0;
   margin-right: 1.175rem;
   margin-top: 0.925rem;
   z-index: 1;
@@ -87,12 +88,29 @@ const CommunityItemInfo = styled.article`
   margin-top: 1.6rem;
 `;
 
+const PlaceContainer = styled.article`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 0.6rem;
+
+  article {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: ${({ theme }) => theme.colors.gray600};
+    ${({ theme }) => theme.fonts.body4};
+    margin-right: 0.6rem;
+  }
+`;
+
+
 const TagContainer = styled.article`
   display: flex;
   flex-direction: row;
   align-items: center;
 
-  div {
+  article {
     display: flex;
     justify-content: center;
     align-items: center;
