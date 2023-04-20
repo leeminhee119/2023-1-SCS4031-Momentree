@@ -1,22 +1,25 @@
 import styled from 'styled-components';
-import Header from 'components/Header';
+import Header from 'components/main/Header';
+import Search from 'components/main/Search';
+import Margin from 'components/main/Margin';
+import Recommendation from 'components/main/Recommendation';
+import Community from 'components/main/Community';
 
-const MainPageContainer = styled.main`
-    display: flex;
-    flex-direction: column;
-
-    h1{
-        color:  ${({ theme }) => theme.colors.gray500};
-        ${({ theme }) => theme.fonts.heading1};
-    }
+const MainContainer = styled.main`
+  display: flex;
+  flex-direction: column;
 `;
 
 const Main = () => {
-    return (
-        <MainPageContainer>
-            <Header />
-        </MainPageContainer>
-    );
+  return (
+    <MainContainer>
+      <Header />
+      <Search />
+      <Recommendation />
+      <Margin />
+      <Community />
+    </MainContainer>
+  );
 };
 
 export default Main;
