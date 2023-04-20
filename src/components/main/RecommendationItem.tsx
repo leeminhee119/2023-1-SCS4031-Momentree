@@ -6,7 +6,7 @@ import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { RecommendationItemProps } from '../../types/recommendationItem';
 
-const RecommendationItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt,place }: RecommendationItemProps) => {
+const RecommendationItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place }: RecommendationItemProps) => {
   const [isbookmarked, setIsbookmarked] = useState<boolean>(bookMarkStatus);
 
   return (
@@ -18,12 +18,10 @@ const RecommendationItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt,place 
         <BookmarkIcon src={unclickbookmarkIcon} alt="북마크 하지 않은 아이콘" onClick={() => setIsbookmarked(true)} />
       )}
       <h1>{title}</h1>
-      <PlaceContainer>            
+      <PlaceContainer>
         {place.map((item, index) => {
-              return(
-                <article key={index}>{item}</article>
-              )
-            })}
+          return <article key={index}>{item}</article>;
+        })}
       </PlaceContainer>
       <RecommendationItemInfo>
         <Icon src={heartIcon} alt="좋아요 아이콘" onClick={() => setIsbookmarked(true)} /> <p>{likeCnt}</p>
