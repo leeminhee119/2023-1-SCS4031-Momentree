@@ -3,6 +3,7 @@ import Header from 'components/main/Header';
 import Search from 'components/main/Search';
 import Margin from 'components/main/Margin';
 import Recommendation from 'components/main/Recommendation';
+import Community from 'components/main/Community';
 
 const MainContainer = styled.main`
   display: flex;
@@ -16,6 +17,7 @@ const Main = () => {
       <Search />
       <Recommendation />
       <Margin />
+      <Community />
     </MainContainer>
   );
 };
