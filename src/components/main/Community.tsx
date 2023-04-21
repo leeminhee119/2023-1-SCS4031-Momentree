@@ -31,11 +31,11 @@ const Community = () => {
   return (
     <CommunityContainer>
       <Label>
+        <img src={filterIcon} alt="필터 아이콘"></img>
         <Filter>
           <option>최신순</option>
           <option>인기순</option>
         </Filter>
-        <img src={filterIcon} alt="필터 아이콘"></img>
       </Label>
       <CommunityList>
         {CommunityData.map((data, index) => {
@@ -74,21 +74,22 @@ const Label = styled.label`
   img {
     width: 1.4rem;
     height: 1.4rem;
-    margin-left: 0.5rem;
+    margin-right: 0.5rem;
     color: ${({ theme }) => theme.colors.gray500};
   }
 `;
 
 const Filter = styled.select`
-  width: 37px;
   outline: none;
   border: none;
   ${({ theme }) => theme.fonts.body4};
   color: ${({ theme }) => theme.colors.gray500};
 
-  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none;
+
+  background: #fff;
 `;
 
 const CommunityList = styled.section`

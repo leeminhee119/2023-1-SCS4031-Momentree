@@ -19,19 +19,15 @@ const CommunityItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, tag
       )}
       <h1>{title}</h1>
       <PlaceContainer>
-            {place.map((item, index) => {
-              return(
-                <article key={index}>{item}</article>
-              )
-            })}
-        </PlaceContainer>
+        {place.map((item, index) => {
+          return <article key={index}>{item}</article>;
+        })}
+      </PlaceContainer>
       <CommunityItemInfo>
         <TagContainer>
-            {tags.map((item, index) => {
-              return(
-                <article key={index}>{item}</article>
-              )
-            })}
+          {tags.map((item, index) => {
+            return <article key={index}>{item}</article>;
+          })}
         </TagContainer>
         <IconContainer>
           <Icon src={heartIcon} alt="좋아요 아이콘" onClick={() => setIsbookmarked(true)} /> <p>{likeCnt}</p>
@@ -103,7 +99,6 @@ const PlaceContainer = styled.article`
     margin-right: 0.6rem;
   }
 `;
-
 
 const TagContainer = styled.article`
   display: flex;
