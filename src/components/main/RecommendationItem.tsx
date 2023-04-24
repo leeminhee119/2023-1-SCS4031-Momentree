@@ -39,6 +39,7 @@ const RecommendationItemContainer = styled.section`
   position: relative;
   width: 12.4rem;
   margin-right: 0.8rem;
+  cursor: pointer;
 
   h1 {
     color: ${({ theme }) => theme.colors.gray700};

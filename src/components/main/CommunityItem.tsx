@@ -46,6 +46,7 @@ const CommunityItemContainer = styled.section`
   position: relative;
   width: 100%;
   margin-bottom: 2rem;
+  cursor: pointer;
 
   h1 {
     color: ${({ theme }) => theme.colors.gray900};
