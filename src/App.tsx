@@ -9,6 +9,7 @@ import { lazy, Suspense } from 'react';
 
 const MainPage = lazy(() => import('./pages/Main'));
 const SelectTags = lazy(() => import('./pages/SelectTags'));
+const Detail = lazy(() => import('./pages/Detail'));
 
 import AppLayout from 'components/layout/AppLayout';
 
@@ -41,6 +42,7 @@ export default function App() {
                 <Routes>
                   <Route path="/" element={<MainPage />} />
                   <Route path="/selectTags" element={<SelectTags />} />
+                  <Route path="/post/:postId" element={<Detail />} />
                 </Routes>
               </Suspense>
             </AppLayout>

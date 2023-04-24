@@ -28,7 +28,7 @@ const SelectTags = () => {
   const [userActivityTags, setUserActivityTags] = useRecoilState(userActivityTagsState);
   const [inputTag, setInputTag] = useState({
     moodInput: '',
-    activityInput: ''
+    activityInput: '',
   });
   const { moodInput, activityInput } = inputTag;
 
@@ -64,10 +64,10 @@ const SelectTags = () => {
       // 다음 태그 입력을 위해 input을 초기화해줍니다.
       setInputTag({
         ...inputTag,
-        [name]: ''
-      })
+        [name]: '',
+      });
     }
-  }
+  };
   const handleInputTag = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
 
@@ -75,11 +75,11 @@ const SelectTags = () => {
     if (value.substring(value.length - 1) != ' ') {
       setInputTag({
         ...inputTag,
-        [name]: value
+        [name]: value,
       });
     }
-  }
-  
+  };
+
   // 삭제 대상인 태그의 인덱스를 통해 삭제를 해줍니다.
   const handleDelete = (targetIndex: number, event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const target = event.target as HTMLInputElement;
@@ -91,81 +91,97 @@ const SelectTags = () => {
       const newActivityArray = [...userActivityTags.slice(0, targetIndex), ...userActivityTags.slice(targetIndex + 1)];
       setUserActivityTags(newActivityArray);
     }
-  }
-  console.log('moodTags', moodTags)
-  console.log('activityTags', activityTags)
-  console.log('userMoodTags', userMoodTags)
-  console.log('userActivityTags', userActivityTags)
+  };
+  console.log('moodTags', moodTags);
+  console.log('activityTags', activityTags);
+  console.log('userMoodTags', userMoodTags);
+  console.log('userActivityTags', userActivityTags);
   return (
     <>
-    <SelectTagsLayout>
-      <TitleBox>
-        데이트의 <strong>분위기</strong>를<br />
-        모두 선택해주세요!
-      </TitleBox>
-      <TagsRow>
-        {moodTagsData.map((tag: string, index: number) => {
-          return (
-            <TagButton key={index} onClick={handleSelectTagMood} className={moodTags.includes(tag) ? 'selected' : ''}>
-              {tag}
-            </TagButton>
-          );
-        })}
-      </TagsRow>
-      <TitleBox>
-        데이트가 <strong>어떤 활동</strong>으로 이루어져 있는지
-        <br />
-        모두 선택해주세요!
-      </TitleBox>
-      <TagsRow>
-        {activityTagsData.map((tag: string, index: number) => {
-          return (
-            <TagButton
-              key={index}
-              onClick={handleSelectTagActivity}
-              className={activityTags.includes(tag) ? 'selected' : ''}>
-              {tag}
-            </TagButton>
-          );
-        })}
-      </TagsRow>
-      <UserTagsRow>
-        <h1>분위기 태그</h1>
-        <CreateTagsRow>
-          {
-            userMoodTags.map((tag: string, index: number) => {
-              return <CreatedTagBox key={index}>
-                <div>#</div>
-                <div>{tag}</div>
-                <DeleteButton id='mood' onClick={(event) => handleDelete(index, event)}>x</DeleteButton>
-              </CreatedTagBox>
-            })
-          }
-          <CreateTagBox>
-            <div>#</div>
-            <input value={moodInput} name='moodInput' placeholder='태그 입력' onChange={handleInputTag} onKeyDown={handleKeyDown}/>
-          </CreateTagBox>
-        </CreateTagsRow>
-      </UserTagsRow>
-      <UserTagsRow>
-        <h1>활동 태그</h1>
-        <CreateTagsRow>
-          {
-            userActivityTags.map((tag: string, index: number) => {
-              return <CreatedTagBox key={index}>
-                <div>#</div>
-                <div>{tag}</div>
-                <DeleteButton id='activity' onClick={(event) => handleDelete(index, event)}>x</DeleteButton>
-              </CreatedTagBox>
-            })
-          }
-          <CreateTagBox>
-            <div>#</div>
-            <input value={activityInput} name='activityInput' placeholder='태그 입력' onChange={handleInputTag} onKeyDown={handleKeyDown}/>
-          </CreateTagBox>
-        </CreateTagsRow>
-      </UserTagsRow>
-    </SelectTagsLayout>
+      <SelectTagsLayout>
+        <TitleBox>
+          데이트의 <strong>분위기</strong>를<br />
+          모두 선택해주세요!
+        </TitleBox>
+        <TagsRow>
+          {moodTagsData.map((tag: string, index: number) => {
+            return (
+              <TagButton key={index} onClick={handleSelectTagMood} className={moodTags.includes(tag) ? 'selected' : ''}>
+                {tag}
+              </TagButton>
+            );
+          })}
+        </TagsRow>
+        <TitleBox>
+          데이트가 <strong>어떤 활동</strong>으로 이루어져 있는지
+          <br />
+          모두 선택해주세요!
+        </TitleBox>
+        <TagsRow>
+          {activityTagsData.map((tag: string, index: number) => {
+            return (
+              <TagButton
+                key={index}
+                onClick={handleSelectTagActivity}
+                className={activityTags.includes(tag) ? 'selected' : ''}>
+                {tag}
+              </TagButton>
+            );
+          })}
+        </TagsRow>
+        <UserTagsRow>
+          <h1>분위기 태그</h1>
+          <CreateTagsRow>
+            {userMoodTags.map((tag: string, index: number) => {
+              return (
+                <CreatedTagBox key={index}>
+                  <div>#</div>
+                  <div>{tag}</div>
+                  <DeleteButton id="mood" onClick={(event) => handleDelete(index, event)}>
+                    x
+                  </DeleteButton>
+                </CreatedTagBox>
+              );
+            })}
+            <CreateTagBox>
+              <div>#</div>
+              <input
+                value={moodInput}
+                name="moodInput"
+                placeholder="태그 입력"
+                onChange={handleInputTag}
+                onKeyDown={handleKeyDown}
+              />
+            </CreateTagBox>
+          </CreateTagsRow>
+        </UserTagsRow>
+        <UserTagsRow>
+          <h1>활동 태그</h1>
+          <CreateTagsRow>
+            {userActivityTags.map((tag: string, index: number) => {
+              return (
+                <CreatedTagBox key={index}>
+                  <div>#</div>
+                  <div>{tag}</div>
+                  <DeleteButton id="activity" onClick={(event) => handleDelete(index, event)}>
+                    x
+                  </DeleteButton>
+                </CreatedTagBox>
+              );
+            })}
+            <CreateTagBox>
+              <div>#</div>
+              <input
+                value={activityInput}
+                name="activityInput"
+                placeholder="태그 입력"
+                onChange={handleInputTag}
+                onKeyDown={handleKeyDown}
+              />
+            </CreateTagBox>
+          </CreateTagsRow>
+        </UserTagsRow>
+      </SelectTagsLayout>
     </>
   );
 };
@@ -201,10 +217,10 @@ const UserTagsRow = styled.div`
   h1 {
     ${({ theme }) => theme.fonts.suubtitle1};
   }
-`
+`;
 const CreateTagsRow = styled.div`
   display: flex;
-`
+`;
 const CreateTagBox = styled.div`
   display: flex;
   ${({ theme }) => theme.fonts.body2};
@@ -212,11 +228,10 @@ const CreateTagBox = styled.div`
     ${({ theme }) => theme.fonts.body2};
     border: none;
   }
-`
+`;
 const CreatedTagBox = styled.div`
   display: flex;
   ${({ theme }) => theme.fonts.body2};
-`
-const DeleteButton = styled.button`
-`
+`;
+const DeleteButton = styled.button``;
 export default SelectTags;

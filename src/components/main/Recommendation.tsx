@@ -1,9 +1,12 @@
 import styled from 'styled-components';
 import RecommendationItem from './RecommendationItem';
+import { useNavigate } from 'react-router-dom';
 
 const Recommendation = () => {
+  const navigate = useNavigate();
   const Recommendations = [
     {
+      recordedId: 1,
       title: '힙지로 데이트',
       bookMarkStatus: false,
       likeCnt: 134,
@@ -11,6 +14,7 @@ const Recommendation = () => {
       place: ['중구'],
     },
     {
+      recordedId: 2,
       title: '강남 데이트 추천',
       bookMarkStatus: true,
       likeCnt: 300,
@@ -18,6 +22,7 @@ const Recommendation = () => {
       place: ['강남구', '서초구'],
     },
     {
+      recordedId: 3,
       title: '롯데월드 데이트',
       bookMarkStatus: true,
       likeCnt: 176,
@@ -25,6 +30,7 @@ const Recommendation = () => {
       place: ['잠실', '삼성'],
     },
     {
+      recordedId: 4,
       title: '뚝섬 데이트',
       bookMarkStatus: false,
       likeCnt: 143,
@@ -39,13 +45,15 @@ const Recommendation = () => {
       <RecommendationSlider>
         {Recommendations.map((data, index) => {
           return (
-            <RecommendationItem
-              title={data.title}
-              bookMarkStatus={data.bookMarkStatus}
-              likeCnt={data.likeCnt}
-              bookmarkCnt={data.bookmarkCnt}
-              place={data.place}
-              key={index}></RecommendationItem>
+            <div onClick={() => navigate(`/post/${data.recordedId}`)}>
+              <RecommendationItem
+                title={data.title}
+                bookMarkStatus={data.bookMarkStatus}
+                likeCnt={data.likeCnt}
+                bookmarkCnt={data.bookmarkCnt}
+                place={data.place}
+                key={index}></RecommendationItem>
+            </div>
           );
         })}
       </RecommendationSlider>
