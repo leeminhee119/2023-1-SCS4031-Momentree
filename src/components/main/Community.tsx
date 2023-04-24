@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import filterIcon from '../../assets/icons/filter.svg';
 import CommunityItem from './CommunityItem';
+import { useNavigate } from 'react-router-dom';
 
 const Community = () => {
+  const navigate = useNavigate();
   const CommunityData = [
     {
-      record_id: 1,
+      recordedId: 6,
       title: '즐거운 여행',
       record_content: '너무 즐거웠어요',
       bookMarkStatus: true,
@@ -16,7 +18,7 @@ const Community = () => {
       tags: ['편안함', '신나는', '즐거운'],
     },
     {
-      record_id: 2,
+      recordedId: 7,
       title: '남산 데이트 코스',
       record_content: '너무 즐거웠어요',
       bookMarkStatus: false,
@@ -40,14 +42,16 @@ const Community = () => {
       <CommunityList>
         {CommunityData.map((data, index) => {
           return (
-            <CommunityItem
-              title={data.title}
-              bookMarkStatus={data.bookMarkStatus}
-              likeCnt={data.likeCnt}
-              bookmarkCnt={data.bookmarkCnt}
-              tags={data.tags}
-              place={data.place}
-              key={index}></CommunityItem>
+            <div onClick={() => navigate(`/post/${data.recordedId}`)}>
+              <CommunityItem
+                title={data.title}
+                bookMarkStatus={data.bookMarkStatus}
+                likeCnt={data.likeCnt}
+                bookmarkCnt={data.bookmarkCnt}
+                tags={data.tags}
+                place={data.place}
+                key={index}></CommunityItem>
+            </div>
           );
         })}
       </CommunityList>
