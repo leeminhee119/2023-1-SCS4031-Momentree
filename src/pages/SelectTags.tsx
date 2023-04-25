@@ -191,24 +191,28 @@ const SelectTagsLayout = styled.div`
   padding: 1.5rem;
 `;
 const TitleBox = styled.div`
-  font-size: 2rem;
+  ${({ theme }) => theme.fonts.suubtitle1};
   strong {
-    font-weight: 900;
+    color: ${({ theme }) => theme.colors.mainDark};
   }
 `;
 const TagsRow = styled.div`
   margin: 2rem -3px 4rem;
 `;
 const TagButton = styled.button`
+  ${({ theme }) => theme.fonts.suubtitle2};
+  border: 1.5px solid;
+  border-radius: 99px;
+  border-color: ${({ theme }) => theme.colors.gray200};
+  background-color: ${({ theme }) => theme.colors.gray200};
+  color: ${({ theme }) => theme.colors.gray700};
   display: inline-block;
   margin: 2px 3px;
-  font-size: 1.2rem;
   padding: 0.5rem 0.8rem;
-  border: 1px solid #000;
-  border-radius: 2rem;
   &.selected {
-    background-color: #000;
-    color: #fff;
+    color: ${({ theme }) => theme.colors.main900};
+    border-color: ${({ theme }) => theme.colors.main900};
+    background-color: ${({ theme }) => theme.colors.gray100};
   }
 `;
 
