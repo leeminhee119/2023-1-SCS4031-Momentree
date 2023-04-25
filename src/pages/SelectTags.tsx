@@ -137,9 +137,9 @@ const SelectTags = () => {
                 <CreatedTagBox key={index}>
                   <div>#</div>
                   <div>{tag}</div>
-                  <DeleteButton id="mood" onClick={(event) => handleDelete(index, event)}>
+                  <button id="mood" onClick={(event) => handleDelete(index, event)}>
                     x
-                  </DeleteButton>
+                  </button>
                 </CreatedTagBox>
               );
             })}
@@ -163,9 +163,9 @@ const SelectTags = () => {
                 <CreatedTagBox key={index}>
                   <div>#</div>
                   <div>{tag}</div>
-                  <DeleteButton id="activity" onClick={(event) => handleDelete(index, event)}>
+                  <button id="activity" onClick={(event) => handleDelete(index, event)}>
                     x
-                  </DeleteButton>
+                  </button>
                 </CreatedTagBox>
               );
             })}
@@ -224,6 +224,7 @@ const UserTagsRow = styled.div`
 `;
 const CreateTagsRow = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `;
 const CreateTagBox = styled.div`
   display: flex;
@@ -237,5 +238,4 @@ const CreatedTagBox = styled.div`
   display: flex;
   ${({ theme }) => theme.fonts.body2};
 `;
-const DeleteButton = styled.button``;
 export default SelectTags;
