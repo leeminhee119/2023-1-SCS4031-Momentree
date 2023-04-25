@@ -92,10 +92,6 @@ const SelectTags = () => {
       setUserActivityTags(newActivityArray);
     }
   };
-  console.log('moodTags', moodTags);
-  console.log('activityTags', activityTags);
-  console.log('userMoodTags', userMoodTags);
-  console.log('userActivityTags', userActivityTags);
   return (
     <>
       <SelectTagsLayout>
