@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { useState } from 'react';
 import unclickbookmarkIcon from '../../assets/icons/unclickbookmark.svg';
 import clickbookmarkIcon from '../../assets/icons/clickbookmark.svg';
 import heartIcon from '../../assets/icons/heart.svg';
@@ -7,15 +6,13 @@ import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { RecommendationItemProps } from '../../types/recommendationItem';
 
 const RecommendationItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place }: RecommendationItemProps) => {
-  const [isbookmarked, setIsbookmarked] = useState<boolean>(bookMarkStatus);
-
   return (
     <RecommendationItemContainer>
       <Map></Map>
-      {isbookmarked ? (
-        <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" onClick={() => setIsbookmarked(false)} />
+      {bookMarkStatus ? (
+        <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" />
       ) : (
-        <BookmarkIcon src={unclickbookmarkIcon} alt="북마크 하지 않은 아이콘" onClick={() => setIsbookmarked(true)} />
+        <BookmarkIcon src={unclickbookmarkIcon} alt="북마크 하지 않은 아이콘" />
       )}
       <h1>{title}</h1>
       <PlaceContainer>
@@ -24,8 +21,8 @@ const RecommendationItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place
         })}
       </PlaceContainer>
       <RecommendationItemInfo>
-        <Icon src={heartIcon} alt="좋아요 아이콘" onClick={() => setIsbookmarked(true)} /> <p>{likeCnt}</p>
-        <Icon src={bookmarkIcon} alt="북마크 아이콘" onClick={() => setIsbookmarked(true)} /> <p>{bookmarkCnt}</p>
+        <Icon src={heartIcon} alt="좋아요 아이콘" /> <p>{likeCnt}</p>
+        <Icon src={bookmarkIcon} alt="북마크 아이콘" /> <p>{bookmarkCnt}</p>
       </RecommendationItemInfo>
     </RecommendationItemContainer>
   );
