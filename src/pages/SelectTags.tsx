@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { atom, useRecoilState } from 'recoil';
+import closeButton from '../assets/icons/close.svg';
 
 const moodTagsState = atom<string[]>({
   key: 'moodTagsState',
@@ -10,12 +11,8 @@ const activityTagsState = atom<string[]>({
   key: 'activityTagsState',
   default: [],
 });
-const userMoodTagsState = atom<string[]>({
-  key: 'userMoodTagsState',
-  default: [],
-});
-const userActivityTagsState = atom<string[]>({
-  key: 'userActivityTagsState',
+const customTagsState = atom<string[]>({
+  key: 'customTagsState',
   default: [],
 });
 const SelectTags = () => {
@@ -24,13 +21,9 @@ const SelectTags = () => {
 
   const [moodTags, setMoodTags] = useRecoilState(moodTagsState);
   const [activityTags, setActivityTags] = useRecoilState(activityTagsState);
-  const [userMoodTags, setUserMoodTags] = useRecoilState(userMoodTagsState);
-  const [userActivityTags, setUserActivityTags] = useRecoilState(userActivityTagsState);
-  const [inputTag, setInputTag] = useState({
-    moodInput: '',
-    activityInput: '',
-  });
-  const { moodInput, activityInput } = inputTag;
+  const [customTags, setCustomTags] = useRecoilState(customTagsState);
+
+  const [inputTag, setInputTag] = useState('');
 
   // recoil atom에 선택한 태그들을 저장해줍니다.
   const handleSelectTagMood = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -50,47 +43,29 @@ const SelectTags = () => {
     }
   };
 
-  // input 입력 시 스페이스바를 눌렀을 때의 이벤트 핸들러
+  // input 입력 시 스페이스바를 누르면 태그 저장
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === ' ') {
-      const target = event.target as HTMLInputElement;
-      const name = target.name;
-      if (name === 'moodInput') {
-        setUserMoodTags([...userMoodTags, moodInput]);
-      } else {
-        setUserActivityTags([...userActivityTags, activityInput]);
-      }
+    if (event.key === ' ' && inputTag !== '') {
+      setCustomTags([...customTags, inputTag]);
 
       // 다음 태그 입력을 위해 input을 초기화해줍니다.
-      setInputTag({
-        ...inputTag,
-        [name]: '',
-      });
+      setInputTag('');
     }
   };
   const handleInputTag = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = event.target;
+    const value = event.target.value;
 
     // 스페이스 키를 입력하지 않는 동안만 state를 업데이트 해줍니다.
-    if (value.substring(value.length - 1) != ' ') {
-      setInputTag({
-        ...inputTag,
-        [name]: value,
-      });
+    if (value.substring(value.length - 1) !== ' ') {
+      setInputTag(value);
     }
   };
 
   // 삭제 대상인 태그의 인덱스를 통해 삭제를 해줍니다.
-  const handleDelete = (targetIndex: number, event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    const target = event.target as HTMLInputElement;
-    const id = target.id;
-    if (id === 'mood') {
-      const newMoodArray = [...userMoodTags.slice(0, targetIndex), ...userMoodTags.slice(targetIndex + 1)];
-      setUserMoodTags(newMoodArray);
-    } else {
-      const newActivityArray = [...userActivityTags.slice(0, targetIndex), ...userActivityTags.slice(targetIndex + 1)];
-      setUserActivityTags(newActivityArray);
-    }
+  const handleDelete = (targetIndex: number) => {
+    // const target = event.target as HTMLInputElement;
+    const newMoodArray = [...customTags.slice(0, targetIndex), ...customTags.slice(targetIndex + 1)];
+    setCustomTags(newMoodArray);
   };
   return (
     <>
@@ -126,54 +101,21 @@ const SelectTags = () => {
           })}
         </TagsRow>
         <UserTagsRow>
-          <h1>분위기 태그</h1>
           <CreateTagsRow>
-            {userMoodTags.map((tag: string, index: number) => {
+            {customTags.map((tag: string, index: number) => {
               return (
                 <CreatedTagBox key={index}>
                   <div>#</div>
                   <div>{tag}</div>
-                  <button id="mood" onClick={(event) => handleDelete(index, event)}>
-                    x
+                  <button onClick={() => handleDelete(index)}>
+                    <img src={closeButton} />
                   </button>
                 </CreatedTagBox>
               );
             })}
             <CreateTagBox>
               <div>#</div>
-              <input
-                value={moodInput}
-                name="moodInput"
-                placeholder="태그 입력"
-                onChange={handleInputTag}
-                onKeyDown={handleKeyDown}
-              />
-            </CreateTagBox>
-          </CreateTagsRow>
-        </UserTagsRow>
-        <UserTagsRow>
-          <h1>활동 태그</h1>
-          <CreateTagsRow>
-            {userActivityTags.map((tag: string, index: number) => {
-              return (
-                <CreatedTagBox key={index}>
-                  <div>#</div>
-                  <div>{tag}</div>
-                  <button id="activity" onClick={(event) => handleDelete(index, event)}>
-                    x
-                  </button>
-                </CreatedTagBox>
-              );
-            })}
-            <CreateTagBox>
-              <div>#</div>
-              <input
-                value={activityInput}
-                name="activityInput"
-                placeholder="태그 입력"
-                onChange={handleInputTag}
-                onKeyDown={handleKeyDown}
-              />
+              <input value={inputTag} placeholder="태그 입력" onChange={handleInputTag} onKeyDown={handleKeyDown} />
             </CreateTagBox>
           </CreateTagsRow>
         </UserTagsRow>
@@ -233,5 +175,8 @@ const CreateTagBox = styled.div`
 const CreatedTagBox = styled.div`
   display: flex;
   ${({ theme }) => theme.fonts.body2};
+  img {
+    width: 1rem;
+  }
 `;
 export default SelectTags;
