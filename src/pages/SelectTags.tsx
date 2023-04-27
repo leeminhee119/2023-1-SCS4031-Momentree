@@ -1,7 +1,9 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { atom, useRecoilState } from 'recoil';
 import closeButton from '../assets/icons/close.svg';
+import SaveButton from 'components/post/SaveButton';
+import { useNavigate } from 'react-router-dom';
 
 const moodTagsState = atom<string[]>({
   key: 'moodTagsState',
@@ -16,6 +18,7 @@ const customTagsState = atom<string[]>({
   default: [],
 });
 const SelectTags = () => {
+  const navigate = useNavigate();
   const moodTagsData = ['편안한', '따뜻한', '로맨틱한', '맛있는', '신나는', '힐링', '조용한', '힙한'];
   const activityTagsData = ['영화', '맛집투어', '레저', '휴식', '산책', '운동', '게임', '체험'];
 
@@ -24,6 +27,8 @@ const SelectTags = () => {
   const [customTags, setCustomTags] = useRecoilState(customTagsState);
 
   const [inputTag, setInputTag] = useState('');
+
+  const [isSaveActive, setIsSaveActive] = useState(false);
 
   // recoil atom에 선택한 태그들을 저장해줍니다.
   const handleSelectTagMood = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -42,6 +47,15 @@ const SelectTags = () => {
       setActivityTags([...activityTags, selectedTagName]);
     }
   };
+
+  // 분위기태그, 활동태그 각각 한 개 이상을 선택해야 저장 버튼 활성화
+  useLayoutEffect(() => {
+    if (moodTags.length !== 0 && activityTags.length !== 0) {
+      setIsSaveActive(true);
+    } else {
+      setIsSaveActive(false);
+    }
+  }, [moodTags, activityTags]);
 
   // input 입력 시 스페이스바를 누르면 태그 저장
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -119,6 +133,7 @@ const SelectTags = () => {
             </CreateTagBox>
           </CreateTagsRow>
         </UserTagsRow>
+        <SaveButton label={'다음'} isActive={isSaveActive} handleClickSave={() => navigate(`/post`)} />
       </SelectTagsLayout>
     </>
   );
@@ -127,6 +142,9 @@ const SelectTags = () => {
 // 해시태그 버튼 선택
 const SelectTagsLayout = styled.div`
   padding: 1.5rem;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 `;
 const TitleBox = styled.div`
   ${({ theme }) => theme.fonts.suubtitle1};
