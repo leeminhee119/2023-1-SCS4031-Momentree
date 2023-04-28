@@ -3,7 +3,8 @@ import { useState } from 'react';
 import closeIcon from '../assets/icons/close.svg';
 import HorizontalLine from '../components/post/HorizontalLine';
 import DatePicker from '../components/post/DatePicker';
-import Margin from 'components/main/Margin';
+import Margin from '../components/main/Margin';
+import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
 
 const Post = () => {
   const [dateDate, setDateDate] = useState<Date>(new Date());
@@ -25,6 +26,7 @@ const Post = () => {
       <HorizontalLine />
       <DatePicker dateDate={dateDate} setDateDate={setDateDate} />
       <Margin />
+      <KeywordPlaceSearch />
     </>
   );
 };
