@@ -5,7 +5,15 @@ import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { CommunityItemProps } from '../../types/communityItem';
 
-const CommunityItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, tags }: CommunityItemProps) => {
+const CommunityItem = ({
+  title,
+  bookMarkStatus,
+  likeCnt,
+  bookmarkCnt,
+  place,
+  vibeTag,
+  activityTag,
+}: CommunityItemProps) => {
   return (
     <CommunityItemContainer>
       <Map></Map>
@@ -21,11 +29,19 @@ const CommunityItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, tag
         })}
       </PlaceContainer>
       <CommunityItemInfo>
-        <TagContainer>
-          {tags.map((item, index) => {
-            return <article key={index}>{item}</article>;
-          })}
-        </TagContainer>
+        <div>
+          <MoodTagContainer>
+            {vibeTag.map((item, index) => {
+              return <article key={index}>{item}</article>;
+            })}
+          </MoodTagContainer>
+          <ActivityTagContainer>
+            {activityTag.map((item, index) => {
+              return <article key={index}>{item}</article>;
+            })}
+          </ActivityTagContainer>
+        </div>
+
         <IconContainer>
           <Icon src={heartIcon} alt="좋아요 아이콘" /> <p>{likeCnt}</p>
           <Icon src={bookmarkIcon} alt="북마크 아이콘" /> <p>{bookmarkCnt}</p>
@@ -98,10 +114,11 @@ const PlaceContainer = styled.article`
   }
 `;
 
-const TagContainer = styled.article`
+const MoodTagContainer = styled.article`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 0.6rem;
 
   article {
     display: flex;
@@ -114,6 +131,13 @@ const TagContainer = styled.article`
     border-radius: 4px;
     ${({ theme }) => theme.fonts.caption2};
     margin-right: 0.6rem;
+  }
+`;
+
+const ActivityTagContainer = styled(MoodTagContainer)`
+  article {
+    background-color: ${({ theme }) => theme.colors.greenLight};
+    color: ${({ theme }) => theme.colors.greenDark};
   }
 `;
 
