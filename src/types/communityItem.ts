@@ -4,5 +4,6 @@ export interface CommunityItemProps {
   likeCnt: number;
   bookmarkCnt: number;
   place: string[];
-  tags: string[];
+  vibeTag: string[];
+  activityTag: string[];
 }

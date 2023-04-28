@@ -2,6 +2,8 @@ const colors = {
   main900: '#F7D54E',
   mainDark: '#E2AF3C',
   mainLight: '#F8DB99',
+  greenDark: '#7DC876',
+  greenLight: '#EAFBD5',
   gray900: '#191F28',
   gray800: '#333D4B',
   gray700: '#4E5968',
