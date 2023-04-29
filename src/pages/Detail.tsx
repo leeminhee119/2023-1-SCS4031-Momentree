@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import clickbookmarkIcon from '../assets/icons/clickbookmark.svg';
 import heartIcon from '../assets/icons/heart.svg';
@@ -12,6 +12,7 @@ const Detail = () => {
   const { postId } = useParams();
   const [ishearted, setIshearted] = useState<boolean>(true);
   const [isbookmarked, setIsbookmarked] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const CommunityData = [
     {
@@ -32,7 +33,13 @@ const Detail = () => {
   return (
     <DeatilContainer>
       <DetailHeader>
-        <Icon src={leftIcon} alt="뒤로가기 아이콘" />
+        <Icon
+          src={leftIcon}
+          alt="뒤로가기 아이콘"
+          onClick={() => {
+            navigate(-1);
+          }}
+        />
         <div>
           {ishearted ? (
             <Icon src={fillheartIcon} alt="좋아요 한 아이콘" onClick={() => setIshearted(false)} />
