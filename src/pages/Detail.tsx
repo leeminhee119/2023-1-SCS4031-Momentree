@@ -23,7 +23,8 @@ const Detail = () => {
       likeCnt: 134,
       bookmarkCnt: 13,
       place: ['강남구', '서초구'],
-      tags: ['편안함', '신나는', '즐거운'],
+      vibeTag: ['편안함', '즐거운', '신나는'],
+      activityTag: ['카페', '식사'],
       createdAt: '2023-04-23',
     },
   ];
@@ -47,9 +48,16 @@ const Detail = () => {
       </DetailHeader>
       <DetailInfo>
         <TagContainer>
-          {CommunityData[0].tags.map((item, index) => {
-            return <article key={index}>{item}</article>;
-          })}
+          <MoodTagContainer>
+            {CommunityData[0].vibeTag.map((item, index) => {
+              return <article key={index}>{item}</article>;
+            })}
+          </MoodTagContainer>
+          <ActivityTagContainer>
+            {CommunityData[0].activityTag.map((item, index) => {
+              return <article key={index}>{item}</article>;
+            })}
+          </ActivityTagContainer>
         </TagContainer>
         <p>{CommunityData[0].createdAt}</p>
       </DetailInfo>
@@ -92,7 +100,11 @@ const DetailInfo = styled.section`
   }
 `;
 
-const TagContainer = styled.article`
+const TagContainer = styled.section`
+  display: flex;
+`;
+
+const MoodTagContainer = styled.article`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -108,6 +120,13 @@ const TagContainer = styled.article`
     border-radius: 4px;
     ${({ theme }) => theme.fonts.caption2};
     margin-right: 0.6rem;
+  }
+`;
+
+const ActivityTagContainer = styled(MoodTagContainer)`
+  article {
+    background-color: ${({ theme }) => theme.colors.greenLight};
+    color: ${({ theme }) => theme.colors.greenDark};
   }
 `;
 
