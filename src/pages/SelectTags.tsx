@@ -1,31 +1,22 @@
 import styled from 'styled-components';
 import { useLayoutEffect, useState } from 'react';
-import { atom, useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
+import { selectedTagsState } from 'recoil/atoms/selectedTagsState';
 import closeButton from '../assets/icons/close.svg';
 import SaveButton from 'components/post/SaveButton';
 import { useNavigate } from 'react-router-dom';
+import { IHashtag } from 'types/post';
 
-const moodTagsState = atom<string[]>({
-  key: 'moodTagsState',
-  default: [],
-});
-const activityTagsState = atom<string[]>({
-  key: 'activityTagsState',
-  default: [],
-});
-const customTagsState = atom<string[]>({
-  key: 'customTagsState',
-  default: [],
-});
 const SelectTags = () => {
   const navigate = useNavigate();
   const moodTagsData = ['편안한', '따뜻한', '로맨틱한', '맛있는', '신나는', '힐링', '조용한', '힙한'];
   const activityTagsData = ['영화', '맛집투어', '레저', '휴식', '산책', '운동', '게임', '체험'];
 
-  const [moodTags, setMoodTags] = useRecoilState(moodTagsState);
-  const [activityTags, setActivityTags] = useRecoilState(activityTagsState);
-  const [customTags, setCustomTags] = useRecoilState(customTagsState);
-
+  const [moodTags, setMoodTags] = useState<string[]>([]);
+  const [activityTags, setActivityTags] = useState<string[]>([]);
+  const [customTags, setCustomTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useRecoilState<IHashtag[]>(selectedTagsState);
+  console.log(selectedTags);
   const [inputTag, setInputTag] = useState('');
 
   const [isSaveActive, setIsSaveActive] = useState(false);
@@ -35,16 +26,32 @@ const SelectTags = () => {
     const selectedTagName = event.currentTarget.innerHTML;
     if (moodTags.includes(selectedTagName)) {
       setMoodTags(moodTags.filter((tag) => tag != selectedTagName));
+      setSelectedTags((prevArray: IHashtag[]) => prevArray.filter((item) => item.tagName !== selectedTagName));
     } else {
       setMoodTags([...moodTags, selectedTagName]);
+      setSelectedTags((prevArray: IHashtag[]) => [
+        ...prevArray,
+        {
+          tagName: selectedTagName,
+          type: 'VIBE',
+        },
+      ]);
     }
   };
   const handleSelectTagActivity = (event: React.MouseEvent<HTMLButtonElement>) => {
     const selectedTagName = event.currentTarget.innerHTML;
     if (activityTags.includes(selectedTagName)) {
       setActivityTags(activityTags.filter((tag) => tag != selectedTagName));
+      setSelectedTags((prevArray: IHashtag[]) => prevArray.filter((item) => item.tagName !== selectedTagName));
     } else {
       setActivityTags([...activityTags, selectedTagName]);
+      setSelectedTags((prevArray: IHashtag[]) => [
+        ...prevArray,
+        {
+          tagName: selectedTagName,
+          type: 'ACTIVITY',
+        },
+      ]);
     }
   };
 
@@ -61,6 +68,13 @@ const SelectTags = () => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === ' ' && inputTag !== '') {
       setCustomTags([...customTags, inputTag]);
+      setSelectedTags((prevArray: IHashtag[]) => [
+        ...prevArray,
+        {
+          tagName: inputTag,
+          type: 'CUSTOM',
+        },
+      ]);
 
       // 다음 태그 입력을 위해 input을 초기화해줍니다.
       setInputTag('');
@@ -76,10 +90,10 @@ const SelectTags = () => {
   };
 
   // 삭제 대상인 태그의 인덱스를 통해 삭제를 해줍니다.
-  const handleDelete = (targetIndex: number) => {
+  const handleDelete = (tag: string) => {
     // const target = event.target as HTMLInputElement;
-    const newMoodArray = [...customTags.slice(0, targetIndex), ...customTags.slice(targetIndex + 1)];
-    setCustomTags(newMoodArray);
+    setCustomTags(customTags.filter((customTag) => customTag !== tag));
+    setSelectedTags((prevArray: IHashtag[]) => prevArray.filter((item) => item.tagName !== tag));
   };
   return (
     <>
@@ -121,7 +135,7 @@ const SelectTags = () => {
                 <CreatedTagBox key={index}>
                   <div>#</div>
                   <div>{tag}</div>
-                  <button onClick={() => handleDelete(index)}>
+                  <button onClick={() => handleDelete(tag)}>
                     <img src={closeButton} />
                   </button>
                 </CreatedTagBox>
