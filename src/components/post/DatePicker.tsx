@@ -3,16 +3,22 @@ import { useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import downIcon from '../../assets/icons/down.svg';
+import { IRecord } from 'types/post';
 
 interface IDatePicker {
-  dateDate: Date;
-  setDateDate: (e: Date) => void;
+  dateDate: string;
+  setRecordData: React.Dispatch<React.SetStateAction<IRecord>>;
 }
 const DatePicker = (props: IDatePicker) => {
   const [isOpen, setIsOpen] = useState(false);
   const handleChange = (e: Date) => {
     setIsOpen(!isOpen);
-    props.setDateDate(e);
+    props.setRecordData((prevState: IRecord) => {
+      return {
+        ...prevState,
+        dateDate: e.toLocaleString(),
+      };
+    });
   };
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
@@ -21,10 +27,10 @@ const DatePicker = (props: IDatePicker) => {
   return (
     <>
       <DatePickerButton onClick={handleClick}>
-        <div>{props.dateDate.toLocaleString().substring(0, 11)}</div>
+        <div>{props.dateDate.substring(0, 11)}</div>
         <img src={downIcon} />
       </DatePickerButton>
-      {isOpen && <ReactDatePicker selected={props.dateDate} onChange={handleChange} inline />}
+      {isOpen && <ReactDatePicker selected={new Date(props.dateDate)} onChange={handleChange} inline />}
     </>
   );
 };
