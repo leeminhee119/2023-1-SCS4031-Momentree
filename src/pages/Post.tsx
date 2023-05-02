@@ -8,13 +8,14 @@ import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
 import { IHashtag, IRecord, IRecordedPlace } from 'types/post';
 import { selectedTagsState } from '\brecoil/atoms/selectedTagsState';
 import { useRecoilValue } from 'recoil';
+import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 
 const Post = () => {
   const hashtags = useRecoilValue<IHashtag[]>(selectedTagsState);
-  /* TODO: http request 보낸 후 setHashtags([])로 전역 selectedTagsState 초기화 */
+  /* TODO: http request 보낸 후 selectedTagsState, recordedPlacesState 초기화 */
   // const [hashtags, setHashtags] = useRecoilState<IHashtag[]>(selectedTagsState);
 
-  const [places, setPlaces] = useState<IRecordedPlace[]>([]);
+  const places = useRecoilValue<IRecordedPlace[]>(recordedPlacesState);
   const [recordData, setRecordData] = useState<IRecord>({
     userName: 'minhee',
     title: '',
@@ -47,7 +48,7 @@ const Post = () => {
       <HorizontalLine />
       <DatePicker dateDate={recordData.dateDate} setRecordData={setRecordData} />
       <Margin />
-      <KeywordPlaceSearch setPlaces={setPlaces} />
+      <KeywordPlaceSearch />
     </>
   );
 };

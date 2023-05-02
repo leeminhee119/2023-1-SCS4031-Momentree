@@ -6,16 +6,15 @@ import { IRecordedPlace } from 'types/post';
 import { useEffect, useState } from 'react';
 import searchIcon from '../../assets/icons/search.svg';
 import SearchModal from './SearchModal';
+import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
+import { useSetRecoilState } from 'recoil';
 
 interface IMapOptions {
   center: any;
   level: number;
 }
-interface KeywordPlaceSearchProps {
-  setPlaces: React.Dispatch<React.SetStateAction<IRecordedPlace[]>>;
-}
-const KeywordPlaceSearch = (props: KeywordPlaceSearchProps) => {
-  console.log(props);
+
+const KeywordPlaceSearch = () => {
   const { kakao } = window;
   const [map, setMap] = useState<any>(null);
   const [results, setResults] = useState<IPlaceKakao[]>([]); // 키워드 검색 결과들을 담는 배열
@@ -23,6 +22,8 @@ const KeywordPlaceSearch = (props: KeywordPlaceSearchProps) => {
   const [placesKakao, setPlacesKakao] = useState<IPlaceKakao[]>([]); // 데이트 코스에 추가한 장소 배열
 
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
+
+  const setPlaces = useSetRecoilState<IRecordedPlace[]>(recordedPlacesState);
   function handleSearchOpen() {
     setIsOpenSearch(true);
   }
@@ -71,7 +72,7 @@ const KeywordPlaceSearch = (props: KeywordPlaceSearchProps) => {
       const curPlaceKakao = placesKakao[curOrder - 1];
       const guStartIdx = curPlaceKakao.road_address_name.indexOf(' ') + 1;
       const guEndIdx = curPlaceKakao.road_address_name.indexOf('구 ') + 1;
-      props.setPlaces((prevPlaces: IRecordedPlace[]) => [
+      setPlaces((prevPlaces: IRecordedPlace[]) => [
         ...prevPlaces,
         {
           orders: curOrder,
@@ -92,12 +93,12 @@ const KeywordPlaceSearch = (props: KeywordPlaceSearchProps) => {
    * @param position new kakao.maps.LatLng(y좌표, x좌표)
    * @param idx 마커 번호 (0부터 시작, 표시될 번호 - 1)
    */
-  function addMarker(position: any, idx: number) {
+  function addMarker(position: any, order: number) {
     const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
       imageSize = new kakao.maps.Size(36, 37), // 마커 이미지의 크기
       imgOptions = {
         spriteSize: new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
-        spriteOrigin: new kakao.maps.Point(0, idx * 46 + 10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+        spriteOrigin: new kakao.maps.Point(0, order * 46 + 10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
         offset: new kakao.maps.Point(13, 37), // 마커 좌표에 일치시킬 이미지 내에서의 좌표
       },
       markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
