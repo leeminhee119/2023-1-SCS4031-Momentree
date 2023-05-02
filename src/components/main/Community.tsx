@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import filterIcon from '../../assets/icons/filter.svg';
-import CommunityItem from './CommunityItem';
+import PostItem from '../common/postItem';
 import { useNavigate } from 'react-router-dom';
 
 const Community = () => {
@@ -45,7 +45,7 @@ const Community = () => {
         {CommunityData.map((data, index) => {
           return (
             <div onClick={() => navigate(`/post/${data.recordedId}`)}>
-              <CommunityItem
+              <PostItem
                 title={data.title}
                 bookMarkStatus={data.bookMarkStatus}
                 likeCnt={data.likeCnt}
@@ -53,7 +53,7 @@ const Community = () => {
                 vibeTag={data.vibeTag}
                 activityTag={data.activityTag}
                 place={data.place}
-                key={index}></CommunityItem>
+                key={index}></PostItem>
             </div>
           );
         })}
