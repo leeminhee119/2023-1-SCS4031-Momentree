@@ -1,4 +1,4 @@
-export interface CommunityItemProps {
+export interface PostItemProps {
   title: string;
   bookMarkStatus: boolean;
   likeCnt: number;
