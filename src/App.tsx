@@ -11,6 +11,7 @@ const MainPage = lazy(() => import('./pages/Main'));
 const SelectTags = lazy(() => import('./pages/SelectTags'));
 const Post = lazy(() => import('./pages/Post'));
 const Detail = lazy(() => import('./pages/Detail'));
+const MyBookmarkList = lazy(() => import('./pages/MyBookmarkList'));
 
 import AppLayout from 'components/layout/AppLayout';
 
@@ -45,6 +46,7 @@ export default function App() {
                   <Route path="/selectTags" element={<SelectTags />} />
                   <Route path="/post" element={<Post />} />
                   <Route path="/post/:postId" element={<Detail />} />
+                  <Route path="/userPage/myBookmarkList" element={<MyBookmarkList />}></Route>
                 </Routes>
               </Suspense>
             </AppLayout>
