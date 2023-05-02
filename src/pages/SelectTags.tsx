@@ -33,7 +33,7 @@ const SelectTags = () => {
         {
           tagName: selectedTagName,
           type: 'VIBE',
-        },
+        } as IHashtag,
       ]);
     }
   };
@@ -49,7 +49,7 @@ const SelectTags = () => {
         {
           tagName: selectedTagName,
           type: 'ACTIVITY',
-        },
+        } as IHashtag,
       ]);
     }
   };
@@ -72,7 +72,7 @@ const SelectTags = () => {
         {
           tagName: inputTag,
           type: 'CUSTOM',
-        },
+        } as IHashtag,
       ]);
 
       // 다음 태그 입력을 위해 input을 초기화해줍니다.
