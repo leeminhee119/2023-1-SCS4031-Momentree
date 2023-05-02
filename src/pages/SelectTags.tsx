@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useLayoutEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { selectedTagsState } from 'recoil/atoms/selectedTagsState';
 import closeButton from '../assets/icons/close.svg';
 import SaveButton from 'components/post/SaveButton';
@@ -15,8 +15,7 @@ const SelectTags = () => {
   const [moodTags, setMoodTags] = useState<string[]>([]);
   const [activityTags, setActivityTags] = useState<string[]>([]);
   const [customTags, setCustomTags] = useState<string[]>([]);
-  const [selectedTags, setSelectedTags] = useRecoilState<IHashtag[]>(selectedTagsState);
-  console.log(selectedTags);
+  const setSelectedTags = useSetRecoilState(selectedTagsState);
   const [inputTag, setInputTag] = useState('');
 
   const [isSaveActive, setIsSaveActive] = useState(false);
