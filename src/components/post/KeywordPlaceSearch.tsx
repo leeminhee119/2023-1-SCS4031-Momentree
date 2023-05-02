@@ -6,6 +6,7 @@ import { IRecordedPlace } from 'types/post';
 import { useEffect, useState } from 'react';
 import searchIcon from '../../assets/icons/search.svg';
 import SearchModal from './SearchModal';
+import PlaceModal from './PlaceModal';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { useSetRecoilState } from 'recoil';
 
@@ -22,14 +23,11 @@ const KeywordPlaceSearch = () => {
   const [placesKakao, setPlacesKakao] = useState<IPlaceKakao[]>([]); // 데이트 코스에 추가한 장소 배열
 
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
+  const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
+  const [clickedMarkerIdx, setClickedMarkerIdx] = useState<number>(0); // 지도에서 클릭한 마커의 인덱스
 
   const setPlaces = useSetRecoilState<IRecordedPlace[]>(recordedPlacesState);
-  function handleSearchOpen() {
-    setIsOpenSearch(true);
-  }
-  function handleSearchClose() {
-    setIsOpenSearch(false);
-  }
+
   // 지도를 불러옵니다
   useEffect(() => {
     const container = document.getElementById('map');
@@ -108,6 +106,12 @@ const KeywordPlaceSearch = () => {
         image: markerImage,
       });
 
+    // 마커에 클릭 이벤트를 등록합니다
+    kakao.maps.event.addListener(marker, 'click', function () {
+      setIsOpenPlace(true);
+      setClickedMarkerIdx(order);
+    });
+
     setMarkers((prevMarkers: any) => [...prevMarkers, marker]); // 배열에 생성된 마커를 추가합니다
   }
 
@@ -130,17 +134,18 @@ const KeywordPlaceSearch = () => {
         <MapBox id="map" />
       </MapLayout>
       <>
-        <SearchContainer onClick={handleSearchOpen}>
+        <SearchContainer onClick={() => setIsOpenSearch(true)}>
           <SearchContainder placeholder="추가할 코스를 검색해주세요" />
           <SearchIcon src={searchIcon} alt="검색 아이콘" />
         </SearchContainer>
         {isOpenSearch ? (
           <SearchModal
-            handleModalClose={handleSearchClose}
+            handleModalClose={() => setIsOpenSearch(false)}
             setResultsParent={setResults}
             handleClickListItem={handleClickListItem}
           />
         ) : null}
+        {isOpenPlace ? <PlaceModal placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} /> : null}
       </>
     </>
   );
