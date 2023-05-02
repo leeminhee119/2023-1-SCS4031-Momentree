@@ -1,28 +1,40 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import styled from 'styled-components';
-import { IPlace } from 'types/kakaoMap';
+import { IPlaceKakao } from 'types/kakaoMap';
+import { IRecordedPlace } from 'types/post';
 import { useEffect, useState } from 'react';
-import Search from './Search';
+import searchIcon from '../../assets/icons/search.svg';
+import SearchModal from './SearchModal';
 
 interface IMapOptions {
   center: any;
   level: number;
 }
-const KeywordPlaceSearch = () => {
+interface KeywordPlaceSearchProps {
+  setPlaces: React.Dispatch<React.SetStateAction<IRecordedPlace[]>>;
+}
+const KeywordPlaceSearch = (props: KeywordPlaceSearchProps) => {
+  console.log(props);
   const { kakao } = window;
   const [map, setMap] = useState<any>(null);
-  const [keyword, setKeyword] = useState('');
-  const [results, setResults] = useState<IPlace[]>([]); // 키워드 검색 결과들을 담는 배열
+  const [results, setResults] = useState<IPlaceKakao[]>([]); // 키워드 검색 결과들을 담는 배열
   const [markers, setMarkers] = useState<any>([]); // 마커들을 담는 배열
-  const [places, setPlaces] = useState<IPlace[]>([]); // 데이트 코스에 추가한 장소 배열
+  const [placesKakao, setPlacesKakao] = useState<IPlaceKakao[]>([]); // 데이트 코스에 추가한 장소 배열
 
+  const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
+  function handleSearchOpen() {
+    setIsOpenSearch(true);
+  }
+  function handleSearchClose() {
+    setIsOpenSearch(false);
+  }
   // 지도를 불러옵니다
   useEffect(() => {
     const container = document.getElementById('map');
 
     // 선택한 장소가 없을 때, 지도에 표시할 default 장소
-    if (places.length === 0) {
+    if (placesKakao.length === 0) {
       const options: IMapOptions = {
         center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표
         level: 4, //지도의 레벨(확대, 축소 정도)
@@ -31,7 +43,7 @@ const KeywordPlaceSearch = () => {
       setMap(newMap);
     } else {
       const options: IMapOptions = {
-        center: new kakao.maps.LatLng(places[places.length - 1].x, places[places.length - 1].y), //지도의 중심좌표
+        center: new kakao.maps.LatLng(placesKakao[placesKakao.length - 1].x, placesKakao[placesKakao.length - 1].y), //지도의 중심좌표
         level: 4, //지도의 레벨(확대, 축소 정도)
       };
       const newMap = new kakao.maps.Map(container, options);
@@ -49,25 +61,31 @@ const KeywordPlaceSearch = () => {
 
       for (let i = 0; i < markers.length; i++) {
         markers[i].setMap(newMap);
-        bounds.extend(new kakao.maps.LatLng(places[i].y, places[i].x));
+        bounds.extend(new kakao.maps.LatLng(placesKakao[i].y, placesKakao[i].x));
         map.setBounds(bounds);
       }
       setMap(newMap);
+
+      // 장소 데이터를 형식에 맞게 업데이트합니다
+      const curOrder = markers.length;
+      const curPlaceKakao = placesKakao[curOrder - 1];
+      const guStartIdx = curPlaceKakao.road_address_name.indexOf(' ') + 1;
+      const guEndIdx = curPlaceKakao.road_address_name.indexOf('구 ') + 1;
+      props.setPlaces((prevPlaces: IRecordedPlace[]) => [
+        ...prevPlaces,
+        {
+          orders: curOrder,
+          placeName: curPlaceKakao.place_name,
+          placeContent: '',
+          address: curPlaceKakao.road_address_name,
+          addressGu: curPlaceKakao.road_address_name.substring(guStartIdx, guEndIdx),
+          addressX: curPlaceKakao.x.toString(),
+          addressY: curPlaceKakao.y.toString(),
+          image: [],
+        },
+      ]);
     }
   }, [markers]);
-
-  // 키워드로 검색한 결과 목록을 받아옵니다
-  useEffect(() => {
-    if (keyword !== '') {
-      // 장소 검색 객체
-      const ps = new kakao.maps.services.Places();
-      ps.keywordSearch(keyword, (data: IPlace[], status: any) => {
-        if (status === kakao.maps.services.Status.OK) {
-          setResults(data);
-        }
-      });
-    }
-  }, [keyword]);
 
   /**
    * 마커를 생성하고 지도에 마커를 표시함
@@ -97,32 +115,32 @@ const KeywordPlaceSearch = () => {
    * @param index 결과 목록에서의 인덱스
    */
   function handleClickListItem(index: number) {
+    setIsOpenSearch(false);
     // 데이트 코스에 추가합니다
-    setPlaces((prevPlaces: IPlace[]) => [...prevPlaces, results[index]]);
+    setPlacesKakao((prevPlaces: IPlaceKakao[]) => [...prevPlaces, results[index]]);
 
     // 마커를 생성하고 지도에 표시합니다
     const placePosition = new kakao.maps.LatLng(results[index].y, results[index].x);
-    addMarker(placePosition, places.length);
+    addMarker(placePosition, placesKakao.length);
   }
   return (
     <>
       <MapLayout>
         <MapBox id="map" />
       </MapLayout>
-      <Search placeholder="추가할 코스를 검색해주세요" onChange={setKeyword} />
-      <SearchResultList>
-        {results.map((place: IPlace, index: number) => {
-          return (
-            <li
-              key={index}
-              onClick={() => {
-                handleClickListItem(index);
-              }}>
-              {place.place_name}
-            </li>
-          );
-        })}
-      </SearchResultList>
+      <>
+        <SearchContainer onClick={handleSearchOpen}>
+          <SearchContainder placeholder="추가할 코스를 검색해주세요" />
+          <SearchIcon src={searchIcon} alt="검색 아이콘" />
+        </SearchContainer>
+        {isOpenSearch ? (
+          <SearchModal
+            handleModalClose={handleSearchClose}
+            setResultsParent={setResults}
+            handleClickListItem={handleClickListItem}
+          />
+        ) : null}
+      </>
     </>
   );
 };
@@ -135,5 +153,34 @@ const MapBox = styled.div`
   border-radius: 1.2rem;
 `;
 
-const SearchResultList = styled.ul``;
+/* Search Box */
+const SearchContainer = styled.section`
+  position: relative;
+`;
+
+const SearchContainder = styled.input`
+  width: 100%;
+  height: 4.6rem;
+  padding: 1.5rem;
+  padding-left: 3.6rem;
+  background-color: ${({ theme }) => theme.colors.gray200};
+  border-radius: 12px;
+  border: none;
+  color: ${({ theme }) => theme.colors.gray900};
+  ${({ theme }) => theme.fonts.body2};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.gray400};
+  }
+`;
+
+const SearchIcon = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 1.4rem;
+  margin-top: 1.6rem;
+  z-index: 1;
+  color: rgb(79, 91, 102);
+`;
 export default KeywordPlaceSearch;
