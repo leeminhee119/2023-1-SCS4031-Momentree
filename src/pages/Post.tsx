@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import closeIcon from '../assets/icons/close.svg';
 import HorizontalLine from '../components/post/HorizontalLine';
 import DatePicker from '../components/post/DatePicker';
@@ -26,7 +26,16 @@ const Post = () => {
     recordedPlaces: places,
   });
 
+  // places가 변경될 때마다 recordData.recordedPlaces 업데이트
+  useEffect(() => {
+    setRecordData((prevRecordData: IRecord) => ({
+      ...prevRecordData,
+      recordedPlaces: places,
+    }));
+  }, [places]);
+
   console.log('places', places);
+  console.log('recordData', recordData);
   return (
     <>
       <HeaderLayout>
