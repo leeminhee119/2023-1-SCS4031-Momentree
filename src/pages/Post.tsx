@@ -19,7 +19,7 @@ const Post = () => {
   const [recordData, setRecordData] = useState<IRecord>({
     userName: 'minhee',
     title: '',
-    dateDate: new Date().toLocaleString(),
+    dateDate: new Date().toLocaleDateString(),
     recordedContent: '',
     exposure: 'OPEN',
     hashtags: hashtags,

@@ -16,7 +16,7 @@ const DatePicker = (props: IDatePicker) => {
     props.setRecordData((prevState: IRecord) => {
       return {
         ...prevState,
-        dateDate: e.toLocaleString(),
+        dateDate: e.toLocaleDateString(),
       };
     });
   };
