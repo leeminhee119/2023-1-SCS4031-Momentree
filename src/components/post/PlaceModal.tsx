@@ -48,9 +48,7 @@ const PlaceModal = ({ placeIdx, handleModalClose }: PlaceModalProps) => {
         </TitleBox>
         <PlaceTextarea onChange={handleChangeTextarea} />
         <PlaceImgUploadInput type="file" onChange={handleUploadImg} />
-        <SaveButtonLayout>
-          <SaveButton isActive={isSaveActive} handleClickSave={handleClickSave} />
-        </SaveButtonLayout>
+        <SaveButton isActive={isSaveActive} handleClickSave={handleClickSave} />
       </ModalLayout>
     </ModalBackground>
   );
@@ -99,7 +97,4 @@ const PlaceTextarea = styled.textarea`
   padding: 1.5rem;
 `;
 const PlaceImgUploadInput = styled.input``;
-const SaveButtonLayout = styled.div`
-  margin-top: auto;
-`;
 export default PlaceModal;

@@ -155,9 +155,9 @@ const SelectTags = () => {
 // 해시태그 버튼 선택
 const SelectTagsLayout = styled.div`
   padding: 1.5rem;
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  height: 90vh;
 `;
 const TitleBox = styled.div`
   ${({ theme }) => theme.fonts.suubtitle1};
