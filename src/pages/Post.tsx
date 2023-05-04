@@ -5,28 +5,49 @@ import HorizontalLine from '../components/post/HorizontalLine';
 import DatePicker from '../components/post/DatePicker';
 import Margin from '../components/main/Margin';
 import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
+import { IHashtag, IRecord, IRecordedPlace } from 'types/post';
+import { selectedTagsState } from '\brecoil/atoms/selectedTagsState';
+import { useRecoilValue } from 'recoil';
 
 const Post = () => {
-  const [dateDate, setDateDate] = useState<Date>(new Date());
-  const [title, setTitle] = useState('');
+  const hashtags = useRecoilValue<IHashtag[]>(selectedTagsState);
+  /* TODO: http request 보낸 후 setHashtags([])로 전역 selectedTagsState 초기화 */
+  // const [hashtags, setHashtags] = useRecoilState<IHashtag[]>(selectedTagsState);
 
+  const [places, setPlaces] = useState<IRecordedPlace[]>([]);
+  const [recordData, setRecordData] = useState<IRecord>({
+    userName: 'minhee',
+    title: '',
+    dateDate: new Date().toLocaleString(),
+    recordedContent: '',
+    exposure: 'OPEN',
+    hashtags: hashtags,
+    recordedPlaces: places,
+  });
+
+  console.log('places', places);
   return (
     <>
       <HeaderLayout>
         <Header>글 작성</Header>
-        <CloseIcon src={closeIcon} />
+        <CloseIcon src={closeIcon} alt="닫기 버튼" />
       </HeaderLayout>
       <TitleInput
         placeholder="제목을 입력해주세요"
-        value={title}
+        value={recordData.title}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setTitle(e.target.value);
+          setRecordData((prevState) => {
+            return {
+              ...prevState,
+              title: e.target.value,
+            };
+          });
         }}
       />
       <HorizontalLine />
-      <DatePicker dateDate={dateDate} setDateDate={setDateDate} />
+      <DatePicker dateDate={recordData.dateDate} setRecordData={setRecordData} />
       <Margin />
-      <KeywordPlaceSearch />
+      <KeywordPlaceSearch setPlaces={setPlaces} />
     </>
   );
 };
