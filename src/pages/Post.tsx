@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import closeIcon from '../assets/icons/close.svg';
+import backIcon from '../assets/icons/back.svg';
 import HorizontalLine from '../components/post/HorizontalLine';
 import DatePicker from '../components/post/DatePicker';
 import Margin from '../components/main/Margin';
@@ -12,6 +14,7 @@ import { useRecoilState } from 'recoil';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 
 const Post = () => {
+  const navigate = useNavigate();
   const [hashtags, setHashtags] = useRecoilState<IHashtag[]>(selectedTagsState);
   const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
 
@@ -46,7 +49,7 @@ const Post = () => {
   async function handleClickSave() {
     console.log('await');
     try {
-      const response = await fetch('3.39.153.141/community', {
+      const response = await fetch('http://3.39.153.141/community', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,6 +67,9 @@ const Post = () => {
       console.error(err);
     }
   }
+  function handleClickBack() {
+    navigate(`/selectTags`);
+  }
 
   console.log('places', places);
   console.log('recordData', recordData);
@@ -71,8 +77,13 @@ const Post = () => {
     <PostLayout>
       <PostBox>
         <HeaderLayout>
+          <button onClick={handleClickBack}>
+            <BackIcon src={backIcon} alt="뒤로가기 버튼" />
+          </button>
           <Header>글 작성</Header>
-          <CloseIcon src={closeIcon} alt="닫기 버튼" />
+          <button>
+            <CloseIcon src={closeIcon} alt="닫기 버튼" />
+          </button>
         </HeaderLayout>
         <TitleInput
           placeholder="제목을 입력해주세요"
@@ -113,6 +124,9 @@ const HeaderLayout = styled.div`
 `;
 const Header = styled.div`
   ${({ theme }) => theme.fonts.suubtitle1};
+`;
+const BackIcon = styled.img`
+  width: 1.2rem;
 `;
 const CloseIcon = styled.img`
   width: 2rem;
