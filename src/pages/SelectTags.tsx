@@ -33,7 +33,7 @@ const SelectTags = () => {
         {
           tagName: selectedTagName,
           type: 'VIBE',
-        },
+        } as IHashtag,
       ]);
     }
   };
@@ -49,7 +49,7 @@ const SelectTags = () => {
         {
           tagName: selectedTagName,
           type: 'ACTIVITY',
-        },
+        } as IHashtag,
       ]);
     }
   };
@@ -72,7 +72,7 @@ const SelectTags = () => {
         {
           tagName: inputTag,
           type: 'CUSTOM',
-        },
+        } as IHashtag,
       ]);
 
       // 다음 태그 입력을 위해 input을 초기화해줍니다.
@@ -155,9 +155,9 @@ const SelectTags = () => {
 // 해시태그 버튼 선택
 const SelectTagsLayout = styled.div`
   padding: 1.5rem;
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  height: 90vh;
 `;
 const TitleBox = styled.div`
   ${({ theme }) => theme.fonts.suubtitle1};

@@ -1,57 +1,110 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import closeIcon from '../assets/icons/close.svg';
 import HorizontalLine from '../components/post/HorizontalLine';
 import DatePicker from '../components/post/DatePicker';
 import Margin from '../components/main/Margin';
 import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
+import SaveButton from 'components/post/SaveButton';
 import { IHashtag, IRecord, IRecordedPlace } from 'types/post';
 import { selectedTagsState } from '\brecoil/atoms/selectedTagsState';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
+import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 
 const Post = () => {
-  const hashtags = useRecoilValue<IHashtag[]>(selectedTagsState);
-  /* TODO: http request 보낸 후 setHashtags([])로 전역 selectedTagsState 초기화 */
-  // const [hashtags, setHashtags] = useRecoilState<IHashtag[]>(selectedTagsState);
+  const [hashtags, setHashtags] = useRecoilState<IHashtag[]>(selectedTagsState);
+  const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
 
-  const [places, setPlaces] = useState<IRecordedPlace[]>([]);
   const [recordData, setRecordData] = useState<IRecord>({
     userName: 'minhee',
     title: '',
-    dateDate: new Date().toLocaleString(),
+    dateDate: new Date().toLocaleDateString(),
     recordedContent: '',
     exposure: 'OPEN',
     hashtags: hashtags,
     recordedPlaces: places,
   });
 
+  const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
+
+  // places가 변경될 때마다 recordData.recordedPlaces 업데이트
+  useEffect(() => {
+    setRecordData((prevRecordData: IRecord) => ({
+      ...prevRecordData,
+      recordedPlaces: places,
+    }));
+  }, [places]);
+
+  useEffect(() => {
+    if (recordData.title !== '' && recordData.recordedPlaces.length !== 0) {
+      setIsSaveActive(true);
+    } else {
+      setIsSaveActive(false);
+    }
+  }, [recordData]);
+
+  async function handleClickSave() {
+    console.log('await');
+    try {
+      const response = await fetch('3.39.153.141/community', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(recordData),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      } else {
+        // 초기화
+        setHashtags([]);
+        setPlaces([]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   console.log('places', places);
+  console.log('recordData', recordData);
   return (
-    <>
-      <HeaderLayout>
-        <Header>글 작성</Header>
-        <CloseIcon src={closeIcon} alt="닫기 버튼" />
-      </HeaderLayout>
-      <TitleInput
-        placeholder="제목을 입력해주세요"
-        value={recordData.title}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setRecordData((prevState) => {
-            return {
-              ...prevState,
-              title: e.target.value,
-            };
-          });
-        }}
-      />
-      <HorizontalLine />
-      <DatePicker dateDate={recordData.dateDate} setRecordData={setRecordData} />
-      <Margin />
-      <KeywordPlaceSearch setPlaces={setPlaces} />
-    </>
+    <PostLayout>
+      <PostBox>
+        <HeaderLayout>
+          <Header>글 작성</Header>
+          <CloseIcon src={closeIcon} alt="닫기 버튼" />
+        </HeaderLayout>
+        <TitleInput
+          placeholder="제목을 입력해주세요"
+          value={recordData.title}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setRecordData((prevState) => {
+              return {
+                ...prevState,
+                title: e.target.value,
+              };
+            });
+          }}
+        />
+        <HorizontalLine />
+        <DatePicker dateDate={recordData.dateDate} setRecordData={setRecordData} />
+        <Margin />
+        <KeywordPlaceSearch />
+      </PostBox>
+      <SaveButton isActive={isSaveActive} handleClickSave={handleClickSave} />
+    </PostLayout>
   );
 };
 
+const PostLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+`;
+const PostBox = styled.div`
+  height: 40%;
+`;
 const HeaderLayout = styled.div`
   display: flex;
   justify-content: space-between;

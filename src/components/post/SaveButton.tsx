@@ -7,19 +7,16 @@ interface ISaveButton {
 }
 const SaveButton = (props: ISaveButton) => {
   return (
-    <ButtonLayout onClick={props.handleClickSave}>
-      <Button isActive={props.isActive}>{props.label === undefined ? '저장' : props.label}</Button>
+    <ButtonLayout>
+      <Button onClick={props.handleClickSave} isActive={props.isActive}>
+        {props.label === undefined ? '저장' : props.label}
+      </Button>
     </ButtonLayout>
   );
 };
 
 const ButtonLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  width: 100%;
-  height: 116px;
-
+  height: 5.2rem;
   margin-top: auto;
 `;
 const Button = styled.button<{ isActive: boolean }>`
@@ -28,7 +25,7 @@ const Button = styled.button<{ isActive: boolean }>`
   align-items: center;
 
   width: 100%;
-  height: 5.2rem;
+  height: 100%;
 
   background-color: ${({ theme, isActive }) => (isActive ? theme.colors.mainDark : theme.colors.gray300)};
   color: ${({ theme }) => theme.colors.gray100};

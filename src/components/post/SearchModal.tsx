@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IPlaceKakao } from 'types/kakaoMap';
-// import { ModalProps } from 'types/modal';
 import searchIcon from '../../assets/icons/search.svg';
 import closeIcon from '../../assets/icons/close.svg';
 
