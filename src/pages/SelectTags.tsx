@@ -1,21 +1,28 @@
 import styled from 'styled-components';
 import { useLayoutEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 import { selectedTagsState } from 'recoil/atoms/selectedTagsState';
 import closeButton from '../assets/icons/close.svg';
 import SaveButton from 'components/post/SaveButton';
-import { useNavigate } from 'react-router-dom';
 import { IHashtag } from 'types/post';
 
 const SelectTags = () => {
   const navigate = useNavigate();
+
   const moodTagsData = ['편안한', '따뜻한', '로맨틱한', '맛있는', '신나는', '힐링', '조용한', '힙한'];
   const activityTagsData = ['영화', '맛집투어', '레저', '휴식', '산책', '운동', '게임', '체험'];
 
-  const [moodTags, setMoodTags] = useState<string[]>([]);
-  const [activityTags, setActivityTags] = useState<string[]>([]);
-  const [customTags, setCustomTags] = useState<string[]>([]);
-  const setSelectedTags = useSetRecoilState(selectedTagsState);
+  const [selectedTags, setSelectedTags] = useRecoilState<IHashtag[]>(selectedTagsState);
+  const [moodTags, setMoodTags] = useState<string[]>(
+    selectedTags.filter((tag) => tag.type === 'VIBE').map((tag) => tag.tagName)
+  );
+  const [activityTags, setActivityTags] = useState<string[]>(
+    selectedTags.filter((tag) => tag.type === 'ACTIVITY').map((tag) => tag.tagName)
+  );
+  const [customTags, setCustomTags] = useState<string[]>(
+    selectedTags.filter((tag) => tag.type === 'CUSTOM').map((tag) => tag.tagName)
+  );
   const [inputTag, setInputTag] = useState('');
 
   const [isSaveActive, setIsSaveActive] = useState(false);
