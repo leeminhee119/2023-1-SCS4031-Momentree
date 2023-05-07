@@ -9,7 +9,10 @@ import { lazy, Suspense } from 'react';
 
 const MainPage = lazy(() => import('./pages/Main'));
 const SelectTags = lazy(() => import('./pages/SelectTags'));
+const Post = lazy(() => import('./pages/Post'));
 const Detail = lazy(() => import('./pages/Detail'));
+const MyBookmarkList = lazy(() => import('./pages/MyBookmarkList'));
+const MyPostList = lazy(() => import('./pages/MyPostList'));
 
 import AppLayout from 'components/layout/AppLayout';
 
@@ -42,7 +45,10 @@ export default function App() {
                 <Routes>
                   <Route path="/" element={<MainPage />} />
                   <Route path="/selectTags" element={<SelectTags />} />
+                  <Route path="/post" element={<Post />} />
                   <Route path="/post/:postId" element={<Detail />} />
+                  <Route path="/userPage/myBookmarkList" element={<MyBookmarkList />}></Route>
+                  <Route path="/userPage/myPostList" element={<MyPostList />}></Route>
                 </Routes>
               </Suspense>
             </AppLayout>

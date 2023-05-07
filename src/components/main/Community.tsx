@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import filterIcon from '../../assets/icons/filter.svg';
-import CommunityItem from './CommunityItem';
+import PostItem from '../common/postItem';
 import { useNavigate } from 'react-router-dom';
 
 const Community = () => {
@@ -15,7 +15,8 @@ const Community = () => {
       likeCnt: 134,
       bookmarkCnt: 13,
       place: ['강남구', '서초구'],
-      tags: ['편안함', '신나는', '즐거운'],
+      vibeTag: ['편안함', '힐링'],
+      activityTag: ['공원', '산책'],
     },
     {
       recordedId: 7,
@@ -26,7 +27,8 @@ const Community = () => {
       likeCnt: 203,
       bookmarkCnt: 34,
       place: ['중구'],
-      tags: ['활동적인', '액티비티', '등산', '활기찬'],
+      vibeTag: ['활기찬', '즐거운', '신나는'],
+      activityTag: ['테마파크', '식사'],
     },
   ];
 
@@ -43,14 +45,15 @@ const Community = () => {
         {CommunityData.map((data, index) => {
           return (
             <div onClick={() => navigate(`/post/${data.recordedId}`)}>
-              <CommunityItem
+              <PostItem
                 title={data.title}
                 bookMarkStatus={data.bookMarkStatus}
                 likeCnt={data.likeCnt}
                 bookmarkCnt={data.bookmarkCnt}
-                tags={data.tags}
+                vibeTag={data.vibeTag}
+                activityTag={data.activityTag}
                 place={data.place}
-                key={index}></CommunityItem>
+                key={index}></PostItem>
             </div>
           );
         })}

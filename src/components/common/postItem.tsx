@@ -1,13 +1,14 @@
+import React from 'react';
 import styled from 'styled-components';
 import unclickbookmarkIcon from '../../assets/icons/unclickbookmark.svg';
 import clickbookmarkIcon from '../../assets/icons/clickbookmark.svg';
 import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
-import { CommunityItemProps } from '../../types/communityItem';
+import { PostItemProps } from '../../types/postItem';
 
-const CommunityItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, tags }: CommunityItemProps) => {
+const PostItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, vibeTag, activityTag }: PostItemProps) => {
   return (
-    <CommunityItemContainer>
+    <PostItemContainer>
       <Map></Map>
       {bookMarkStatus ? (
         <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" />
@@ -20,24 +21,32 @@ const CommunityItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, tag
           return <article key={index}>{item}</article>;
         })}
       </PlaceContainer>
-      <CommunityItemInfo>
-        <TagContainer>
-          {tags.map((item, index) => {
-            return <article key={index}>{item}</article>;
-          })}
-        </TagContainer>
+      <PostItemInfo>
+        <div>
+          <MoodTagContainer>
+            {vibeTag.map((item, index) => {
+              return <article key={index}>{item}</article>;
+            })}
+          </MoodTagContainer>
+          <ActivityTagContainer>
+            {activityTag.map((item, index) => {
+              return <article key={index}>{item}</article>;
+            })}
+          </ActivityTagContainer>
+        </div>
+
         <IconContainer>
           <Icon src={heartIcon} alt="좋아요 아이콘" /> <p>{likeCnt}</p>
           <Icon src={bookmarkIcon} alt="북마크 아이콘" /> <p>{bookmarkCnt}</p>
         </IconContainer>
-      </CommunityItemInfo>
-    </CommunityItemContainer>
+      </PostItemInfo>
+    </PostItemContainer>
   );
 };
 
-export default CommunityItem;
+export default PostItem;
 
-const CommunityItemContainer = styled.section`
+const PostItemContainer = styled.section`
   display: flex;
   flex-direction: column;
   position: relative;
@@ -74,7 +83,7 @@ const BookmarkIcon = styled.img`
 
 const Icon = styled.img``;
 
-const CommunityItemInfo = styled.article`
+const PostItemInfo = styled.article`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -98,10 +107,11 @@ const PlaceContainer = styled.article`
   }
 `;
 
-const TagContainer = styled.article`
+const MoodTagContainer = styled.article`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 0.6rem;
 
   article {
     display: flex;
@@ -114,6 +124,13 @@ const TagContainer = styled.article`
     border-radius: 4px;
     ${({ theme }) => theme.fonts.caption2};
     margin-right: 0.6rem;
+  }
+`;
+
+const ActivityTagContainer = styled(MoodTagContainer)`
+  article {
+    background-color: ${({ theme }) => theme.colors.greenLight};
+    color: ${({ theme }) => theme.colors.greenDark};
   }
 `;
 
