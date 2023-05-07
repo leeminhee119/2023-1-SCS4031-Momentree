@@ -129,10 +129,10 @@ const KeywordPlaceSearch = () => {
     addMarker(placePosition, placesKakao.length);
   }
   return (
-    <>
-      <MapLayout>
+    <KeywordPlaceSearchLayout>
+      <MapCol>
         <MapBox id="map" />
-      </MapLayout>
+      </MapCol>
       <>
         <SearchContainer onClick={() => setIsOpenSearch(true)}>
           <SearchContainder placeholder="추가할 코스를 검색해주세요" />
@@ -147,10 +147,13 @@ const KeywordPlaceSearch = () => {
         ) : null}
         {isOpenPlace ? <PlaceModal placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} /> : null}
       </>
-    </>
+    </KeywordPlaceSearchLayout>
   );
 };
-const MapLayout = styled.div`
+const KeywordPlaceSearchLayout = styled.div`
+  margin-bottom: 1rem;
+`;
+const MapCol = styled.div`
   padding: 1.5rem 0;
 `;
 const MapBox = styled.div`

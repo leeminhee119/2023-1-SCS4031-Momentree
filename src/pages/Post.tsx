@@ -67,6 +67,24 @@ const Post = () => {
 
   console.log('places', places);
   console.log('recordData', recordData);
+
+  function handleChangeTitle(event: React.ChangeEvent<HTMLInputElement>) {
+    setRecordData((prevState) => {
+      return {
+        ...prevState,
+        recordedContent: event.target.value,
+      };
+    });
+  }
+  function handleChangeContent(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    setRecordData((prevState) => {
+      return {
+        ...prevState,
+        recordedContent: event.target.value,
+      };
+    });
+  }
+
   return (
     <PostLayout>
       <PostBox>
@@ -74,22 +92,13 @@ const Post = () => {
           <Header>글 작성</Header>
           <CloseIcon src={closeIcon} alt="닫기 버튼" />
         </HeaderLayout>
-        <TitleInput
-          placeholder="제목을 입력해주세요"
-          value={recordData.title}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setRecordData((prevState) => {
-              return {
-                ...prevState,
-                title: e.target.value,
-              };
-            });
-          }}
-        />
+        <TitleInput placeholder="제목을 입력해주세요" value={recordData.title} onChange={handleChangeTitle} />
         <HorizontalLine />
         <DatePicker dateDate={recordData.dateDate} setRecordData={setRecordData} />
         <Margin />
         <KeywordPlaceSearch />
+        <Margin />
+        <ContentTextBox placeholder="오늘 데이트가 어땠는지 알려주세요" onChange={handleChangeContent} />
       </PostBox>
       <SaveButton isActive={isSaveActive} handleClickSave={handleClickSave} />
     </PostLayout>
@@ -126,5 +135,14 @@ const TitleInput = styled.input`
   padding: 0;
   height: 5rem;
 `;
-
+const ContentTextBox = styled.textarea`
+  width: 100%;
+  height: 10rem;
+  border: none;
+  margin: 1rem 0;
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.gray400};
+    ${({ theme }) => theme.fonts.body2}
+  }
+`;
 export default Post;
