@@ -9,31 +9,30 @@ import Margin from '../components/main/Margin';
 import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
 import SaveButton from 'components/post/SaveButton';
 import { IHashtag, IRecord, IRecordedPlace } from 'types/post';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectedTagsState } from '\brecoil/atoms/selectedTagsState';
-import { useRecoilState } from 'recoil';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
+import { recordState } from '\brecoil/atoms/recordState';
+import { useResetRecoilState } from 'recoil';
 
 const Post = () => {
   const navigate = useNavigate();
-  const [hashtags, setHashtags] = useRecoilState<IHashtag[]>(selectedTagsState);
-  const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
+  const hashtags = useRecoilValue<IHashtag[]>(selectedTagsState);
+  const places = useRecoilValue<IRecordedPlace[]>(recordedPlacesState);
+  const [recordData, setRecordData] = useRecoilState<IRecord>(recordState);
 
-  const [recordData, setRecordData] = useState<IRecord>({
-    userName: 'minhee',
-    title: '',
-    dateDate: new Date().toLocaleDateString(),
-    recordedContent: '',
-    exposure: 'OPEN',
-    hashtags: hashtags,
-    recordedPlaces: places,
-  });
+  const resetHashtags = useResetRecoilState(selectedTagsState);
+  const resetPlaces = useResetRecoilState(recordedPlacesState);
+  const resetRecord = useResetRecoilState(recordState);
 
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
 
-  // places가 변경될 때마다 recordData.recordedPlaces 업데이트
+  // places가 KeywordPlaceSearch에서 변경될 때마다 recordData.recordedPlaces 업데이트
+  // 선택한 해시태그 recordData.hashtags에 업데이트
   useEffect(() => {
     setRecordData((prevRecordData: IRecord) => ({
       ...prevRecordData,
+      hashtags: hashtags,
       recordedPlaces: places,
     }));
   }, [places]);
@@ -48,24 +47,26 @@ const Post = () => {
 
   async function handleClickSave() {
     console.log('await');
-    try {
-      const response = await fetch('http://3.39.153.141/community', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(recordData),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}`);
-      } else {
-        // 초기화
-        setHashtags([]);
-        setPlaces([]);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    await fetch('http://3.39.153.141/community', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6InRlc3QwMiIsIm5hbWUiOiLsubTtjpjsl6ztlonrn6wiLCJpYXQiOjE2ODMyODI5NjEsImV4cCI6MTY4NTg3NDk2MX0.6G-nM1bU9vq1vtA4Zj8wosHLB-ioRR0OachtFK21S5I',
+      },
+      body: JSON.stringify(recordData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error ${response.status}`);
+        } else {
+          // recoil atom 초기화
+          resetHashtags();
+          resetPlaces();
+          resetRecord();
+        }
+      })
+      .catch((error) => console.log('error:', error));
   }
   function handleClickBack() {
     navigate(`/selectTags`);
