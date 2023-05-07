@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import unclickbookmarkIcon from '../../assets/icons/unclickbookmark.svg';
 import clickbookmarkIcon from '../../assets/icons/clickbookmark.svg';
@@ -17,24 +16,23 @@ const PostItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, vibeTag,
       )}
       <h1>{title}</h1>
       <PlaceContainer>
-        {place.map((item, index) => {
-          return <article key={index}>{item}</article>;
+        {place?.map((item, index: number) => {
+          return <article key={index}> {item.addressGu.split(' ')[1]} </article>;
         })}
       </PlaceContainer>
       <PostItemInfo>
         <div>
           <MoodTagContainer>
-            {vibeTag.map((item, index) => {
+            {vibeTag?.map((item, index) => {
               return <article key={index}>{item}</article>;
             })}
           </MoodTagContainer>
           <ActivityTagContainer>
-            {activityTag.map((item, index) => {
+            {activityTag?.map((item, index) => {
               return <article key={index}>{item}</article>;
             })}
           </ActivityTagContainer>
         </div>
-
         <IconContainer>
           <Icon src={heartIcon} alt="좋아요 아이콘" /> <p>{likeCnt}</p>
           <Icon src={bookmarkIcon} alt="북마크 아이콘" /> <p>{bookmarkCnt}</p>

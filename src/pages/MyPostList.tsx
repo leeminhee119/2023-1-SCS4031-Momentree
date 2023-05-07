@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import leftIcon from '../assets/icons/left.svg';
-import PostItem from 'components/common/postItem';
+import PostItem from 'components/common/PostItem';
 
 const MyPostList = () => {
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ const MyPostList = () => {
               bookmarkCnt={data.bookmarkCnt}
               vibeTag={data.vibeTag}
               activityTag={data.activityTag}
-              place={data.place}
+              // place={data.place}
               key={index}></PostItem>
           </div>
         );

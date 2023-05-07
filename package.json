@@ -13,6 +13,7 @@
     "@types/react-datepicker": "^4.10.0",
     "@types/react-dom": "^18.0.11",
     "@types/react-router-dom": "^5.3.3",
+    "axios": "^1.4.0",
     "eslint": "^8.38.0",
     "eslint-plugin-react-app": "^6.2.2",
     "react": "^18.2.0",

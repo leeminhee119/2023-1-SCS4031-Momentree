@@ -7,31 +7,47 @@ import fillheartIcon from '../assets/icons/fillheart.svg';
 import bookmarkIcon from '../assets/icons/bookmark.svg';
 import leftIcon from '../assets/icons/left.svg';
 import WriterInfo from 'components/detail/WriterInfo';
+import { useCommunityDetailQuery } from 'hooks/queries/useCommunityDetail';
+import { PlaceInformation } from 'types/placeInformation';
+import PlaceMap from 'components/detail/PlaceMap';
 
 const Detail = () => {
   const { postId } = useParams();
   const [ishearted, setIshearted] = useState<boolean>(true);
   const [isbookmarked, setIsbookmarked] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { data } = useCommunityDetailQuery(Number(postId));
 
-  const CommunityData = [
+  // 지도 더미 데이터
+  const dummyData = [
     {
-      recordedId: 6,
-      title: '충무로에서 즐거운 데이트',
-      record_content: '너무 즐거웠어요',
-      bookMarkStatus: true,
-      likeStatus: false,
-      likeCnt: 134,
-      bookmarkCnt: 13,
-      place: ['강남구', '서초구'],
-      vibeTag: ['편안함', '즐거운', '신나는'],
-      activityTag: ['카페', '식사'],
-      createdAt: '2023-04-23',
+      recordId: 1,
+      placeId: 23,
+      orders: 1,
+      placeName: '이따금',
+      placeContent: '내가 제일 좋아하는 카페, 말차슈페너 진짜진짜 맛있음!!!!',
+      address: '경기 수원시 팔달구 화서문로32번길 15',
+      addressGu: '수원시 팔달구',
+      addressX: '127.012027642142',
+      addressY: '37.2843970838872',
+      placeImages: [],
+    },
+    {
+      recordId: 1,
+      placeId: 33,
+      orders: 2,
+      placeName: '하우스플랜비',
+      placeContent: '인생 뇨끼 맛집~~',
+      address: '경기 수원시 팔달구 신풍로23번길 62',
+      addressGu: '수원시 팔달구',
+      addressX: '127.011531409585',
+      addressY: '37.2839952698365',
+      placeImages: [],
     },
   ];
 
   return (
-    <DeatilContainer>
+    <DetailContainer>
       <DetailHeader>
         <Icon
           src={leftIcon}
@@ -56,30 +72,45 @@ const Detail = () => {
       <DetailInfo>
         <TagContainer>
           <MoodTagContainer>
-            {CommunityData[0].vibeTag.map((item, index) => {
+            {data?.result.vibeTags.map((item: string, index: number) => {
               return <article key={index}>{item}</article>;
             })}
           </MoodTagContainer>
           <ActivityTagContainer>
-            {CommunityData[0].activityTag.map((item, index) => {
+            {data?.result.activityTags.map((item: string, index: number) => {
               return <article key={index}>{item}</article>;
             })}
           </ActivityTagContainer>
         </TagContainer>
-        <p>{CommunityData[0].createdAt}</p>
+        <p>{data?.result.createdAt}</p>
       </DetailInfo>
-      <DetailTitle>{CommunityData[0].title}</DetailTitle>
-      <WriterInfo />
-      <DetialContent>
-        {CommunityData[0].record_content} 게시글 아이디 {postId}
-      </DetialContent>
-    </DeatilContainer>
+      <DetailTitle>{data?.result.title}</DetailTitle>
+      <WriterInfo userName={data?.result.userName} />
+      {/* ! 지도 좌표 더미 데이터로 찍어보기 */}
+      <PlaceMap placeList={dummyData} />
+      <PlaceContainer>
+        {data?.result.recordedPlaces.map((place: PlaceInformation, index: number) => {
+          return (
+            <PlaceList>
+              <article key={index}>
+                <p>{index + 1} </p>
+                <h2>{place.placeName}</h2>
+              </article>
+              <div></div>
+            </PlaceList>
+          );
+        })}
+      </PlaceContainer>
+      <DetailContent>
+        {data?.result.record_content} <br />
+      </DetailContent>
+    </DetailContainer>
   );
 };
 
 export default Detail;
 
-const DeatilContainer = styled.section``;
+const DetailContainer = styled.section``;
 
 const DetailHeader = styled.header`
   display: flex;
@@ -137,6 +168,51 @@ const ActivityTagContainer = styled(MoodTagContainer)`
   }
 `;
 
+const PlaceContainer = styled.section`
+  section {
+    &:last-child {
+      div {
+        display: none;
+      }
+    }
+  }
+`;
+
+const PlaceList = styled.section`
+  article {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  p {
+    width: 16px;
+    height: 16px;
+    margin-right: 12px;
+    background-color: ${({ theme }) => theme.colors.main900};
+    color: ${({ theme }) => theme.colors.gray100};
+    ${({ theme }) => theme.fonts.caption1};
+    font-size: 0.8rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  h2 {
+    color: ${({ theme }) => theme.colors.gray900};
+    ${({ theme }) => theme.fonts.body4};
+  }
+
+  div {
+    border: 1px solid rgb(224, 224, 224);
+    width: 0px;
+    height: 12px;
+    margin-left: 7.7px;
+    position: relative;
+  }
+`;
+
 const DetailTitle = styled.h1`
   margin-top: 1.6rem;
   margin-bottom: 2rem;
@@ -144,7 +220,7 @@ const DetailTitle = styled.h1`
   ${({ theme }) => theme.fonts.heading2};
 `;
 
-const DetialContent = styled.p`
+const DetailContent = styled.p`
   color: ${({ theme }) => theme.colors.gray700};
   ${({ theme }) => theme.fonts.body2};
   margin-top: 16px;
