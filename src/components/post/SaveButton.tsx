@@ -8,7 +8,9 @@ interface ISaveButton {
 const SaveButton = (props: ISaveButton) => {
   return (
     <ButtonLayout>
-      <Button onClick={props.handleClickSave} isActive={props.isActive}>
+      <Button
+        onClick={props.isActive ? props.handleClickSave : () => console.log('Inactive Button')}
+        isActive={props.isActive}>
         {props.label === undefined ? '저장' : props.label}
       </Button>
     </ButtonLayout>

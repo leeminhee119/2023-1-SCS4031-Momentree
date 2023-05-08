@@ -8,7 +8,7 @@ import searchIcon from '../../assets/icons/search.svg';
 import SearchModal from './SearchModal';
 import PlaceModal from './PlaceModal';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 interface IMapOptions {
   center: any;
@@ -20,20 +20,19 @@ const KeywordPlaceSearch = () => {
   const [map, setMap] = useState<any>(null);
   const [results, setResults] = useState<IPlaceKakao[]>([]); // 키워드 검색 결과들을 담는 배열
   const [markers, setMarkers] = useState<any>([]); // 마커들을 담는 배열
-  const [placesKakao, setPlacesKakao] = useState<IPlaceKakao[]>([]); // 데이트 코스에 추가한 장소 배열
 
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
   const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
   const [clickedMarkerIdx, setClickedMarkerIdx] = useState<number>(0); // 지도에서 클릭한 마커의 인덱스
 
-  const setPlaces = useSetRecoilState<IRecordedPlace[]>(recordedPlacesState);
+  const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState); //추가한 데이트 장소
 
   // 지도를 불러옵니다
   useEffect(() => {
     const container = document.getElementById('map');
 
     // 선택한 장소가 없을 때, 지도에 표시할 default 장소
-    if (placesKakao.length === 0) {
+    if (places.length === 0) {
       const options: IMapOptions = {
         center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표
         level: 4, //지도의 레벨(확대, 축소 정도)
@@ -42,7 +41,7 @@ const KeywordPlaceSearch = () => {
       setMap(newMap);
     } else {
       const options: IMapOptions = {
-        center: new kakao.maps.LatLng(placesKakao[placesKakao.length - 1].x, placesKakao[placesKakao.length - 1].y), //지도의 중심좌표
+        center: new kakao.maps.LatLng(places[places.length - 1].addressX, places[places.length - 1].addressY), //지도의 중심좌표
         level: 4, //지도의 레벨(확대, 축소 정도)
       };
       const newMap = new kakao.maps.Map(container, options);
@@ -60,29 +59,10 @@ const KeywordPlaceSearch = () => {
 
       for (let i = 0; i < markers.length; i++) {
         markers[i].setMap(newMap);
-        bounds.extend(new kakao.maps.LatLng(placesKakao[i].y, placesKakao[i].x));
+        bounds.extend(new kakao.maps.LatLng(places[i].addressY, places[i].addressX));
         map.setBounds(bounds);
       }
       setMap(newMap);
-
-      // 장소 데이터를 형식에 맞게 업데이트합니다
-      const curOrder = markers.length;
-      const curPlaceKakao = placesKakao[curOrder - 1];
-      const guStartIdx = curPlaceKakao.road_address_name.indexOf(' ') + 1;
-      const guEndIdx = curPlaceKakao.road_address_name.indexOf('구 ') + 1;
-      setPlaces((prevPlaces: IRecordedPlace[]) => [
-        ...prevPlaces,
-        {
-          orders: curOrder,
-          placeName: curPlaceKakao.place_name,
-          placeContent: '',
-          address: curPlaceKakao.road_address_name,
-          addressGu: curPlaceKakao.road_address_name.substring(guStartIdx, guEndIdx),
-          addressX: curPlaceKakao.x.toString(),
-          addressY: curPlaceKakao.y.toString(),
-          image: [],
-        },
-      ]);
     }
   }, [markers]);
 
@@ -122,17 +102,33 @@ const KeywordPlaceSearch = () => {
   function handleClickListItem(index: number) {
     setIsOpenSearch(false);
     // 데이트 코스에 추가합니다
-    setPlacesKakao((prevPlaces: IPlaceKakao[]) => [...prevPlaces, results[index]]);
-
+    // 장소 데이터를 업데이트합니다
+    const curOrder = markers.length;
+    const curPlaceKakao = results[index];
+    const guStartIdx = curPlaceKakao.road_address_name.indexOf(' ') + 1;
+    const guEndIdx = curPlaceKakao.road_address_name.indexOf('구 ') + 1;
+    setPlaces((prevPlaces: IRecordedPlace[]) => [
+      ...prevPlaces,
+      {
+        orders: curOrder,
+        placeName: curPlaceKakao.place_name,
+        placeContent: '',
+        address: curPlaceKakao.road_address_name,
+        addressGu: curPlaceKakao.road_address_name.substring(guStartIdx, guEndIdx),
+        addressX: curPlaceKakao.x.toString(),
+        addressY: curPlaceKakao.y.toString(),
+        image: [],
+      },
+    ]);
     // 마커를 생성하고 지도에 표시합니다
     const placePosition = new kakao.maps.LatLng(results[index].y, results[index].x);
-    addMarker(placePosition, placesKakao.length);
+    addMarker(placePosition, places.length);
   }
   return (
-    <>
-      <MapLayout>
+    <KeywordPlaceSearchLayout>
+      <MapCol>
         <MapBox id="map" />
-      </MapLayout>
+      </MapCol>
       <>
         <SearchContainer onClick={() => setIsOpenSearch(true)}>
           <SearchContainder placeholder="추가할 코스를 검색해주세요" />
@@ -147,10 +143,13 @@ const KeywordPlaceSearch = () => {
         ) : null}
         {isOpenPlace ? <PlaceModal placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} /> : null}
       </>
-    </>
+    </KeywordPlaceSearchLayout>
   );
 };
-const MapLayout = styled.div`
+const KeywordPlaceSearchLayout = styled.div`
+  margin-bottom: 1rem;
+`;
+const MapCol = styled.div`
   padding: 1.5rem 0;
 `;
 const MapBox = styled.div`
