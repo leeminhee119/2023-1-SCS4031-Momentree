@@ -93,7 +93,7 @@ const ModalLayout = styled.div`
   z-index: 1000;
 `;
 const TitleBox = styled.div`
-  ${({ theme }) => theme.fonts.suubtitle1};
+  ${({ theme }) => theme.fonts.subtitle1};
   display: flex;
   justify-content: space-between;
 `;

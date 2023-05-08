@@ -65,6 +65,8 @@ const Post = () => {
           resetHashtags();
           resetPlaces();
           resetRecord();
+          navigate(`/`);
+          window.location.reload();
         }
       })
       .catch((error) => console.log('error:', error));
@@ -138,7 +140,7 @@ const HeaderLayout = styled.div`
   height: 4.4rem;
 `;
 const Header = styled.div`
-  ${({ theme }) => theme.fonts.suubtitle1};
+  ${({ theme }) => theme.fonts.subtitle1};
 `;
 const BackIcon = styled.img`
   width: 1.2rem;

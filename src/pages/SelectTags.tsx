@@ -167,7 +167,7 @@ const SelectTagsLayout = styled.div`
   height: 90vh;
 `;
 const TitleBox = styled.div`
-  ${({ theme }) => theme.fonts.suubtitle1};
+  ${({ theme }) => theme.fonts.subtitle1};
   strong {
     color: ${({ theme }) => theme.colors.mainDark};
   }
@@ -176,7 +176,7 @@ const TagsRow = styled.div`
   margin: 2rem -3px 4rem;
 `;
 const TagButton = styled.button`
-  ${({ theme }) => theme.fonts.suubtitle2};
+  ${({ theme }) => theme.fonts.subtitle2};
   border: 1.5px solid;
   border-radius: 99px;
   border-color: ${({ theme }) => theme.colors.gray200};
@@ -195,7 +195,7 @@ const TagButton = styled.button`
 // 해시태그 직접 입력
 const UserTagsRow = styled.div`
   h1 {
-    ${({ theme }) => theme.fonts.suubtitle1};
+    ${({ theme }) => theme.fonts.subtitle1};
   }
 `;
 const CreateTagsRow = styled.div`
