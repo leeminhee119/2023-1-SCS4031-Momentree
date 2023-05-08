@@ -24,12 +24,12 @@ const PostItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, vibeTag,
         <div>
           <MoodTagContainer>
             {vibeTag?.map((item, index) => {
-              return <article key={index}>{item}</article>;
+              return <article key={index}>{item.tagName}</article>;
             })}
           </MoodTagContainer>
           <ActivityTagContainer>
             {activityTag?.map((item, index) => {
-              return <article key={index}>{item}</article>;
+              return <article key={index}>{item.tagName}</article>;
             })}
           </ActivityTagContainer>
         </div>

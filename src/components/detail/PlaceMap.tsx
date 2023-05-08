@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import PlaceMapModal from './PlaceMapModal';
-import { PlaceInformation } from 'types/placeInformation';
+import { PlaceInformation, PlaceImageProps } from 'types/placeInformation';
 
 interface PlaceMapProps {
   placeList: PlaceInformation[];
@@ -12,20 +12,20 @@ const PlaceMap = ({ placeList }: PlaceMapProps) => {
   const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
   const [clickedMarkerName, setClickedMarkerName] = useState<string>(''); // 지도에서 클릭한 마커의 장소명
   const [clickedMarkerContent, setClickedMarkerContent] = useState<string>(''); // 지도에서 클릭한 마커의 장소 내용
-  const [clickedMarkerImage, setClickedMarkerImage] = useState<string[]>([]); // 지도에서 클릭한 마커의 장소 이미지
+  const [clickedMarkerImage, setClickedMarkerImage] = useState<PlaceImageProps[]>([]); // 지도에서 클릭한 마커의 장소 이미지
 
   let sumX = 0;
   let sumY = 0;
 
-  placeList.forEach((place) => {
-    sumX += Number(place.addressX);
-    sumY += Number(place.addressY);
-  });
-
   useEffect(() => {
+    placeList?.forEach((place) => {
+      sumX += Number(place.addressX);
+      sumY += Number(place.addressY);
+    });
+
     const mapContainer = document.getElementById('map'), // 지도를 표시할 div
       mapOption = {
-        center: new kakao.maps.LatLng(sumY / placeList.length, sumX / placeList.length), // 지도의 중심좌표
+        center: new kakao.maps.LatLng(sumY / 2, sumX / 2), // 지도의 중심좌표
         level: 4, // 지도의 확대 레벨
       };
 
@@ -55,7 +55,7 @@ const PlaceMap = ({ placeList }: PlaceMapProps) => {
         setClickedMarkerImage(place.placeImages); // 마커(장소) 아이디
       });
     });
-  });
+  }, []);
 
   return (
     <>

@@ -1,7 +1,7 @@
 import { PlaceInformation } from './placeInformation';
 
 export interface CommunityData {
-  activityTags: string[];
+  activityTags: Tag[];
   bookMarkCnt: number;
   bookMarkStatus: boolean;
   createdAt: string;
@@ -12,5 +12,9 @@ export interface CommunityData {
   recordedPlaces: Array<PlaceInformation>;
   title: string;
   userName: string;
-  vibeTags: string[];
+  vibeTags: Tag[];
+}
+
+interface Tag {
+  tagName: string;
 }

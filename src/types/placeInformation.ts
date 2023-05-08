@@ -8,5 +8,10 @@ export interface PlaceInformation {
   addressX: string;
   addressY: string;
   placeContent: string;
-  placeImages: string[];
+  placeImages: PlaceImageProps[];
+}
+
+export interface PlaceImageProps {
+  imageUrl: string;
+  orders: number;
 }

@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import closeIcon from '../../assets/icons/close.svg';
+import { PlaceImageProps } from 'types/placeInformation';
 
 interface PlaceMapModalProps {
   placeName: string;
   placeContent: string;
-  placeImage: string[];
+  placeImage: PlaceImageProps[];
   handleModalClose: () => void;
 }
 
@@ -19,7 +20,9 @@ const PlaceMapModal = ({ placeName, placeContent, placeImage, handleModalClose }
           </div>
         </TitleBox>
         <PlaceContent>{placeContent}</PlaceContent>
-        {placeImage}
+        {placeImage?.map((img, index: number): JSX.Element => {
+          return <p key={index}>{img.imageUrl}</p>;
+        })}
       </ModalLayout>
     </ModalBackground>
   );

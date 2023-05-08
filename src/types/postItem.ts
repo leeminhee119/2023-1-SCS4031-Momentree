@@ -5,6 +5,10 @@ export interface PostItemProps {
   likeCnt: number;
   bookmarkCnt: number;
   place?: Array<PlaceInformation>;
-  vibeTag: string[];
-  activityTag: string[];
+  vibeTag: Tag[];
+  activityTag: Tag[];
+}
+
+interface Tag {
+  tagName: string;
 }

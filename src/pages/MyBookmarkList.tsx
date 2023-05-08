@@ -15,8 +15,8 @@ const MyBookmarkList = () => {
       likeCnt: 134,
       bookmarkCnt: 13,
       place: ['중구'],
-      vibeTag: ['편안함', '힐링'],
-      activityTag: ['공원', '산책'],
+      vibeTag: [{ tagName: '맛집' }],
+      activityTag: [{ tagName: '맛집' }],
     },
     {
       recordedId: 7,
@@ -27,8 +27,8 @@ const MyBookmarkList = () => {
       likeCnt: 203,
       bookmarkCnt: 34,
       place: ['서초구', '강남구'],
-      vibeTag: ['활기찬', '즐거운', '신나는'],
-      activityTag: ['테마파크', '식사'],
+      vibeTag: [{ tagName: '맛집' }],
+      activityTag: [{ tagName: '맛집' }],
     },
     {
       recordedId: 183,
@@ -39,8 +39,8 @@ const MyBookmarkList = () => {
       likeCnt: 203,
       bookmarkCnt: 34,
       place: ['광하문로', '강남구'],
-      vibeTag: ['고즈넉한', '즐거운', '신나는'],
-      activityTag: ['식사'],
+      vibeTag: [{ tagName: '맛집' }],
+      activityTag: [{ tagName: '맛집' }],
     },
   ];
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import clickbookmarkIcon from '../assets/icons/clickbookmark.svg';
 import heartIcon from '../assets/icons/heart.svg';
 import fillheartIcon from '../assets/icons/fillheart.svg';
@@ -8,8 +8,9 @@ import bookmarkIcon from '../assets/icons/bookmark.svg';
 import leftIcon from '../assets/icons/left.svg';
 import WriterInfo from 'components/detail/WriterInfo';
 import { useCommunityDetailQuery } from 'hooks/queries/useCommunityDetail';
-import { PlaceInformation } from 'types/placeInformation';
-import PlaceMap from 'components/detail/PlaceMap';
+import { PlaceInformation, PlaceImageProps } from 'types/placeInformation';
+
+import PlaceMapModal from '../components/detail/PlaceMapModal';
 
 const Detail = () => {
   const { postId } = useParams();
@@ -18,33 +19,57 @@ const Detail = () => {
   const navigate = useNavigate();
   const { data } = useCommunityDetailQuery(Number(postId));
 
-  // 지도 더미 데이터
-  const dummyData = [
-    {
-      recordId: 1,
-      placeId: 23,
-      orders: 1,
-      placeName: '이따금',
-      placeContent: '내가 제일 좋아하는 카페, 말차슈페너 진짜진짜 맛있음!!!!',
-      address: '경기 수원시 팔달구 화서문로32번길 15',
-      addressGu: '수원시 팔달구',
-      addressX: '127.012027642142',
-      addressY: '37.2843970838872',
-      placeImages: [],
-    },
-    {
-      recordId: 1,
-      placeId: 33,
-      orders: 2,
-      placeName: '하우스플랜비',
-      placeContent: '인생 뇨끼 맛집~~',
-      address: '경기 수원시 팔달구 신풍로23번길 62',
-      addressGu: '수원시 팔달구',
-      addressX: '127.011531409585',
-      addressY: '37.2839952698365',
-      placeImages: [],
-    },
-  ];
+  const { kakao } = window;
+  const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
+  const [clickedMarkerName, setClickedMarkerName] = useState<string>(''); // 지도에서 클릭한 마커의 장소명
+  const [clickedMarkerContent, setClickedMarkerContent] = useState<string>(''); // 지도에서 클릭한 마커의 장소 내용
+  const [clickedMarkerImage, setClickedMarkerImage] = useState<PlaceImageProps[]>([]); // 지도에서 클릭한 마커의 장소 이미지
+
+  let sumX = 0;
+  let sumY = 0;
+
+  useEffect(() => {
+    data?.result.recordedPlaces?.forEach((place: PlaceInformation) => {
+      sumX += Number(place.addressX);
+      sumY += Number(place.addressY);
+    });
+
+    const mapContainer = document.getElementById('map'), // 지도를 표시할 div
+      mapOption = {
+        center: new kakao.maps.LatLng(
+          sumY / data?.result.recordedPlaces.length,
+          sumX / data?.result.recordedPlaces.length
+        ), // 지도의 중심좌표
+        level: 4, // 지도의 확대 레벨
+      };
+
+    const map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+    // 마커 이미지의 이미지 주소입니다
+    const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
+
+    data?.result.recordedPlaces.map((place: PlaceInformation) => {
+      // 마커 이미지의 이미지 크기 입니다
+      const imageSize = new kakao.maps.Size(24, 35);
+
+      // 마커 이미지를 생성합니다
+      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+      // 마커를 생성합니다
+      const marker = new kakao.maps.Marker({
+        map: map, // 마커를 표시할 지도
+        position: new kakao.maps.LatLng(place.addressY, place.addressX), // 마커를 표시할 위치
+        image: markerImage, // 마커 이미지
+      });
+
+      kakao.maps.event.addListener(marker, 'click', function () {
+        setIsOpenPlace(true);
+        setClickedMarkerName(place.placeName); // 마커(장소) 이름
+        setClickedMarkerContent(place.placeContent); // 마커(장소) 내용
+        setClickedMarkerImage(place.placeImages); // 마커(장소) 사진
+      });
+    });
+  }, [data]);
 
   return (
     <DetailContainer>
@@ -72,22 +97,32 @@ const Detail = () => {
       <DetailInfo>
         <TagContainer>
           <MoodTagContainer>
-            {data?.result.vibeTags.map((item: string, index: number) => {
-              return <article key={index}>{item}</article>;
+            {data?.result.vibeTags.map((item: { tagName: string }, index: number) => {
+              return <article key={index}>{item.tagName}</article>;
             })}
           </MoodTagContainer>
           <ActivityTagContainer>
-            {data?.result.activityTags.map((item: string, index: number) => {
-              return <article key={index}>{item}</article>;
+            {data?.result.activityTags.map((item: { tagName: string }, index: number) => {
+              return <article key={index}>{item.tagName}</article>;
             })}
           </ActivityTagContainer>
         </TagContainer>
-        <p>{data?.result.createdAt}</p>
+        <p>게시글{data?.result.createdAt}</p> <br />
+        <p>데이트{data?.result.dateDate}</p>
       </DetailInfo>
       <DetailTitle>{data?.result.title}</DetailTitle>
       <WriterInfo userName={data?.result.userName} />
-      {/* ! 지도 좌표 더미 데이터로 찍어보기 */}
-      <PlaceMap placeList={dummyData} />
+      <MapLayout>
+        <MapBox id="map" />
+      </MapLayout>
+      {isOpenPlace ? (
+        <PlaceMapModal
+          placeName={clickedMarkerName}
+          placeContent={clickedMarkerContent}
+          placeImage={clickedMarkerImage}
+          handleModalClose={() => setIsOpenPlace(false)}
+        />
+      ) : null}
       <PlaceContainer>
         {data?.result.recordedPlaces.map((place: PlaceInformation, index: number) => {
           return (
@@ -224,4 +259,13 @@ const DetailContent = styled.p`
   color: ${({ theme }) => theme.colors.gray700};
   ${({ theme }) => theme.fonts.body2};
   margin-top: 16px;
+`;
+
+const MapLayout = styled.div`
+  padding: 1.5rem 0;
+`;
+const MapBox = styled.div`
+  width: 100%;
+  height: 20rem;
+  border-radius: 1.2rem;
 `;
