@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import filterIcon from '../../assets/icons/filter.svg';
 import { useNavigate } from 'react-router-dom';
 import { CommunityData } from '../../types/communityData';
-import PostItem from 'components/common/PostItem';
+import PostItem from 'components/common/PostMainItem';
 
 interface CommunityDataProps {
   communityData: CommunityData[];

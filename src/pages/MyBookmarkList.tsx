@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import leftIcon from '../assets/icons/left.svg';
-import PostItem from 'components/common/PostItem';
+import PostItem from 'components/common/PostMainItem';
 
 const MyBookmarkList = () => {
   const navigate = useNavigate();

@@ -5,7 +5,7 @@ import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { PostItemProps } from '../../types/postItem';
 
-const PostItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, vibeTag, activityTag }: PostItemProps) => {
+const PostMainItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, vibeTag, activityTag }: PostItemProps) => {
   return (
     <PostItemContainer>
       <Map></Map>
@@ -42,7 +42,7 @@ const PostItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, vibeTag,
   );
 };
 
-export default PostItem;
+export default PostMainItem;
 
 const PostItemContainer = styled.section`
   display: flex;
