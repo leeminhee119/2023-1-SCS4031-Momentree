@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import leftIcon from '../assets/icons/left.svg';
-import PostItem from 'components/common/postItem';
+import PostItem from 'components/common/PostItem';
 
 const MyPostList = () => {
   const navigate = useNavigate();
@@ -15,8 +15,8 @@ const MyPostList = () => {
       likeCnt: 134,
       bookmarkCnt: 13,
       place: ['중구'],
-      vibeTag: ['편안함', '힐링'],
-      activityTag: ['공원', '산책'],
+      vibeTag: [{ tagName: '맛집' }],
+      activityTag: [{ tagName: '맛집' }],
     },
     {
       recordedId: 999,
@@ -27,8 +27,8 @@ const MyPostList = () => {
       likeCnt: 203,
       bookmarkCnt: 34,
       place: ['서초구', '강남구'],
-      vibeTag: ['활기찬', '즐거운', '신나는'],
-      activityTag: ['테마파크', '식사'],
+      vibeTag: [{ tagName: '맛집' }],
+      activityTag: [{ tagName: '맛집' }],
     },
   ];
 
@@ -54,7 +54,7 @@ const MyPostList = () => {
               bookmarkCnt={data.bookmarkCnt}
               vibeTag={data.vibeTag}
               activityTag={data.activityTag}
-              place={data.place}
+              // place={data.place}
               key={index}></PostItem>
           </div>
         );

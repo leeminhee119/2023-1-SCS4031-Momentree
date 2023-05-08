@@ -1,22 +1,24 @@
 import styled from 'styled-components';
-
-const WriterInfo = () => {
+interface WriterInfoProps {
+  userName: string;
+}
+const WriterInfo = ({ userName }: WriterInfoProps) => {
   return (
-    <WriterInfoContatiner>
+    <WriterInfoContainer>
       <div>
         <img src="https://user-images.githubusercontent.com/62867581/234172890-03b605e4-9e8d-4661-8142-cb94bae8e3a4.png"></img>
         <Info>
-          <h1>모멘트리</h1>
+          <h1>{userName}</h1>
           <p>글 119 · 팔로워 33</p>
         </Info>
       </div>
       <AddFollowerButton type="button"> + 팔로우 </AddFollowerButton>
-    </WriterInfoContatiner>
+    </WriterInfoContainer>
   );
 };
 export default WriterInfo;
 
-const WriterInfoContatiner = styled.section`
+const WriterInfoContainer = styled.section`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -43,7 +45,7 @@ const WriterInfoContatiner = styled.section`
 const Info = styled.article`
   h1 {
     color: ${({ theme }) => theme.colors.gray900};
-    ${({ theme }) => theme.fonts.suubtitle2};
+    ${({ theme }) => theme.fonts.subtitle2};
   }
 
   p {

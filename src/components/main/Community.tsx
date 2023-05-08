@@ -1,36 +1,15 @@
 import styled from 'styled-components';
 import filterIcon from '../../assets/icons/filter.svg';
-import PostItem from '../common/postItem';
 import { useNavigate } from 'react-router-dom';
+import { CommunityData } from '../../types/communityData';
+import PostItem from 'components/common/PostItem';
 
-const Community = () => {
+interface CommunityDataProps {
+  communityData: CommunityData[];
+}
+
+const Community = ({ communityData }: CommunityDataProps) => {
   const navigate = useNavigate();
-  const CommunityData = [
-    {
-      recordedId: 6,
-      title: '즐거운 여행',
-      record_content: '너무 즐거웠어요',
-      bookMarkStatus: true,
-      likeStatus: false,
-      likeCnt: 134,
-      bookmarkCnt: 13,
-      place: ['강남구', '서초구'],
-      vibeTag: ['편안함', '힐링'],
-      activityTag: ['공원', '산책'],
-    },
-    {
-      recordedId: 7,
-      title: '남산 데이트 코스',
-      record_content: '너무 즐거웠어요',
-      bookMarkStatus: false,
-      likeStatus: false,
-      likeCnt: 203,
-      bookmarkCnt: 34,
-      place: ['중구'],
-      vibeTag: ['활기찬', '즐거운', '신나는'],
-      activityTag: ['테마파크', '식사'],
-    },
-  ];
 
   return (
     <CommunityContainer>
@@ -42,17 +21,21 @@ const Community = () => {
         </Filter>
       </Label>
       <CommunityList>
-        {CommunityData.map((data, index) => {
+        {communityData?.map((data: CommunityData, index: number) => {
           return (
-            <div onClick={() => navigate(`/post/${data.recordedId}`)}>
+            <div
+              onClick={() => {
+                navigate(`/post/${data?.recordedId}`);
+                window.location.reload();
+              }}>
               <PostItem
-                title={data.title}
-                bookMarkStatus={data.bookMarkStatus}
-                likeCnt={data.likeCnt}
-                bookmarkCnt={data.bookmarkCnt}
-                vibeTag={data.vibeTag}
-                activityTag={data.activityTag}
-                place={data.place}
+                title={data?.title}
+                bookMarkStatus={data?.bookMarkStatus}
+                likeCnt={data?.likeCnt}
+                bookmarkCnt={data?.bookMarkCnt}
+                vibeTag={data?.vibeTags}
+                activityTag={data?.activityTags}
+                place={data?.recordedPlaces}
                 key={index}></PostItem>
             </div>
           );

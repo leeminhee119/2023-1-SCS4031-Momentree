@@ -36,8 +36,8 @@ const fonts = {
   heading1: FONT({ weight: 700, size: 2.4, lineHeight: 36 }),
   heading2: FONT({ weight: 700, size: 2.2, lineHeight: 33 }),
 
-  suubtitle1: FONT({ weight: 700, size: 1.8, lineHeight: 27 }),
-  suubtitle2: FONT({ weight: 700, size: 1.3, lineHeight: 19.5 }),
+  subtitle1: FONT({ weight: 700, size: 1.8, lineHeight: 27 }),
+  subtitle2: FONT({ weight: 700, size: 1.3, lineHeight: 19.5 }),
 
   body1: FONT({ weight: 700, size: 1.6, lineHeight: 24 }),
   body2: FONT({ weight: 400, size: 1.6, lineHeight: 24 }),
