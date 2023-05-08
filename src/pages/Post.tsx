@@ -53,7 +53,7 @@ const Post = () => {
       headers: {
         'Content-Type': 'application/json',
         Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6InRlc3QwMiIsIm5hbWUiOiLsubTtjpjsl6ztlonrn6wiLCJpYXQiOjE2ODMyODI5NjEsImV4cCI6MTY4NTg3NDk2MX0.6G-nM1bU9vq1vtA4Zj8wosHLB-ioRR0OachtFK21S5I',
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6InRlc3QwMiIsIm5hbWUiOiLsubTtjpjsl6ztlonrn6wiLCJpYXQiOjE2ODM1MjMwOTcsImV4cCI6MTY4NjExNTA5N30.MdRtV8YRmwdc6ZEgSR41qxvA723xkSRo8XipM_9dEEQ',
       },
       body: JSON.stringify(recordData),
     })
@@ -80,7 +80,7 @@ const Post = () => {
     setRecordData((prevState) => {
       return {
         ...prevState,
-        recordedContent: event.target.value,
+        title: event.target.value,
       };
     });
   }
@@ -105,13 +105,17 @@ const Post = () => {
             <CloseIcon src={closeIcon} alt="닫기 버튼" />
           </button>
         </HeaderLayout>
-        <TitleInput placeholder="제목을 입력해주세요" value={recordData.title} onChange={handleChangeTitle} />
+        <TitleInput placeholder="제목을 입력해주세요" defaultValue={recordData.title} onChange={handleChangeTitle} />
         <HorizontalLine />
         <DatePicker dateDate={recordData.dateDate} setRecordData={setRecordData} />
         <Margin />
         <KeywordPlaceSearch />
         <Margin />
-        <ContentTextBox placeholder="오늘 데이트가 어땠는지 알려주세요" onChange={handleChangeContent} />
+        <ContentTextBox
+          placeholder="오늘 데이트가 어땠는지 알려주세요"
+          defaultValue={recordData.recordedContent}
+          onChange={handleChangeContent}
+        />
       </PostBox>
       <SaveButton isActive={isSaveActive} handleClickSave={handleClickSave} />
     </PostLayout>
