@@ -4,7 +4,7 @@ import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { IRecordedPlace } from 'types/post';
 import { IImage } from 'types/post';
 import { useRecoilState } from 'recoil';
-import SaveButton from './SaveButton';
+import SaveButton from '../common/SaveButton';
 import { useState } from 'react';
 interface PlaceModalProps {
   placeIdx: number;

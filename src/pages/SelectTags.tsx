@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { selectedTagsState } from 'recoil/atoms/selectedTagsState';
 import closeButton from '../assets/icons/close.svg';
-import SaveButton from 'components/post/SaveButton';
+import SaveButton from 'components/common/SaveButton';
 import { IHashtag } from 'types/post';
 
 const SelectTags = () => {

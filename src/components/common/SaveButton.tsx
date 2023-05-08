@@ -20,6 +20,7 @@ const SaveButton = (props: ISaveButton) => {
 const ButtonLayout = styled.div`
   height: 5.2rem;
   margin-top: auto;
+  width: 100%;
 `;
 const Button = styled.button<{ isActive: boolean }>`
   display: flex;

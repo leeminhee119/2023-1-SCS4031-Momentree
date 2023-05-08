@@ -8,7 +8,7 @@ import HorizontalLine from '../components/post/HorizontalLine';
 import DatePicker from '../components/post/DatePicker';
 import Margin from '../components/main/Margin';
 import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
-import SaveButton from 'components/post/SaveButton';
+import SaveButton from 'components/common/SaveButton';
 import { IHashtag, IRecord, IRecordedPlace } from 'types/post';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectedTagsState } from '\brecoil/atoms/selectedTagsState';
