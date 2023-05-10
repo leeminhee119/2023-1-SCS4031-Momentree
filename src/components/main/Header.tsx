@@ -3,16 +3,26 @@ import sidebarIcon from '../../assets/icons/sidebar.svg';
 import penIcon from '../../assets/icons/pen.svg';
 import logoIcon from '../../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
+import Nav from 'pages/Nav';
+import { useState } from 'react';
 
 const Header = () => {
   const navigate = useNavigate();
+  const [isNavOpen, setIsNavOpen] = useState<boolean>(false);
   return (
     <MainHeader>
       <LogoImage src={logoIcon} />
       <IconBox>
         <img src={penIcon} alt="글 작성하기 아이콘" onClick={() => navigate(`/selectTags`)} />
-        <img src={sidebarIcon} alt="사이드바 열기 아이콘" />
+        <img
+          src={sidebarIcon}
+          alt="네브바 열기 아이콘"
+          onClick={() => {
+            setIsNavOpen(true);
+          }}
+        />
       </IconBox>
+      {isNavOpen && <Nav setIsNavOpen={setIsNavOpen} />}
     </MainHeader>
   );
 };
