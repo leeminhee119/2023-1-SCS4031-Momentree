@@ -128,5 +128,16 @@ const SearchIcon = styled.img`
   z-index: 1;
   color: rgb(79, 91, 102);
 `;
-const SearchResultList = styled.ul``;
+const SearchResultList = styled.ul`
+  height: 90%;
+  padding: 1rem;
+  overflow-y: scroll;
+  li {
+    ${({ theme }) => theme.fonts.subtitle1};
+    padding: 1.5rem 0;
+    :hover {
+      color: ${({ theme }) => theme.colors.mainDark};
+    }
+  }
+`;
 export default SearchModal;
