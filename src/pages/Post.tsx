@@ -65,7 +65,6 @@ const Post = () => {
           resetPlaces();
           resetRecord();
           navigate(`/`);
-          window.location.reload();
         }
       })
       .catch((error) => console.log('error:', error));
