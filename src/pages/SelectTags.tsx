@@ -10,8 +10,48 @@ import { IHashtag } from 'types/post';
 const SelectTags = () => {
   const navigate = useNavigate();
 
-  const moodTagsData = ['편안한', '따뜻한', '로맨틱한', '맛있는', '신나는', '힐링', '조용한', '힙한'];
-  const activityTagsData = ['영화', '맛집투어', '레저', '휴식', '산책', '운동', '게임', '체험'];
+  const moodTagsData = [
+    '로맨틱',
+    '캐쥬얼',
+    '활기찬',
+    '역사적',
+    '고급스러운',
+    '이국적',
+    '편안한',
+    '아늑한',
+    '조용한',
+    '트렌디',
+    '도시적',
+    '빈티지',
+    '야외',
+    '전통적',
+    '힐링',
+    '스포티',
+    '나른한',
+    '힙한',
+    '따뜻한',
+  ];
+  const activityTagsData = [
+    '영화',
+    '쇼핑',
+    '산책',
+    '전시',
+    '운동',
+    '캠핑',
+    '공연',
+    '피크닉',
+    '연극',
+    '게임',
+    '여행',
+    '체험',
+    '쉼',
+    '음악',
+    '피크닉',
+    '맛집투어',
+    '방탈출',
+    '공방',
+    '술',
+  ];
 
   const [selectedTags, setSelectedTags] = useRecoilState<IHashtag[]>(selectedTagsState);
   const [moodTags, setMoodTags] = useState<string[]>(

@@ -47,7 +47,6 @@ const Post = () => {
   }, [recordData]);
 
   async function handleClickSave() {
-    console.log('await');
     await fetch('http://3.39.153.141/community', {
       method: 'POST',
       headers: {
@@ -74,9 +73,6 @@ const Post = () => {
   function handleClickBack() {
     navigate(`/selectTags`);
   }
-
-  console.log('places', places);
-  console.log('recordData', recordData);
 
   function handleChangeTitle(event: React.ChangeEvent<HTMLInputElement>) {
     setRecordData((prevState) => {
