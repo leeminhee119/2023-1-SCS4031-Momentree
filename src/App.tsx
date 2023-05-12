@@ -8,6 +8,7 @@ import theme from './styles/theme';
 import { lazy, Suspense } from 'react';
 
 const MainPage = lazy(() => import('./pages/Main'));
+const Login = lazy(() => import('./pages/Login'));
 const SelectTags = lazy(() => import('./pages/SelectTags'));
 const Post = lazy(() => import('./pages/Post'));
 const Detail = lazy(() => import('./pages/Detail'));
@@ -44,6 +45,7 @@ export default function App() {
               <Suspense fallback={<h1>로딩중입니다.</h1>}>
                 <Routes>
                   <Route path="/" element={<MainPage />} />
+                  <Route path="/login" element={<Login />} />
                   <Route path="/selectTags" element={<SelectTags />} />
                   <Route path="/post" element={<Post />} />
                   <Route path="/post/:postId" element={<Detail />} />
