@@ -137,7 +137,7 @@ const Detail = () => {
         })}
       </PlaceContainer>
       <DetailContent>
-        {data?.result.record_content} <br />
+        {data?.result.recordContent} <br />
       </DetailContent>
     </DetailContainer>
   );
