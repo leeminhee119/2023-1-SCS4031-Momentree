@@ -1,26 +1,20 @@
+import React from 'react';
 import styled from 'styled-components';
 import RegisterForm from '../components/register/RegisterForm';
 
-const RegisterPage = () => {
+const SignUp = () => {
   return (
-    <PageContainer>
-      <Title>회원가입</Title>
+    <PageLayout>
       <RegisterForm />
-    </PageContainer>
+    </PageLayout>
   );
 };
 
-const PageContainer = styled.div`
+const PageLayout = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: flex-start; /* 수정: 센터 정렬 대신 상단 정렬 */
   align-items: center;
-  padding: 2rem;
+  // height: 100vh;
 `;
 
-const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
-`;
-
-export default RegisterPage;
+export default SignUp;
