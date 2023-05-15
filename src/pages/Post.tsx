@@ -15,19 +15,24 @@ import { selectedTagsState } from '\brecoil/atoms/selectedTagsState';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { recordState } from '\brecoil/atoms/recordState';
 import { useResetRecoilState } from 'recoil';
+import { getImageUrls } from 'S3upload';
+import { imageFilesState } from '\brecoil/atoms/imageFilesState';
+import { IImageFilesState } from 'types/post';
 
 const Post = () => {
   const navigate = useNavigate();
   const hashtags = useRecoilValue<IHashtag[]>(selectedTagsState);
-  const places = useRecoilValue<IRecordedPlace[]>(recordedPlacesState);
+  const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
   const [recordData, setRecordData] = useRecoilState<IRecord>(recordState);
 
   const resetHashtags = useResetRecoilState(selectedTagsState);
   const resetPlaces = useResetRecoilState(recordedPlacesState);
   const resetRecord = useResetRecoilState(recordState);
+  const resetImageFiles = useResetRecoilState(imageFilesState);
 
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
 
+  const imageFiles = useRecoilValue<IImageFilesState[]>(imageFilesState);
   // places가 KeywordPlaceSearch에서 변경될 때마다 recordData.recordedPlaces 업데이트
   // 선택한 해시태그 recordData.hashtags에 업데이트
   useEffect(() => {
@@ -47,6 +52,25 @@ const Post = () => {
   }, [recordData]);
 
   async function handleClickSave() {
+    // 1. places 데이터의 image 값 할당
+    const updatedPlacesData = await Promise.all(
+      places.map(async (placeData, index) => {
+        const curImageFiles: File[] = [];
+        imageFiles.forEach((imgFile) => {
+          if (imgFile.placeIdx === index) {
+            curImageFiles.push(...imgFile.files);
+          }
+        });
+        const images = await getImageUrls(curImageFiles);
+        return {
+          ...placeData,
+          image: images || [],
+        };
+      })
+    );
+    // 2. image값이 할당된 데이터로 상태 업데이트
+    setPlaces(updatedPlacesData);
+    // 3. 서버 요청
     await fetch('http://3.39.153.141/community', {
       method: 'POST',
       headers: {
@@ -64,6 +88,7 @@ const Post = () => {
           resetHashtags();
           resetPlaces();
           resetRecord();
+          resetImageFiles();
           navigate(`/`);
         }
       })

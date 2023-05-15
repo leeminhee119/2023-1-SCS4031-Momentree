@@ -3,7 +3,7 @@ export interface IHashtag {
   type: string;
 }
 export interface IImage {
-  order: number;
+  orders: number;
   imgUrl: string;
 }
 export interface IRecordedPlace {
@@ -26,4 +26,9 @@ export interface IRecord {
   exposure: string; //OPEN
   hashtags: IHashtag[];
   recordedPlaces: IRecordedPlace[];
+}
+
+export interface IImageFilesState {
+  placeIdx: number;
+  files: File[];
 }
