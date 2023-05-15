@@ -39,7 +39,7 @@ const MainHeader = styled.header`
   height: 6rem;
 `;
 const LogoImage = styled.img`
-  width: 15rem;
+  width: 10rem;
 `;
 const IconBox = styled.div`
   display: flex;

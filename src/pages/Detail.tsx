@@ -1,23 +1,43 @@
 import styled from 'styled-components';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import clickbookmarkIcon from '../assets/icons/clickbookmark.svg';
 import heartIcon from '../assets/icons/heart.svg';
 import fillheartIcon from '../assets/icons/fillheart.svg';
 import bookmarkIcon from '../assets/icons/bookmark.svg';
 import leftIcon from '../assets/icons/left.svg';
+import shareIcon from '../assets/icons/share.svg';
 import WriterInfo from 'components/detail/WriterInfo';
 import { useCommunityDetailQuery } from 'hooks/queries/useCommunityDetail';
 import { PlaceInformation, PlaceImageProps } from 'types/placeInformation';
 
 import PlaceMapModal from '../components/detail/PlaceMapModal';
+import ToastMessage from 'components/common/ToastMessage';
 
 const Detail = () => {
   const { postId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [ishearted, setIshearted] = useState<boolean>(true);
   const [isbookmarked, setIsbookmarked] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const [iscopyed, setIscopyed] = useState<boolean>(false);
   const { data } = useCommunityDetailQuery(Number(postId));
+
+  const handleCopyClipBoard = async () => {
+    await navigator.clipboard
+      // TODO base url 추가
+      .writeText(location.pathname)
+      .then(() => {
+        setIscopyed(true);
+        setTimeout(() => {
+          setIscopyed(false);
+        }, 2000);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const { kakao } = window;
   const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
@@ -74,6 +94,7 @@ const Detail = () => {
   return (
     <DetailContainer>
       <DetailHeader>
+        {iscopyed && <ToastMessage text="게시글 url을 복사했어요!" />}
         <Icon
           src={leftIcon}
           alt="뒤로가기 아이콘"
@@ -92,6 +113,7 @@ const Detail = () => {
           ) : (
             <Icon src={bookmarkIcon} alt="북마크 하지 않은 아이콘" onClick={() => setIsbookmarked(true)} />
           )}
+          <Icon src={shareIcon} alt="url 복사 아이콘" onClick={() => handleCopyClipBoard()} />
         </div>
       </DetailHeader>
       <DetailInfo>
