@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logoIcon from '../../assets/logo.png';
 import RegisterButton from './RegisterButton';
+import axios from 'axios';
 
 const Register = () => {
   // 회원가입 창의 상태와 활성화 여부를 관리하는 상태 변수들
@@ -15,6 +16,7 @@ const Register = () => {
     nickName: '',
   });
 
+  const navigate = useNavigate();
   useEffect(() => {
     // 회원가입 입력 필드가 모두 채워졌을 때만 활성화 상태로 설정
     const { userName, email, password, nickName } = registerInput;
@@ -25,14 +27,25 @@ const Register = () => {
     }
   }, [registerInput]);
 
-  // 회원가입 양식 제출 시 호출되는 함수
-  const handleRegister = () => {
-    console.log(registerInput);
+  const handleRegister = async () => {
+    //console.log(registerInput);
+    try {
+      const response = await axios.post('/signup', registerInput);
+      if (response.status === 200) {
+        // 회원가입 성공 처리
+        navigate('/login');
+        console.log('회원가입 성공');
+      } else {
+        // 회원가입 실패 처리
+        console.log('회원가입 실패');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
     <RegisterLayout>
-      {/* 로고 이미지 */}
       <LogoRow>
         <LogoImage src={logoIcon} alt="Logo" />
       </LogoRow>
