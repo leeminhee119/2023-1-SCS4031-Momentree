@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-// import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import logoIcon from '../assets/logo.png';
 import SaveButton from 'components/common/SaveButton';
 import { userState } from '\brecoil/atoms/userState';
-// import { useLogin } from 'hooks/queries/useLogin';
-// import { loginState } from '\brecoil/atoms/loginState';
 
 const Login = () => {
   const [isActive, setIsActive] = useState<boolean>(false);
@@ -15,21 +12,9 @@ const Login = () => {
     userName: '',
     password: '',
   }); // 사용자가 입력한 아이디 패스워드
-  //   const [loginBody, setLoginBody] = useRecoilState(loginState);
 
-  //   const setUserState = useSetRecoilState(userState);
-  const tempUserState = useRecoilValue(userState);
+  const setUserState = useSetRecoilState(userState); // 유저 아이디, 토큰 저장
 
-  //   const data = useLogin(loginBody);
-  //   console.log(data);
-  //   useEffect(() => {
-  //     setUserState(() => {
-  //       return {
-  //         userName: loginInput.userName,
-  //         token: data.
-  //       };
-  //     });
-  //   });
   useEffect(() => {
     if (loginInput.userName !== '' && loginInput.password !== '') {
       setIsActive(true);
@@ -37,10 +22,6 @@ const Login = () => {
       setIsActive(false);
     }
   }, [loginInput]);
-
-  //   function handleLogin() {
-  //     setLoginBody(loginInput);
-  //   }
 
   async function handleLogin() {
     await fetch('http://3.39.153.141/login', {
@@ -54,19 +35,21 @@ const Login = () => {
         if (!response.ok) {
           throw new Error(`HTTP error ${response.status}`);
         } else {
-          console.log(response);
-          //   setUserState(() => {
-          //     return {
-          //       userName: loginInput.userName,
-          //       token: response.body.
-          //     };
-          //   });
+          console.log(
+            response.json().then((body) => {
+              setUserState(() => {
+                return {
+                  userName: loginInput.userName,
+                  token: body.result.token,
+                };
+              });
+            })
+          );
         }
       })
       .catch((error) => console.log('error:', error));
   }
 
-  console.log(tempUserState);
   return (
     <LoginLayout>
       <LogoRol>
