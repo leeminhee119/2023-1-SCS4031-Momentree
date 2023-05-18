@@ -2,11 +2,13 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 import logoIcon from '../assets/logo.png';
 import SaveButton from 'components/common/SaveButton';
 import { userState } from '\brecoil/atoms/userState';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [isActive, setIsActive] = useState<boolean>(false);
   const [loginInput, setLoginInput] = useState({
     userName: '',
@@ -33,6 +35,9 @@ const Login = () => {
     })
       .then((response) => {
         if (!response.ok) {
+          if (response.status === 500) {
+            alert('아이디 혹은 비밀번호가 일치하지 않습니다.\n 다시 입력해주세요.');
+          }
           throw new Error(`HTTP error ${response.status}`);
         } else {
           console.log(
@@ -43,6 +48,7 @@ const Login = () => {
                   token: body.result.token,
                 };
               });
+              navigate('/');
             })
           );
         }
