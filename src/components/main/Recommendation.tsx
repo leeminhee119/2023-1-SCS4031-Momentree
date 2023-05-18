@@ -43,9 +43,9 @@ const Recommendation = () => {
     <RecommendationContainer>
       <RecommendationContainerTitle>당신을 위한 추천 코스</RecommendationContainerTitle>
       <RecommendationSlider>
-        {Recommendations.map((data, index) => {
+        {Recommendations.map((data, index: number) => {
           return (
-            <div onClick={() => navigate(`/post/${data.recordedId}`)}>
+            <div key={index} onClick={() => navigate(`/post/${data.recordedId}`)}>
               <RecommendationItem
                 title={data.title}
                 bookMarkStatus={data.bookMarkStatus}

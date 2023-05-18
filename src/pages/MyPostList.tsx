@@ -2,35 +2,15 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import leftIcon from '../assets/icons/left.svg';
 import PostItem from 'components/common/PostMainItem';
+import { useMyPostListQuery } from 'hooks/queries/useMyPage';
+import { useRecoilValue } from 'recoil';
+import { userState } from '\brecoil/atoms/userState';
+import { CommunityData } from 'types/communityData';
 
 const MyPostList = () => {
   const navigate = useNavigate();
-  const PostData = [
-    {
-      recordedId: 123,
-      title: '충무로 데이트 코스',
-      record_content: '너무 즐거웠어요',
-      bookMarkStatus: true,
-      likeStatus: false,
-      likeCnt: 134,
-      bookmarkCnt: 13,
-      place: ['중구'],
-      vibeTag: [{ tagName: '맛집' }],
-      activityTag: [{ tagName: '맛집' }],
-    },
-    {
-      recordedId: 999,
-      title: '반포대교 코스',
-      record_content: '무지개 분수 최고',
-      bookMarkStatus: false,
-      likeStatus: false,
-      likeCnt: 203,
-      bookmarkCnt: 34,
-      place: ['서초구', '강남구'],
-      vibeTag: [{ tagName: '맛집' }],
-      activityTag: [{ tagName: '맛집' }],
-    },
-  ];
+  const token = useRecoilValue(userState).token;
+  const { data } = useMyPostListQuery(token);
 
   return (
     <MyPostListContainer>
@@ -44,17 +24,17 @@ const MyPostList = () => {
         />
         <h1>나의 데이트 코스</h1>
       </MyPostListHeader>
-      {PostData.map((data, index) => {
+      {data?.result.content.map((data: CommunityData, index: number) => {
         return (
           <div onClick={() => navigate(`/post/${data.recordedId}`)}>
             <PostItem
               title={data.title}
               bookMarkStatus={data.bookMarkStatus}
               likeCnt={data.likeCnt}
-              bookmarkCnt={data.bookmarkCnt}
-              vibeTag={data.vibeTag}
-              activityTag={data.activityTag}
-              // place={data.place}
+              bookmarkCnt={data.bookMarkCnt}
+              vibeTag={data.vibeTags}
+              activityTag={data.activityTags}
+              place={data.recordedPlaces}
               key={index}></PostItem>
           </div>
         );
