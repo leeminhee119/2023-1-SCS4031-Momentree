@@ -1,24 +1,34 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import logoIcon from '../assets/logo.png';
 import SaveButton from 'components/common/SaveButton';
+import { useLoginMutation } from 'hooks/queries/useLogin';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [isActive, setIsActive] = useState<boolean>(false);
   const [loginInput, setLoginInput] = useState({
     userName: '',
     password: '',
-  });
+  }); // 사용자가 입력한 아이디 패스워드
+
+  // API에 post 요청 보내기 위한 useMutation 훅 가져오기
+  const loginMutation = useLoginMutation(loginInput.userName, loginInput.password); // 입력한 userName, password 전달
 
   useEffect(() => {
     if (loginInput.userName !== '' && loginInput.password !== '') {
       setIsActive(true);
+    } else {
+      setIsActive(false);
     }
   }, [loginInput]);
 
   function handleLogin() {
-    console.log(loginInput);
+    // API post 요청
+    loginMutation.mutate();
+    navigate(`/`);
   }
 
   return (
