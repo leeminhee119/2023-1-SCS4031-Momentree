@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 import logoIcon from '../assets/logo.png';
 import SaveButton from 'components/common/SaveButton';
-import { userState } from '\brecoil/atoms/userState';
+import { useLoginMutation } from 'hooks/queries/useLogin';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,7 +14,8 @@ const Login = () => {
     password: '',
   }); // 사용자가 입력한 아이디 패스워드
 
-  const setUserState = useSetRecoilState(userState); // 유저 아이디, 토큰 저장
+  // API에 post 요청 보내기 위한 useMutation 훅 가져오기
+  const loginMutation = useLoginMutation(loginInput.userName, loginInput.password); // 입력한 userName, password 전달
 
   useEffect(() => {
     if (loginInput.userName !== '' && loginInput.password !== '') {
@@ -25,35 +25,10 @@ const Login = () => {
     }
   }, [loginInput]);
 
-  async function handleLogin() {
-    await fetch('http://3.39.153.141/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(loginInput),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          if (response.status === 500) {
-            alert('아이디 혹은 비밀번호가 일치하지 않습니다.\n 다시 입력해주세요.');
-          }
-          throw new Error(`HTTP error ${response.status}`);
-        } else {
-          console.log(
-            response.json().then((body) => {
-              setUserState(() => {
-                return {
-                  userName: loginInput.userName,
-                  token: body.result.token,
-                };
-              });
-              navigate('/');
-            })
-          );
-        }
-      })
-      .catch((error) => console.log('error:', error));
+  function handleLogin() {
+    // API post 요청
+    loginMutation.mutate();
+    navigate(`/`);
   }
 
   return (
