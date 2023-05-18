@@ -36,7 +36,7 @@ const request = async ({ url, method, body, params, token }: RequestType): Promi
   }
 };
 
-export const GET = (url: string, params?: object) => request({ url, method: 'get', params });
+export const GET = (url: string, token?: string) => request({ url, method: 'get', token });
 export const POST = (url: string, body?: object, token?: string) => request({ url, method: 'post', body, token });
 export const PATCH = (url: string, body?: object, token?: string) => request({ url, method: 'patch', body, token });
 export const PUT = (url: string, body?: object, token?: string) => request({ url, method: 'put', body, token });
