@@ -19,14 +19,19 @@ const MyPostList = () => {
           src={leftIcon}
           alt="뒤로가기 아이콘"
           onClick={() => {
-            navigate(-1);
+            navigate('/');
+            window.location.reload();
           }}
         />
         <h1>나의 데이트 코스</h1>
       </MyPostListHeader>
       {data?.result.content.map((data: CommunityData, index: number) => {
         return (
-          <div onClick={() => navigate(`/post/${data.recordedId}`)}>
+          <div
+            onClick={() => {
+              navigate(`/post/${data.recordedId}`);
+              window.location.reload();
+            }}>
             <PostItem
               title={data.title}
               bookMarkStatus={data.bookMarkStatus}
