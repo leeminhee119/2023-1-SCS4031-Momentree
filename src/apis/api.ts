@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from 'axios';
-
 const baseURL = 'http://3.39.153.141';
 
 interface RequestType {
@@ -21,7 +20,7 @@ const request = async ({ url, method, body, params, token }: RequestType): Promi
       params,
       headers: {},
     };
-    if (token != '' && config.headers) {
+    if (token && config.headers) {
       config.headers['Authorization'] = token;
     }
     const data =

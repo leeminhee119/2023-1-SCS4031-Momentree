@@ -14,10 +14,15 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectedTagsState } from '\brecoil/atoms/selectedTagsState';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { recordState } from '\brecoil/atoms/recordState';
+import { usePostMutation } from 'hooks/queries/usePost';
+import { userState } from '\brecoil/atoms/userState';
 import { useResetRecoilState } from 'recoil';
 
 const Post = () => {
   const navigate = useNavigate();
+  // 로그인한 유저 토큰 값 불러오기
+  const token = useRecoilValue(userState).token;
+
   const hashtags = useRecoilValue<IHashtag[]>(selectedTagsState);
   const places = useRecoilValue<IRecordedPlace[]>(recordedPlacesState);
   const [recordData, setRecordData] = useRecoilState<IRecord>(recordState);
@@ -26,8 +31,16 @@ const Post = () => {
   const resetPlaces = useResetRecoilState(recordedPlacesState);
   const resetRecord = useResetRecoilState(recordState);
 
-  const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
+  const postMutation = usePostMutation(recordData, token, function () {
+    // API post 후 success 콜백
+    // recoil atom 초기화
+    resetHashtags();
+    resetPlaces();
+    resetRecord();
+    navigate(`/`);
+  });
 
+  const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
   // places가 KeywordPlaceSearch에서 변경될 때마다 recordData.recordedPlaces 업데이트
   // 선택한 해시태그 recordData.hashtags에 업데이트
   useEffect(() => {
@@ -46,29 +59,10 @@ const Post = () => {
     }
   }, [recordData]);
 
-  async function handleClickSave() {
-    await fetch('http://3.39.153.141/community', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6InRlc3QwMiIsIm5hbWUiOiLsubTtjpjsl6ztlonrn6wiLCJpYXQiOjE2ODM1MjMwOTcsImV4cCI6MTY4NjExNTA5N30.MdRtV8YRmwdc6ZEgSR41qxvA723xkSRo8XipM_9dEEQ',
-      },
-      body: JSON.stringify(recordData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error ${response.status}`);
-        } else {
-          // recoil atom 초기화
-          resetHashtags();
-          resetPlaces();
-          resetRecord();
-          navigate(`/`);
-        }
-      })
-      .catch((error) => console.log('error:', error));
+  function handleClickSave() {
+    postMutation.mutate();
   }
+
   function handleClickBack() {
     navigate(`/selectTags`);
   }
