@@ -7,6 +7,7 @@ import backIcon from '../assets/icons/back.svg';
 import HorizontalLine from '../components/post/HorizontalLine';
 import DatePicker from '../components/post/DatePicker';
 import Margin from '../components/main/Margin';
+import Map from 'components/common/Map';
 import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
 import SaveButton from 'components/common/SaveButton';
 import { IHashtag, IRecord, IRecordedPlace } from 'types/post';
@@ -14,6 +15,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectedTagsState } from '\brecoil/atoms/selectedTagsState';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { recordState } from '\brecoil/atoms/recordState';
+import { usePostMutation } from 'hooks/queries/usePost';
+import { userState } from '\brecoil/atoms/userState';
 import { useResetRecoilState } from 'recoil';
 import { getImageUrls } from 'S3upload';
 import { imageFilesState } from '\brecoil/atoms/imageFilesState';
@@ -21,6 +24,9 @@ import { IImageFilesState } from 'types/post';
 
 const Post = () => {
   const navigate = useNavigate();
+  // 로그인한 유저 토큰 값 불러오기
+  const token = useRecoilValue(userState).token;
+
   const hashtags = useRecoilValue<IHashtag[]>(selectedTagsState);
   const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
   const [recordData, setRecordData] = useRecoilState<IRecord>(recordState);
@@ -30,9 +36,16 @@ const Post = () => {
   const resetRecord = useResetRecoilState(recordState);
   const resetImageFiles = useResetRecoilState(imageFilesState);
 
-  const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
+  const postMutation = usePostMutation(recordData, token, function () {
+    // API post 후 success 콜백
+    // recoil atom 초기화
+    resetHashtags();
+    resetPlaces();
+    resetRecord();
+    navigate(`/`);
+  });
 
-  const imageFiles = useRecoilValue<IImageFilesState[]>(imageFilesState);
+  const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
   // places가 KeywordPlaceSearch에서 변경될 때마다 recordData.recordedPlaces 업데이트
   // 선택한 해시태그 recordData.hashtags에 업데이트
   useEffect(() => {
@@ -51,49 +64,10 @@ const Post = () => {
     }
   }, [recordData]);
 
-  async function handleClickSave() {
-    // 1. places 데이터의 image 값 할당
-    const updatedPlacesData = await Promise.all(
-      places.map(async (placeData, index) => {
-        const curImageFiles: File[] = [];
-        imageFiles.forEach((imgFile) => {
-          if (imgFile.placeIdx === index) {
-            curImageFiles.push(...imgFile.files);
-          }
-        });
-        const images = await getImageUrls(curImageFiles);
-        return {
-          ...placeData,
-          image: images || [],
-        };
-      })
-    );
-    // 2. image값이 할당된 데이터로 상태 업데이트
-    setPlaces(updatedPlacesData);
-    // 3. 서버 요청
-    await fetch('http://3.39.153.141/community', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6InRlc3QwMiIsIm5hbWUiOiLsubTtjpjsl6ztlonrn6wiLCJpYXQiOjE2ODM1MjMwOTcsImV4cCI6MTY4NjExNTA5N30.MdRtV8YRmwdc6ZEgSR41qxvA723xkSRo8XipM_9dEEQ',
-      },
-      body: JSON.stringify(recordData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error ${response.status}`);
-        } else {
-          // recoil atom 초기화
-          resetHashtags();
-          resetPlaces();
-          resetRecord();
-          resetImageFiles();
-          navigate(`/`);
-        }
-      })
-      .catch((error) => console.log('error:', error));
+  function handleClickSave() {
+    postMutation.mutate();
   }
+
   function handleClickBack() {
     navigate(`/selectTags`);
   }
@@ -131,6 +105,7 @@ const Post = () => {
         <HorizontalLine />
         <DatePicker dateDate={recordData.dateDate} setRecordData={setRecordData} />
         <Margin />
+        <Map places={places} />
         <KeywordPlaceSearch />
         <Margin />
         <ContentTextBox
