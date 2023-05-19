@@ -10,11 +10,6 @@ import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { useRecoilState } from 'recoil';
 import Map from 'components/common/Map';
 
-// interface IMapOptions {
-//   center: any;
-//   level: number;
-// }
-
 const KeywordPlaceSearch = () => {
   const [results, setResults] = useState<IPlaceKakao[]>([]); // 키워드 검색 결과들을 담는 배열
 
