@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import closeIcon from '../assets/icons/close.svg';
+import { useRecoilValue } from 'recoil';
+import { userState } from '\brecoil/atoms/userState';
 
 interface NavProps {
   setIsNavOpen(state: boolean): void;
@@ -8,9 +10,11 @@ interface NavProps {
 
 const Nav = ({ setIsNavOpen }: NavProps) => {
   const navigate = useNavigate();
+  const { userName, token } = useRecoilValue(userState);
+
   const USERPAGE_LIST = [
-    { title: '나의 북마크', url: 'userPage/myBookmarkList' },
     { title: '나의 데이트 코스', url: 'userPage/myPostList' },
+    { title: '나의 북마크', url: 'userPage/myBookmarkList' },
     { title: '팔로잉 유저', url: 'userPage/myPostList' },
   ];
 
@@ -20,35 +24,41 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
         <IconImage>
           <img src={closeIcon} alt="닫기 아이콘" onClick={() => setIsNavOpen(false)} />
         </IconImage>
-
-        <UserInfo>
-          <UserImage
-            src="https://user-images.githubusercontent.com/62867581/234172890-03b605e4-9e8d-4661-8142-cb94bae8e3a4.png"
-            alt="유저 이미지"
-          />
-          <UserName>모멘트리</UserName>
-        </UserInfo>
-
-        <UserFollower>
-          <article>
-            <h1>팔로워</h1>
-            <p>1125</p>
-          </article>
-          <div></div>
-          <article>
-            <h1>팔로잉</h1>
-            <p>58</p>
-          </article>
-        </UserFollower>
-        <List onClick={() => navigate(`/selectTags`)}>코스 등록하기</List>
-        <Bar></Bar>
-        {USERPAGE_LIST.map((item, index) => {
-          return (
-            <List key={index} onClick={() => navigate(`${item.url}`)}>
-              {item.title}
-            </List>
-          );
-        })}
+        {token ? (
+          <>
+            <UserInfo>
+              <UserImage
+                src="https://user-images.githubusercontent.com/62867581/234172890-03b605e4-9e8d-4661-8142-cb94bae8e3a4.png"
+                alt="유저 이미지"
+              />
+              <UserName>{userName}</UserName>
+            </UserInfo>
+            <p>로그아웃</p>
+            <UserFollower>
+              <article>
+                <h1>팔로워</h1>
+                <p>1125</p>
+              </article>
+              <article>
+                <h1>팔로잉</h1>
+                <p>58</p>
+              </article>
+            </UserFollower>
+            <List onClick={() => navigate(`/selectTags`)}>코스 등록하기</List>
+            <Bar></Bar>
+            {USERPAGE_LIST.map((item, index) => {
+              return (
+                <List key={index} onClick={() => navigate(`${item.url}`)}>
+                  {item.title}
+                </List>
+              );
+            })}
+          </>
+        ) : (
+          <GotoLoginButton type="button" onClick={() => navigate('/login')}>
+            로그인하기
+          </GotoLoginButton>
+        )}
       </NavContainer>
     </NavBackground>
   );
@@ -148,4 +158,12 @@ const List = styled.p`
   color: ${({ theme }) => theme.colors.gray900};
   ${({ theme }) => theme.fonts.body3};
   margin-bottom: 20px;
+`;
+
+const GotoLoginButton = styled.button`
+  color: ${({ theme }) => theme.colors.gray900};
+  background-color: ${({ theme }) => theme.colors.mainLight};
+  ${({ theme }) => theme.fonts.body3};
+  border-radius: 30px;
+  height: 3rem;
 `;

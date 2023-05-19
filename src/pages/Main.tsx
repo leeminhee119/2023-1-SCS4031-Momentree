@@ -8,7 +8,6 @@ import { useCommunityQuery } from '../hooks/queries/useCommunity';
 
 const Main = () => {
   const { data } = useCommunityQuery();
-
   return (
     <MainContainer>
       <Header />

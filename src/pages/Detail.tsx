@@ -1,23 +1,56 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import styled from 'styled-components';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import clickbookmarkIcon from '../assets/icons/clickbookmark.svg';
 import heartIcon from '../assets/icons/heart.svg';
 import fillheartIcon from '../assets/icons/fillheart.svg';
 import bookmarkIcon from '../assets/icons/bookmark.svg';
 import leftIcon from '../assets/icons/left.svg';
+import deleteIcon from '../assets/icons/delete.svg';
+import shareIcon from '../assets/icons/share.svg';
 import WriterInfo from 'components/detail/WriterInfo';
-import { useCommunityDetailQuery } from 'hooks/queries/useCommunityDetail';
+import { useCommunityDetailQuery, usedeleteCommunityDetail } from 'hooks/queries/useCommunityDetail';
 import { PlaceInformation, PlaceImageProps } from 'types/placeInformation';
-
 import PlaceMapModal from '../components/detail/PlaceMapModal';
+import ToastMessage from 'components/common/ToastMessage';
+import { useRecoilValue } from 'recoil';
+import { userState } from '\brecoil/atoms/userState';
 
 const Detail = () => {
   const { postId } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { userName, token } = useRecoilValue(userState);
+
   const [ishearted, setIshearted] = useState<boolean>(true);
   const [isbookmarked, setIsbookmarked] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const [iscopyed, setIscopyed] = useState<boolean>(false);
   const { data } = useCommunityDetailQuery(Number(postId));
+  const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), token);
+
+  const deleteConfirmModal = () => {
+    if (confirm('게시글을 정말 삭제하시겠습니까?')) {
+      handleClickDeleteButton();
+      navigate('/');
+      window.location.reload();
+    }
+  };
+
+  const handleCopyClipBoard = async () => {
+    await navigator.clipboard
+      // TODO base url 추가
+      .writeText(location.pathname)
+      .then(() => {
+        setIscopyed(true);
+        setTimeout(() => {
+          setIscopyed(false);
+        }, 2000);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const { kakao } = window;
   const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
@@ -74,11 +107,13 @@ const Detail = () => {
   return (
     <DetailContainer>
       <DetailHeader>
+        {iscopyed && <ToastMessage text="게시글 url을 복사했어요!" />}
         <Icon
           src={leftIcon}
           alt="뒤로가기 아이콘"
           onClick={() => {
-            navigate(-1);
+            navigate('/');
+            window.location.reload();
           }}
         />
         <div>
@@ -92,6 +127,16 @@ const Detail = () => {
           ) : (
             <Icon src={bookmarkIcon} alt="북마크 하지 않은 아이콘" onClick={() => setIsbookmarked(true)} />
           )}
+          {data?.result.userName === userName && (
+            <Icon
+              src={deleteIcon}
+              alt="삭제 아이콘"
+              onClick={() => {
+                deleteConfirmModal();
+              }}
+            />
+          )}
+          <Icon src={shareIcon} alt="url 복사 아이콘" onClick={() => handleCopyClipBoard()} />
         </div>
       </DetailHeader>
       <DetailInfo>
@@ -107,8 +152,8 @@ const Detail = () => {
             })}
           </ActivityTagContainer>
         </TagContainer>
-        <p>게시글{data?.result.createdAt}</p> <br />
-        <p>데이트{data?.result.dateDate}</p>
+        <p>작성일 {data?.result.createdAt}</p> <br />
+        <p>데이트일 {data?.result.dateDate}</p>
       </DetailInfo>
       <DetailTitle>{data?.result.title}</DetailTitle>
       <WriterInfo userName={data?.result.userName} />
@@ -126,7 +171,7 @@ const Detail = () => {
       <PlaceContainer>
         {data?.result.recordedPlaces.map((place: PlaceInformation, index: number) => {
           return (
-            <PlaceList>
+            <PlaceList key={index}>
               <article key={index}>
                 <p>{index + 1} </p>
                 <h2>{place.placeName}</h2>
@@ -163,8 +208,9 @@ const Icon = styled.img`
 
 const DetailInfo = styled.section`
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
   width: 100%;
 
   p {
@@ -175,6 +221,7 @@ const DetailInfo = styled.section`
 
 const TagContainer = styled.section`
   display: flex;
+  margin-bottom: 0.5rem;
 `;
 
 const MoodTagContainer = styled.article`

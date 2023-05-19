@@ -24,6 +24,7 @@ const Community = ({ communityData }: CommunityDataProps) => {
         {communityData?.map((data: CommunityData, index: number) => {
           return (
             <div
+              key={index}
               onClick={() => {
                 navigate(`/post/${data?.recordedId}`);
                 window.location.reload();
