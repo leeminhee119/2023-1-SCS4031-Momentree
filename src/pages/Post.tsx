@@ -7,6 +7,7 @@ import backIcon from '../assets/icons/back.svg';
 import HorizontalLine from '../components/post/HorizontalLine';
 import DatePicker from '../components/post/DatePicker';
 import Margin from '../components/main/Margin';
+import Map from 'components/common/Map';
 import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
 import SaveButton from 'components/common/SaveButton';
 import { IHashtag, IRecord, IRecordedPlace } from 'types/post';
@@ -100,6 +101,7 @@ const Post = () => {
         <HorizontalLine />
         <DatePicker dateDate={recordData.dateDate} setRecordData={setRecordData} />
         <Margin />
+        <Map places={places} />
         <KeywordPlaceSearch />
         <Margin />
         <ContentTextBox

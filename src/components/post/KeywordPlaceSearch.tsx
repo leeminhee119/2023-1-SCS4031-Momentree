@@ -8,7 +8,6 @@ import searchIcon from '../../assets/icons/search.svg';
 import SearchModal from './SearchModal';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { useRecoilState } from 'recoil';
-import Map from 'components/common/Map';
 
 const KeywordPlaceSearch = () => {
   const [results, setResults] = useState<IPlaceKakao[]>([]); // 키워드 검색 결과들을 담는 배열
@@ -45,7 +44,6 @@ const KeywordPlaceSearch = () => {
   }
   return (
     <KeywordPlaceSearchLayout>
-      <Map places={places} />
       <SearchContainer onClick={() => setIsOpenSearch(true)}>
         <SearchContainder placeholder="추가할 코스를 검색해주세요" />
         <SearchIcon src={searchIcon} alt="검색 아이콘" />
