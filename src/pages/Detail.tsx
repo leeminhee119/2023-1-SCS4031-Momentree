@@ -10,12 +10,16 @@ import leftIcon from '../assets/icons/left.svg';
 import deleteIcon from '../assets/icons/delete.svg';
 import shareIcon from '../assets/icons/share.svg';
 import WriterInfo from 'components/detail/WriterInfo';
-import { useCommunityDetailQuery, usedeleteCommunityDetail } from 'hooks/queries/useCommunityDetail';
+import {
+  useCommunityDetailQuery,
+  useLoginCommunityDetailQuery,
+  usedeleteCommunityDetail,
+} from 'hooks/queries/useCommunityDetail';
 import { PlaceInformation } from 'types/placeInformation';
 import ToastMessage from 'components/common/ToastMessage';
 import { useCookies } from 'react-cookie';
 import Map from 'components/detail/Map';
-import { usePostBookmarkMutation } from 'hooks/queries/useUser';
+import { usePostBookmarkMutation, usePostLikekMutation } from 'hooks/queries/useUser';
 
 const Detail = () => {
   const { postId } = useParams();
@@ -25,10 +29,13 @@ const Detail = () => {
   const [ishearted, setIshearted] = useState<boolean>(true);
   const body = {};
   const postBookmarkMutation = usePostBookmarkMutation(Number(postId), body, cookies.user.userToken);
+  const postLikeMutation = usePostLikekMutation(Number(postId), body, cookies.user.userToken);
   const [iscopyed, setIscopyed] = useState<boolean>(false);
-  const { data } = useCommunityDetailQuery(Number(postId));
+  // const { data } = useCommunityDetailQuery(Number(postId));
+  const { data } = useLoginCommunityDetailQuery(Number(postId), cookies.user.userToken);
   const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), cookies.user.userToken);
 
+  console.log(data);
   const deleteConfirmModal = () => {
     if (confirm('게시글을 정말 삭제하시겠습니까?')) {
       handleClickDeleteButton();
@@ -65,10 +72,24 @@ const Detail = () => {
           }}
         />
         <div>
-          {ishearted ? (
-            <Icon src={fillheartIcon} alt="좋아요 한 아이콘" onClick={() => setIshearted(false)} />
+          {data?.result.likeStatus ? (
+            <Icon
+              src={fillheartIcon}
+              alt="좋아요 한 아이콘"
+              onClick={() => {
+                postLikeMutation.mutate();
+                window.location.reload();
+              }}
+            />
           ) : (
-            <Icon src={heartIcon} alt="좋아요 하지 않은 아이콘" onClick={() => setIshearted(true)} />
+            <Icon
+              src={heartIcon}
+              alt="좋아요 하지 않은 아이콘"
+              onClick={() => {
+                postLikeMutation.mutate();
+                window.location.reload();
+              }}
+            />
           )}
           {data?.result.bookMarkStatus ? (
             <Icon
