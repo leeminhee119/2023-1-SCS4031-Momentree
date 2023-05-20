@@ -42,7 +42,6 @@ const Post = () => {
   });
 
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
-
   // places가 KeywordPlaceSearch에서 변경될 때마다 recordData.recordedPlaces 업데이트
   // 선택한 해시태그 recordData.hashtags에 업데이트
   useEffect(() => {
