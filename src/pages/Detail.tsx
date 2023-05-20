@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import styled from 'styled-components';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import clickbookmarkIcon from '../assets/icons/clickbookmark.svg';
 import heartIcon from '../assets/icons/heart.svg';
 import fillheartIcon from '../assets/icons/fillheart.svg';
@@ -11,23 +11,25 @@ import deleteIcon from '../assets/icons/delete.svg';
 import shareIcon from '../assets/icons/share.svg';
 import WriterInfo from 'components/detail/WriterInfo';
 import { useCommunityDetailQuery, usedeleteCommunityDetail } from 'hooks/queries/useCommunityDetail';
-import { PlaceInformation, PlaceImageProps } from 'types/placeInformation';
-import PlaceMapModal from '../components/detail/PlaceMapModal';
+import { PlaceInformation } from 'types/placeInformation';
 import ToastMessage from 'components/common/ToastMessage';
-import { useRecoilValue } from 'recoil';
-import { userState } from '\brecoil/atoms/userState';
+import { useCookies } from 'react-cookie';
+import Map from 'components/detail/Map';
+import { usePostBookmarkMutation, usePostLikekMutation } from 'hooks/queries/useUser';
 
 const Detail = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { userName, token } = useRecoilValue(userState);
+  const [cookies] = useCookies(['user']);
 
-  const [ishearted, setIshearted] = useState<boolean>(true);
-  const [isbookmarked, setIsbookmarked] = useState<boolean>(false);
+  const body = {};
+  const postBookmarkMutation = usePostBookmarkMutation(Number(postId), body, cookies.user.userToken);
+  const postLikeMutation = usePostLikekMutation(Number(postId), body, cookies.user.userToken);
+  const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), cookies.user.userToken);
   const [iscopyed, setIscopyed] = useState<boolean>(false);
-  const { data } = useCommunityDetailQuery(Number(postId));
-  const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), token);
+
+  const { data } = useCommunityDetailQuery(Number(postId), cookies.user.userToken);
 
   const deleteConfirmModal = () => {
     if (confirm('게시글을 정말 삭제하시겠습니까?')) {
@@ -52,58 +54,6 @@ const Detail = () => {
       });
   };
 
-  const { kakao } = window;
-  const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
-  const [clickedMarkerName, setClickedMarkerName] = useState<string>(''); // 지도에서 클릭한 마커의 장소명
-  const [clickedMarkerContent, setClickedMarkerContent] = useState<string>(''); // 지도에서 클릭한 마커의 장소 내용
-  const [clickedMarkerImage, setClickedMarkerImage] = useState<PlaceImageProps[]>([]); // 지도에서 클릭한 마커의 장소 이미지
-
-  let sumX = 0;
-  let sumY = 0;
-
-  useEffect(() => {
-    data?.result.recordedPlaces?.forEach((place: PlaceInformation) => {
-      sumX += Number(place.addressX);
-      sumY += Number(place.addressY);
-    });
-
-    const mapContainer = document.getElementById('map'), // 지도를 표시할 div
-      mapOption = {
-        center: new kakao.maps.LatLng(
-          sumY / data?.result.recordedPlaces.length,
-          sumX / data?.result.recordedPlaces.length
-        ), // 지도의 중심좌표
-        level: 4, // 지도의 확대 레벨
-      };
-
-    const map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
-    // 마커 이미지의 이미지 주소입니다
-    const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
-
-    data?.result.recordedPlaces.map((place: PlaceInformation) => {
-      // 마커 이미지의 이미지 크기 입니다
-      const imageSize = new kakao.maps.Size(24, 35);
-
-      // 마커 이미지를 생성합니다
-      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-
-      // 마커를 생성합니다
-      const marker = new kakao.maps.Marker({
-        map: map, // 마커를 표시할 지도
-        position: new kakao.maps.LatLng(place.addressY, place.addressX), // 마커를 표시할 위치
-        image: markerImage, // 마커 이미지
-      });
-
-      kakao.maps.event.addListener(marker, 'click', function () {
-        setIsOpenPlace(true);
-        setClickedMarkerName(place.placeName); // 마커(장소) 이름
-        setClickedMarkerContent(place.placeContent); // 마커(장소) 내용
-        setClickedMarkerImage(place.placeImages); // 마커(장소) 사진
-      });
-    });
-  }, [data]);
-
   return (
     <DetailContainer>
       <DetailHeader>
@@ -117,17 +67,45 @@ const Detail = () => {
           }}
         />
         <div>
-          {ishearted ? (
-            <Icon src={fillheartIcon} alt="좋아요 한 아이콘" onClick={() => setIshearted(false)} />
+          {data?.result.likeStatus ? (
+            <Icon
+              src={fillheartIcon}
+              alt="좋아요 한 아이콘"
+              onClick={() => {
+                postLikeMutation.mutate();
+                window.location.reload();
+              }}
+            />
           ) : (
-            <Icon src={heartIcon} alt="좋아요 하지 않은 아이콘" onClick={() => setIshearted(true)} />
+            <Icon
+              src={heartIcon}
+              alt="좋아요 하지 않은 아이콘"
+              onClick={() => {
+                postLikeMutation.mutate();
+                window.location.reload();
+              }}
+            />
           )}
-          {isbookmarked ? (
-            <Icon src={clickbookmarkIcon} alt="북마크 한 아이콘" onClick={() => setIsbookmarked(false)} />
+          {data?.result.bookMarkStatus ? (
+            <Icon
+              src={clickbookmarkIcon}
+              alt="북마크 한 아이콘"
+              onClick={() => {
+                postBookmarkMutation.mutate();
+                window.location.reload();
+              }}
+            />
           ) : (
-            <Icon src={bookmarkIcon} alt="북마크 하지 않은 아이콘" onClick={() => setIsbookmarked(true)} />
+            <Icon
+              src={bookmarkIcon}
+              alt="북마크 하지 않은 아이콘"
+              onClick={() => {
+                postBookmarkMutation.mutate();
+                window.location.reload();
+              }}
+            />
           )}
-          {data?.result.userName === userName && (
+          {data?.result.userName === cookies.user.userName && (
             <Icon
               src={deleteIcon}
               alt="삭제 아이콘"
@@ -158,16 +136,8 @@ const Detail = () => {
       <DetailTitle>{data?.result.title}</DetailTitle>
       <WriterInfo userName={data?.result.userName} />
       <MapLayout>
-        <MapBox id="map" />
+        <Map places={data?.result.recordedPlaces} />
       </MapLayout>
-      {isOpenPlace ? (
-        <PlaceMapModal
-          placeName={clickedMarkerName}
-          placeContent={clickedMarkerContent}
-          placeImage={clickedMarkerImage}
-          handleModalClose={() => setIsOpenPlace(false)}
-        />
-      ) : null}
       <PlaceContainer>
         {data?.result.recordedPlaces.map((place: PlaceInformation, index: number) => {
           return (
@@ -310,9 +280,4 @@ const DetailContent = styled.p`
 
 const MapLayout = styled.div`
   padding: 1.5rem 0;
-`;
-const MapBox = styled.div`
-  width: 100%;
-  height: 20rem;
-  border-radius: 1.2rem;
 `;

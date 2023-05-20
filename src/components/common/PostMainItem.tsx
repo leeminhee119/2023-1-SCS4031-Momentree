@@ -4,17 +4,57 @@ import clickbookmarkIcon from '../../assets/icons/clickbookmark.svg';
 import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { PostItemProps } from '../../types/postItem';
+import MapThumbnail from 'components/common/MapThumbnail';
+import { usePostBookmarkMutation } from 'hooks/queries/useUser';
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
-const PostMainItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, vibeTag, activityTag }: PostItemProps) => {
+const PostMainItem = ({
+  recordedId,
+  title,
+  bookMarkStatus,
+  likeCnt,
+  bookmarkCnt,
+  place,
+  vibeTag,
+  activityTag,
+}: PostItemProps) => {
+  const navigate = useNavigate();
+  const [cookies] = useCookies(['user']);
+  const body = {};
+  const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, cookies.user.userToken);
+
   return (
     <PostItemContainer>
-      <Map></Map>
+      <MapContainer>
+        <MapThumbnail recordedId={recordedId} places={place} />
+      </MapContainer>
       {bookMarkStatus ? (
-        <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" />
+        <BookmarkIcon
+          onClick={() => {
+            postBookmarkMutation.mutate();
+            window.location.reload();
+          }}
+          src={clickbookmarkIcon}
+          alt="북마크 한 아이콘"
+        />
       ) : (
-        <BookmarkIcon src={unclickbookmarkIcon} alt="북마크 하지 않은 아이콘" />
+        <BookmarkIcon
+          src={unclickbookmarkIcon}
+          onClick={() => {
+            postBookmarkMutation.mutate();
+            window.location.reload();
+          }}
+          alt="북마크 하지 않은 아이콘"
+        />
       )}
-      <h1>{title}</h1>
+      <h1
+        onClick={() => {
+          navigate(`/post/${recordedId}`);
+          window.location.reload();
+        }}>
+        {title}
+      </h1>
       <PlaceContainer>
         {place?.map((item, index: number) => {
           return <article key={index}> {item.addressGu.split(' ')[1]} </article>;
@@ -59,11 +99,10 @@ const PostItemContainer = styled.section`
   }
 `;
 
-const Map = styled.article`
+const MapContainer = styled.article`
   width: 100%;
   height: 16rem;
 
-  background-color: ${({ theme }) => theme.colors.gray500};
   border-radius: 4px;
   margin-bottom: 1.2rem;
 `;
