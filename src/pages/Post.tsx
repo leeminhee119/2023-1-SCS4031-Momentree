@@ -42,6 +42,7 @@ const Post = () => {
   });
 
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
+
   // places가 KeywordPlaceSearch에서 변경될 때마다 recordData.recordedPlaces 업데이트
   // 선택한 해시태그 recordData.hashtags에 업데이트
   useEffect(() => {
@@ -59,14 +60,6 @@ const Post = () => {
       setIsSaveActive(false);
     }
   }, [recordData]);
-
-  function handleClickSave() {
-    postMutation.mutate();
-  }
-
-  function handleClickBack() {
-    navigate(`/selectTags`);
-  }
 
   function handleChangeTitle(event: React.ChangeEvent<HTMLInputElement>) {
     setRecordData((prevState) => {
@@ -89,7 +82,7 @@ const Post = () => {
     <PostLayout>
       <PostBox>
         <HeaderLayout>
-          <button onClick={handleClickBack}>
+          <button onClick={() => navigate(`/selectTags`)}>
             <BackIcon src={backIcon} alt="뒤로가기 버튼" />
           </button>
           <Header>글 작성</Header>
@@ -110,7 +103,7 @@ const Post = () => {
           onChange={handleChangeContent}
         />
       </PostBox>
-      <SaveButton isActive={isSaveActive} handleClickSave={handleClickSave} />
+      <SaveButton isActive={isSaveActive} handleClickSave={() => postMutation.mutate()} />
     </PostLayout>
   );
 };
