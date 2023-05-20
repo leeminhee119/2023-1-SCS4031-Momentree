@@ -4,11 +4,23 @@ import clickbookmarkIcon from '../../assets/icons/clickbookmark.svg';
 import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { PostItemProps } from '../../types/postItem';
+import MapThumbnail from 'components/common/MapThumbnail';
 
-const PostMainItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place, vibeTag, activityTag }: PostItemProps) => {
+const PostMainItem = ({
+  recordedId,
+  title,
+  bookMarkStatus,
+  likeCnt,
+  bookmarkCnt,
+  place,
+  vibeTag,
+  activityTag,
+}: PostItemProps) => {
   return (
     <PostItemContainer>
-      <Map></Map>
+      <MapContainer>
+        <MapThumbnail recordedId={recordedId} places={place} />
+      </MapContainer>
       {bookMarkStatus ? (
         <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" />
       ) : (
@@ -59,11 +71,10 @@ const PostItemContainer = styled.section`
   }
 `;
 
-const Map = styled.article`
+const MapContainer = styled.article`
   width: 100%;
   height: 16rem;
 
-  background-color: ${({ theme }) => theme.colors.gray500};
   border-radius: 4px;
   margin-bottom: 1.2rem;
 `;

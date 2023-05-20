@@ -40,6 +40,7 @@ const MyPostList = () => {
               vibeTag={data.vibeTags}
               activityTag={data.activityTags}
               place={data.recordedPlaces}
+              recordedId={data.recordedId}
               key={index}></PostItem>
           </div>
         );

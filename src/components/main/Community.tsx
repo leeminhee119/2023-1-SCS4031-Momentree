@@ -30,6 +30,7 @@ const Community = ({ communityData }: CommunityDataProps) => {
                 window.location.reload();
               }}>
               <PostItem
+                recordedId={data?.recordedId}
                 title={data?.title}
                 bookMarkStatus={data?.bookMarkStatus}
                 likeCnt={data?.likeCnt}
