@@ -10,25 +10,32 @@ import leftIcon from '../assets/icons/left.svg';
 import deleteIcon from '../assets/icons/delete.svg';
 import shareIcon from '../assets/icons/share.svg';
 import WriterInfo from 'components/detail/WriterInfo';
-import { useCommunityDetailQuery, usedeleteCommunityDetail } from 'hooks/queries/useCommunityDetail';
+import {
+  useCommunityDetailQuery,
+  useLoginCommunityDetailQuery,
+  usedeleteCommunityDetail,
+} from 'hooks/queries/useCommunityDetail';
 import { PlaceInformation } from 'types/placeInformation';
 import ToastMessage from 'components/common/ToastMessage';
-import { useRecoilValue } from 'recoil';
-import { userState } from '\brecoil/atoms/userState';
+import { useCookies } from 'react-cookie';
 import Map from 'components/detail/Map';
+import { usePostBookmarkMutation, usePostLikekMutation } from 'hooks/queries/useUser';
 
 const Detail = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { userName, token } = useRecoilValue(userState);
-
+  const [cookies] = useCookies(['user']);
   const [ishearted, setIshearted] = useState<boolean>(true);
-  const [isbookmarked, setIsbookmarked] = useState<boolean>(false);
+  const body = {};
+  const postBookmarkMutation = usePostBookmarkMutation(Number(postId), body, cookies.user.userToken);
+  const postLikeMutation = usePostLikekMutation(Number(postId), body, cookies.user.userToken);
   const [iscopyed, setIscopyed] = useState<boolean>(false);
-  const { data } = useCommunityDetailQuery(Number(postId));
-  const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), token);
+  // const { data } = useCommunityDetailQuery(Number(postId));
+  const { data } = useLoginCommunityDetailQuery(Number(postId), cookies.user.userToken);
+  const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), cookies.user.userToken);
 
+  console.log(data);
   const deleteConfirmModal = () => {
     if (confirm('게시글을 정말 삭제하시겠습니까?')) {
       handleClickDeleteButton();
@@ -65,17 +72,45 @@ const Detail = () => {
           }}
         />
         <div>
-          {ishearted ? (
-            <Icon src={fillheartIcon} alt="좋아요 한 아이콘" onClick={() => setIshearted(false)} />
+          {data?.result.likeStatus ? (
+            <Icon
+              src={fillheartIcon}
+              alt="좋아요 한 아이콘"
+              onClick={() => {
+                postLikeMutation.mutate();
+                window.location.reload();
+              }}
+            />
           ) : (
-            <Icon src={heartIcon} alt="좋아요 하지 않은 아이콘" onClick={() => setIshearted(true)} />
+            <Icon
+              src={heartIcon}
+              alt="좋아요 하지 않은 아이콘"
+              onClick={() => {
+                postLikeMutation.mutate();
+                window.location.reload();
+              }}
+            />
           )}
-          {isbookmarked ? (
-            <Icon src={clickbookmarkIcon} alt="북마크 한 아이콘" onClick={() => setIsbookmarked(false)} />
+          {data?.result.bookMarkStatus ? (
+            <Icon
+              src={clickbookmarkIcon}
+              alt="북마크 한 아이콘"
+              onClick={() => {
+                postBookmarkMutation.mutate();
+                window.location.reload();
+              }}
+            />
           ) : (
-            <Icon src={bookmarkIcon} alt="북마크 하지 않은 아이콘" onClick={() => setIsbookmarked(true)} />
+            <Icon
+              src={bookmarkIcon}
+              alt="북마크 하지 않은 아이콘"
+              onClick={() => {
+                postBookmarkMutation.mutate();
+                window.location.reload();
+              }}
+            />
           )}
-          {data?.result.userName === userName && (
+          {data?.result.userName === cookies.user.userName && (
             <Icon
               src={deleteIcon}
               alt="삭제 아이콘"

@@ -5,6 +5,11 @@ export const getCommunityDetail = async (postId: number) => {
   return data;
 };
 
+export const getLoginCommunityDetail = async (postId: number, token: string) => {
+  const { data } = await GET(`/community/login/${postId}`, token);
+  return data;
+};
+
 export const deleteCommunityDetail = async (postId: number, token: string) => {
   const { data } = await DELETE(`/community/${postId}`, token);
   return data;

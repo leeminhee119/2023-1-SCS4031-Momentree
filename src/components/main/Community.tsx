@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import filterIcon from '../../assets/icons/filter.svg';
-import { useNavigate } from 'react-router-dom';
 import { CommunityData } from '../../types/communityData';
 import PostItem from 'components/common/PostMainItem';
 
@@ -9,8 +8,6 @@ interface CommunityDataProps {
 }
 
 const Community = ({ communityData }: CommunityDataProps) => {
-  const navigate = useNavigate();
-
   return (
     <CommunityContainer>
       <Label>
@@ -23,23 +20,16 @@ const Community = ({ communityData }: CommunityDataProps) => {
       <CommunityList>
         {communityData?.map((data: CommunityData, index: number) => {
           return (
-            <div
-              key={index}
-              onClick={() => {
-                navigate(`/post/${data?.recordedId}`);
-                window.location.reload();
-              }}>
-              <PostItem
-                recordedId={data?.recordedId}
-                title={data?.title}
-                bookMarkStatus={data?.bookMarkStatus}
-                likeCnt={data?.likeCnt}
-                bookmarkCnt={data?.bookMarkCnt}
-                vibeTag={data?.vibeTags}
-                activityTag={data?.activityTags}
-                place={data?.recordedPlaces}
-                key={index}></PostItem>
-            </div>
+            <PostItem
+              recordedId={data?.recordedId}
+              title={data?.title}
+              bookMarkStatus={data?.bookMarkStatus}
+              likeCnt={data?.likeCnt}
+              bookmarkCnt={data?.bookMarkCnt}
+              vibeTag={data?.vibeTags}
+              activityTag={data?.activityTags}
+              place={data?.recordedPlaces}
+              key={index}></PostItem>
           );
         })}
       </CommunityList>
