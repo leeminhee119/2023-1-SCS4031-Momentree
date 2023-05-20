@@ -5,6 +5,10 @@ import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { PostItemProps } from '../../types/postItem';
 import MapThumbnail from 'components/common/MapThumbnail';
+import { useRecoilValue } from 'recoil';
+import { userState } from '\brecoil/atoms/userState';
+import { usePostBookmarkMutation } from 'hooks/queries/useUser';
+import { useNavigate } from 'react-router-dom';
 
 const PostMainItem = ({
   recordedId,
@@ -16,17 +20,42 @@ const PostMainItem = ({
   vibeTag,
   activityTag,
 }: PostItemProps) => {
+  const navigate = useNavigate();
+  const token = useRecoilValue(userState).token;
+  const body = {};
+  const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, token);
+
   return (
     <PostItemContainer>
       <MapContainer>
         <MapThumbnail recordedId={recordedId} places={place} />
       </MapContainer>
       {bookMarkStatus ? (
-        <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" />
+        <BookmarkIcon
+          onClick={() => {
+            postBookmarkMutation.mutate();
+            window.location.reload();
+          }}
+          src={clickbookmarkIcon}
+          alt="북마크 한 아이콘"
+        />
       ) : (
-        <BookmarkIcon src={unclickbookmarkIcon} alt="북마크 하지 않은 아이콘" />
+        <BookmarkIcon
+          src={unclickbookmarkIcon}
+          onClick={() => {
+            postBookmarkMutation.mutate();
+            window.location.reload();
+          }}
+          alt="북마크 하지 않은 아이콘"
+        />
       )}
-      <h1>{title}</h1>
+      <h1
+        onClick={() => {
+          navigate(`/post/${recordedId}`);
+          window.location.reload();
+        }}>
+        {title}
+      </h1>
       <PlaceContainer>
         {place?.map((item, index: number) => {
           return <article key={index}> {item.addressGu.split(' ')[1]} </article>;
@@ -88,6 +117,7 @@ const BookmarkIcon = styled.img`
   z-index: 1;
   color: rgb(79, 91, 102);
   cursor: pointer;
+  z-index: 999;
 `;
 
 const Icon = styled.img``;

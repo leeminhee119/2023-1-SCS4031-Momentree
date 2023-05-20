@@ -16,15 +16,16 @@ import ToastMessage from 'components/common/ToastMessage';
 import { useRecoilValue } from 'recoil';
 import { userState } from '\brecoil/atoms/userState';
 import Map from 'components/detail/Map';
+import { usePostBookmarkMutation } from 'hooks/queries/useUser';
 
 const Detail = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { userName, token } = useRecoilValue(userState);
-
   const [ishearted, setIshearted] = useState<boolean>(true);
-  const [isbookmarked, setIsbookmarked] = useState<boolean>(false);
+  const body = {};
+  const postBookmarkMutation = usePostBookmarkMutation(Number(postId), body, token);
   const [iscopyed, setIscopyed] = useState<boolean>(false);
   const { data } = useCommunityDetailQuery(Number(postId));
   const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), token);
@@ -70,10 +71,24 @@ const Detail = () => {
           ) : (
             <Icon src={heartIcon} alt="좋아요 하지 않은 아이콘" onClick={() => setIshearted(true)} />
           )}
-          {isbookmarked ? (
-            <Icon src={clickbookmarkIcon} alt="북마크 한 아이콘" onClick={() => setIsbookmarked(false)} />
+          {data?.result.bookMarkStatus ? (
+            <Icon
+              src={clickbookmarkIcon}
+              alt="북마크 한 아이콘"
+              onClick={() => {
+                postBookmarkMutation.mutate();
+                window.location.reload();
+              }}
+            />
           ) : (
-            <Icon src={bookmarkIcon} alt="북마크 하지 않은 아이콘" onClick={() => setIsbookmarked(true)} />
+            <Icon
+              src={bookmarkIcon}
+              alt="북마크 하지 않은 아이콘"
+              onClick={() => {
+                postBookmarkMutation.mutate();
+                window.location.reload();
+              }}
+            />
           )}
           {data?.result.userName === userName && (
             <Icon
