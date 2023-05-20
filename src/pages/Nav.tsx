@@ -90,24 +90,14 @@ const NavContainer = styled.section`
   width: 271px;
   background-color: ${({ theme }) => theme.colors.gray100};
   ${({ theme }) => theme.fonts.body1};
-
   padding: 47px 1.6rem 3.2rem;
 `;
 
 const UserInfo = styled.section`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: flex-start;
   margin-bottom: 12px;
-  justify-content: space-between;
-`;
-
-const LogoutButton = styled.p`
-  color: ${({ theme }) => theme.colors.gray400};
-  padding: 1rem 2rem;
-  margin-left: 1rem;
-  margin-top: 0.7rem;
-  ${({ theme }) => theme.fonts.caption3};
 `;
 
 const UserImage = styled.img`
@@ -118,6 +108,15 @@ const UserImage = styled.img`
 `;
 
 const UserName = styled.h1``;
+
+const LogoutButton = styled.p`
+  color: ${({ theme }) => theme.colors.gray400};
+  ${({ theme }) => theme.fonts.caption3};
+  display: flex;
+  margin: 0.7rem;
+  justify-content: flex-end;
+  width: 100%;
+`;
 
 const UserFollower = styled.section`
   display: flex;
