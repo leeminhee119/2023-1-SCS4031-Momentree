@@ -9,13 +9,20 @@ interface NavProps {
 
 const Nav = ({ setIsNavOpen }: NavProps) => {
   const navigate = useNavigate();
-  const [cookies] = useCookies(['user']);
+  const [cookies, , removeCookie] = useCookies(['user']);
 
   const USERPAGE_LIST = [
     { title: '나의 데이트 코스', url: 'userPage/myPostList' },
     { title: '나의 북마크', url: 'userPage/myBookmarkList' },
     { title: '팔로잉 유저', url: 'userPage/myPostList' },
   ];
+
+  // 로그아웃 처리 함수
+  const handleLogout = () => {
+    console.log('쿠키를 삭제합니다.');
+    removeCookie('user', { path: '/' });
+    navigate('/'); // 필요하다면 홈 페이지로 리다이렉트합니다.
+  };
 
   return (
     <NavBackground>
@@ -31,8 +38,8 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
                 alt="유저 이미지"
               />
               <UserName>{cookies.user.userName}</UserName>
+              <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
             </UserInfo>
-            <p>로그아웃</p>
             <UserFollower>
               <article>
                 <h1>팔로워</h1>
@@ -92,6 +99,15 @@ const UserInfo = styled.section`
   flex-direction: row;
   align-items: center;
   margin-bottom: 12px;
+  justify-content: space-between;
+`;
+
+const LogoutButton = styled.p`
+  color: ${({ theme }) => theme.colors.gray400};
+  padding: 1rem 2rem;
+  margin-left: 1rem;
+  margin-top: 0.7rem;
+  ${({ theme }) => theme.fonts.caption3};
 `;
 
 const UserImage = styled.img`
