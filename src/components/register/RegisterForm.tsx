@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logoIcon from '../../assets/logo.png';
 import RegisterButton from './RegisterButton';
@@ -13,14 +13,14 @@ const Register = () => {
     userName: '',
     email: '',
     password: '',
-    nickName: '',
+    nickname: '',
   });
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useEffect(() => {
     // 회원가입 입력 필드가 모두 채워졌을 때만 활성화 상태로 설정
-    const { userName, email, password, nickName } = registerInput;
-    if (userName !== '' && email !== '' && password !== '' && nickName !== '') {
+    const { userName, email, password, nickname } = registerInput;
+    if (userName !== '' && email !== '' && password !== '' && nickname !== '') {
       setIsActive(true);
     } else {
       setIsActive(false);
@@ -30,10 +30,10 @@ const Register = () => {
   const handleRegister = async () => {
     //console.log(registerInput);
     try {
-      const response = await axios.post('/signup', registerInput);
+      const response = await axios.post('http://3.39.153.141/join', registerInput);
       if (response.status === 200) {
         // 회원가입 성공 처리
-        navigate('/login');
+        // navigate('/login');
         console.log('회원가입 성공');
       } else {
         // 회원가입 실패 처리
@@ -99,12 +99,12 @@ const Register = () => {
           type="text"
           name="nickname"
           placeholder="닉네임을 입력해주세요"
-          value={registerInput.nickName}
+          value={registerInput.nickname}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             setRegisterInput((prev) => {
               return {
                 ...prev,
-                nickName: event.target.value,
+                nickname: event.target.value,
               };
             })
           }
