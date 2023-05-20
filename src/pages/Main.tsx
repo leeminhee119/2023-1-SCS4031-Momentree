@@ -4,15 +4,14 @@ import Search from 'components/main/Search';
 import Margin from 'components/main/Margin';
 import Recommendation from 'components/main/Recommendation';
 import Community from 'components/main/Community';
+import { useCookies } from 'react-cookie';
 import { useCommunityQuery, useLoginCommunityQuery } from '../hooks/queries/useCommunity';
-import { useRecoilValue } from 'recoil';
-import { userState } from '\brecoil/atoms/userState';
 
 const Main = () => {
-  const token = useRecoilValue(userState).token;
-  let { data } = useLoginCommunityQuery(token);
+  const [cookies] = useCookies(['user']);
 
-  console.log(token);
+  const { data } = useLoginCommunityQuery(cookies.user.userToken);
+
   // if (token) {
   //   data = useLoginCommunityQuery(token);
   // }

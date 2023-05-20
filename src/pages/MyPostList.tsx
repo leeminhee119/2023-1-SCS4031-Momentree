@@ -3,14 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import leftIcon from '../assets/icons/left.svg';
 import PostItem from 'components/common/PostMainItem';
 import { useMyPostListQuery } from 'hooks/queries/useMyPage';
-import { useRecoilValue } from 'recoil';
-import { userState } from '\brecoil/atoms/userState';
+import { useCookies } from 'react-cookie';
 import { CommunityData } from 'types/communityData';
 
 const MyPostList = () => {
   const navigate = useNavigate();
-  const token = useRecoilValue(userState).token;
-  const { data } = useMyPostListQuery(token);
+  const [cookies] = useCookies(['user']);
+  const { data } = useMyPostListQuery(cookies.user.userToken);
 
   return (
     <MyPostListContainer>

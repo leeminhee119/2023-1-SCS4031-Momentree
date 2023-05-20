@@ -6,6 +6,7 @@ import GlobalStyle from './styles/globalStyle';
 import { ThemeProvider } from 'styled-components';
 import theme from './styles/theme';
 import { lazy, Suspense } from 'react';
+import { CookiesProvider } from 'react-cookie';
 
 const MainPage = lazy(() => import('./pages/Main'));
 const Login = lazy(() => import('./pages/Login'));
@@ -37,28 +38,30 @@ export default function App() {
   });
 
   return (
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
-          <RecoilRoot>
-            <GlobalStyle />
-            <AppLayout>
-              <Suspense fallback={<h1>로딩중입니다.</h1>}>
-                <Routes>
-                  <Route path="/" element={<MainPage />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<SignUp />} />
-                  <Route path="/selectTags" element={<SelectTags />} />
-                  <Route path="/post" element={<Post />} />
-                  <Route path="/post/:postId" element={<Detail />} />
-                  <Route path="/userPage/myBookmarkList" element={<MyBookmarkList />}></Route>
-                  <Route path="/userPage/myPostList" element={<MyPostList />}></Route>
-                </Routes>
-              </Suspense>
-            </AppLayout>
-          </RecoilRoot>
-        </ThemeProvider>
-      </QueryClientProvider>
-    </BrowserRouter>
+    <CookiesProvider>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider theme={theme}>
+            <RecoilRoot>
+              <GlobalStyle />
+              <AppLayout>
+                <Suspense fallback={<h1>로딩중입니다.</h1>}>
+                  <Routes>
+                    <Route path="/" element={<MainPage />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<SignUp />} />
+                    <Route path="/selectTags" element={<SelectTags />} />
+                    <Route path="/post" element={<Post />} />
+                    <Route path="/post/:postId" element={<Detail />} />
+                    <Route path="/userPage/myBookmarkList" element={<MyBookmarkList />}></Route>
+                    <Route path="/userPage/myPostList" element={<MyPostList />}></Route>
+                  </Routes>
+                </Suspense>
+              </AppLayout>
+            </RecoilRoot>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </BrowserRouter>
+    </CookiesProvider>
   );
 }

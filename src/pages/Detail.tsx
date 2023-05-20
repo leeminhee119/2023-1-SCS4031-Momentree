@@ -13,8 +13,7 @@ import WriterInfo from 'components/detail/WriterInfo';
 import { useCommunityDetailQuery, usedeleteCommunityDetail } from 'hooks/queries/useCommunityDetail';
 import { PlaceInformation } from 'types/placeInformation';
 import ToastMessage from 'components/common/ToastMessage';
-import { useRecoilValue } from 'recoil';
-import { userState } from '\brecoil/atoms/userState';
+import { useCookies } from 'react-cookie';
 import Map from 'components/detail/Map';
 import { usePostBookmarkMutation } from 'hooks/queries/useUser';
 
@@ -22,13 +21,13 @@ const Detail = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const { userName, token } = useRecoilValue(userState);
+  const [cookies] = useCookies(['user']);
   const [ishearted, setIshearted] = useState<boolean>(true);
   const body = {};
-  const postBookmarkMutation = usePostBookmarkMutation(Number(postId), body, token);
+  const postBookmarkMutation = usePostBookmarkMutation(Number(postId), body, cookies.user.userToken);
   const [iscopyed, setIscopyed] = useState<boolean>(false);
   const { data } = useCommunityDetailQuery(Number(postId));
-  const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), token);
+  const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), cookies.user.userToken);
 
   const deleteConfirmModal = () => {
     if (confirm('게시글을 정말 삭제하시겠습니까?')) {
@@ -90,7 +89,7 @@ const Detail = () => {
               }}
             />
           )}
-          {data?.result.userName === userName && (
+          {data?.result.userName === cookies.user.userName && (
             <Icon
               src={deleteIcon}
               alt="삭제 아이콘"

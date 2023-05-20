@@ -5,10 +5,9 @@ import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { PostItemProps } from '../../types/postItem';
 import MapThumbnail from 'components/common/MapThumbnail';
-import { useRecoilValue } from 'recoil';
-import { userState } from '\brecoil/atoms/userState';
 import { usePostBookmarkMutation } from 'hooks/queries/useUser';
 import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 const PostMainItem = ({
   recordedId,
@@ -21,9 +20,9 @@ const PostMainItem = ({
   activityTag,
 }: PostItemProps) => {
   const navigate = useNavigate();
-  const token = useRecoilValue(userState).token;
+  const [cookies] = useCookies(['user']);
   const body = {};
-  const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, token);
+  const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, cookies.user.userToken);
 
   return (
     <PostItemContainer>
@@ -117,7 +116,6 @@ const BookmarkIcon = styled.img`
   z-index: 1;
   color: rgb(79, 91, 102);
   cursor: pointer;
-  z-index: 999;
 `;
 
 const Icon = styled.img``;
