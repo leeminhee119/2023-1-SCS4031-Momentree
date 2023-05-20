@@ -1,13 +1,8 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { getCommunityDetail, getLoginCommunityDetail, deleteCommunityDetail } from 'apis/detail';
+import { getCommunityDetail, deleteCommunityDetail } from 'apis/detail';
 
-export const useCommunityDetailQuery = (postId: number) => {
-  const data = useQuery([getCommunityDetail], () => getCommunityDetail(postId));
-  return data;
-};
-
-export const useLoginCommunityDetailQuery = (postId: number, token: string) => {
-  const data = useQuery([getLoginCommunityDetail], () => getLoginCommunityDetail(postId, token));
+export const useCommunityDetailQuery = (postId: number, token?: string) => {
+  const data = useQuery([getCommunityDetail], () => getCommunityDetail(postId, token));
   return data;
 };
 

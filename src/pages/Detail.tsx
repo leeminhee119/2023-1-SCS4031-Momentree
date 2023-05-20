@@ -10,11 +10,7 @@ import leftIcon from '../assets/icons/left.svg';
 import deleteIcon from '../assets/icons/delete.svg';
 import shareIcon from '../assets/icons/share.svg';
 import WriterInfo from 'components/detail/WriterInfo';
-import {
-  useCommunityDetailQuery,
-  useLoginCommunityDetailQuery,
-  usedeleteCommunityDetail,
-} from 'hooks/queries/useCommunityDetail';
+import { useCommunityDetailQuery, usedeleteCommunityDetail } from 'hooks/queries/useCommunityDetail';
 import { PlaceInformation } from 'types/placeInformation';
 import ToastMessage from 'components/common/ToastMessage';
 import { useCookies } from 'react-cookie';
@@ -26,16 +22,15 @@ const Detail = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [cookies] = useCookies(['user']);
-  const [ishearted, setIshearted] = useState<boolean>(true);
+
   const body = {};
   const postBookmarkMutation = usePostBookmarkMutation(Number(postId), body, cookies.user.userToken);
   const postLikeMutation = usePostLikekMutation(Number(postId), body, cookies.user.userToken);
-  const [iscopyed, setIscopyed] = useState<boolean>(false);
-  // const { data } = useCommunityDetailQuery(Number(postId));
-  const { data } = useLoginCommunityDetailQuery(Number(postId), cookies.user.userToken);
   const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), cookies.user.userToken);
+  const [iscopyed, setIscopyed] = useState<boolean>(false);
 
-  console.log(data);
+  const { data } = useCommunityDetailQuery(Number(postId), cookies.user.userToken);
+
   const deleteConfirmModal = () => {
     if (confirm('게시글을 정말 삭제하시겠습니까?')) {
       handleClickDeleteButton();
