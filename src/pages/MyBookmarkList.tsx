@@ -67,6 +67,7 @@ const MyBookmarkList = () => {
               vibeTag={data.vibeTag}
               activityTag={data.activityTag}
               // place={data.place}
+              recordedId={data.recordedId}
               key={index}></PostItem>
           </div>
         );

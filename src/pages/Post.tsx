@@ -18,9 +18,6 @@ import { recordState } from '\brecoil/atoms/recordState';
 import { usePostMutation } from 'hooks/queries/usePost';
 import { userState } from '\brecoil/atoms/userState';
 import { useResetRecoilState } from 'recoil';
-import { getImageUrls } from 'S3upload';
-import { imageFilesState } from '\brecoil/atoms/imageFilesState';
-import { IImageFilesState } from 'types/post';
 
 const Post = () => {
   const navigate = useNavigate();
@@ -28,13 +25,12 @@ const Post = () => {
   const token = useRecoilValue(userState).token;
 
   const hashtags = useRecoilValue<IHashtag[]>(selectedTagsState);
-  const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
+  const places = useRecoilValue<IRecordedPlace[]>(recordedPlacesState);
   const [recordData, setRecordData] = useRecoilState<IRecord>(recordState);
 
   const resetHashtags = useResetRecoilState(selectedTagsState);
   const resetPlaces = useResetRecoilState(recordedPlacesState);
   const resetRecord = useResetRecoilState(recordState);
-  const resetImageFiles = useResetRecoilState(imageFilesState);
 
   const postMutation = usePostMutation(recordData, token, function () {
     // API post 후 success 콜백
@@ -64,14 +60,6 @@ const Post = () => {
     }
   }, [recordData]);
 
-  function handleClickSave() {
-    postMutation.mutate();
-  }
-
-  function handleClickBack() {
-    navigate(`/selectTags`);
-  }
-
   function handleChangeTitle(event: React.ChangeEvent<HTMLInputElement>) {
     setRecordData((prevState) => {
       return {
@@ -93,7 +81,7 @@ const Post = () => {
     <PostLayout>
       <PostBox>
         <HeaderLayout>
-          <button onClick={handleClickBack}>
+          <button onClick={() => navigate(`/selectTags`)}>
             <BackIcon src={backIcon} alt="뒤로가기 버튼" />
           </button>
           <Header>글 작성</Header>
@@ -114,7 +102,7 @@ const Post = () => {
           onChange={handleChangeContent}
         />
       </PostBox>
-      <SaveButton isActive={isSaveActive} handleClickSave={handleClickSave} />
+      <SaveButton isActive={isSaveActive} handleClickSave={() => postMutation.mutate()} />
     </PostLayout>
   );
 };

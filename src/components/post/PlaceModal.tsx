@@ -2,12 +2,10 @@ import styled from 'styled-components';
 import closeIcon from '../../assets/icons/close.svg';
 import cameraIcon from '../../assets/icons/camera.svg';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
-import { IRecordedPlace } from 'types/post';
+import { IImage, IRecordedPlace } from 'types/post';
 import { useRecoilState } from 'recoil';
-import { imageFilesState } from '\brecoil/atoms/imageFilesState';
 import SaveButton from '../common/SaveButton';
 import { useEffect, useState } from 'react';
-import { IImageFilesState } from 'types/post';
 interface PlaceModalProps {
   placeIdx: number;
   handleModalClose: () => void;
@@ -17,18 +15,16 @@ const PlaceModal = ({ placeIdx, handleModalClose }: PlaceModalProps) => {
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
   const [placeContent, setPlaceContent] = useState<string>(placesData[placeIdx].placeContent);
   // 각 장소의 세부 후기로 첨부한 이미지 파일들을 저장합니다.
-  const [imageFiles, setImageFiles] = useRecoilState<IImageFilesState[]>(imageFilesState);
   const [filesArray, setFilesArray] = useState<File[]>(() => {
-    const curImageFiles: File[] = [];
-    imageFiles.forEach((imgFiles: IImageFilesState) => {
-      if (imgFiles.placeIdx === placeIdx) {
-        curImageFiles.push(...imgFiles.files);
-      }
+    const files: File[] = [];
+    placesData[placeIdx].images.forEach((imgObj: IImage) => {
+      files.push(imgObj.imgFile);
     });
-    return curImageFiles;
+    return files;
   });
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
+  //미리보기로 보여주기 위해 이미지 주소를 배열에 저장
   useEffect(() => {
     const previews: string[] = [];
     filesArray.forEach((file: File) => {
@@ -46,37 +42,19 @@ const PlaceModal = ({ placeIdx, handleModalClose }: PlaceModalProps) => {
     setIsSaveActive(true);
   }
   function handleClickSave() {
-    // 해당 장소의 파일 정보 업데이트
-    setImageFiles((files: IImageFilesState[]) => {
-      const existingEntry = files.find((imgFiles: IImageFilesState) => imgFiles.placeIdx === placeIdx);
-      if (existingEntry) {
-        const updatedFiles = files.map((imgFiles: IImageFilesState) => {
-          if (imgFiles.placeIdx === placeIdx) {
-            return {
-              ...imgFiles,
-              files: filesArray,
-            };
-          } else {
-            return imgFiles;
-          }
-        });
-        return updatedFiles;
-      } else {
-        // Add a new entry
-        return [
-          ...files,
-          {
-            placeIdx: placeIdx,
-            files: filesArray,
-          },
-        ];
-      }
-    });
     setPlacesData((prevArr: IRecordedPlace[]) => {
+      const placeImages: IImage[] = [];
+      filesArray.forEach((file: File, idx: number) => {
+        placeImages.push({
+          orders: idx + 1,
+          imgFile: file,
+        });
+      });
       const newPlacesData = [...prevArr];
       newPlacesData[placeIdx] = {
         ...newPlacesData[placeIdx],
         placeContent: placeContent,
+        images: placeImages,
       };
       return newPlacesData;
     });
@@ -112,7 +90,7 @@ const PlaceModal = ({ placeIdx, handleModalClose }: PlaceModalProps) => {
           }}
         />
         <UploadImageRow>
-          {filesArray && filesArray.length <= 3 ? (
+          {placesData[placeIdx].images && placesData[placeIdx].images.length <= 3 ? (
             <UploadButton as={'label'} htmlFor={'fileUpload'}>
               <CameraIcon src={cameraIcon} alt="카메라 아이콘" />
             </UploadButton>

@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import closeIcon from '../assets/icons/close.svg';
-import { useRecoilValue } from 'recoil';
-import { userState } from '\brecoil/atoms/userState';
+import { useCookies } from 'react-cookie';
 
 interface NavProps {
   setIsNavOpen(state: boolean): void;
@@ -10,7 +9,7 @@ interface NavProps {
 
 const Nav = ({ setIsNavOpen }: NavProps) => {
   const navigate = useNavigate();
-  const { userName, token } = useRecoilValue(userState);
+  const [cookies] = useCookies(['user']);
 
   const USERPAGE_LIST = [
     { title: '나의 데이트 코스', url: 'userPage/myPostList' },
@@ -24,14 +23,14 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
         <IconImage>
           <img src={closeIcon} alt="닫기 아이콘" onClick={() => setIsNavOpen(false)} />
         </IconImage>
-        {token ? (
+        {cookies.user.userToken ? (
           <>
             <UserInfo>
               <UserImage
                 src="https://user-images.githubusercontent.com/62867581/234172890-03b605e4-9e8d-4661-8142-cb94bae8e3a4.png"
                 alt="유저 이미지"
               />
-              <UserName>{userName}</UserName>
+              <UserName>{cookies.user.userName}</UserName>
             </UserInfo>
             <p>로그아웃</p>
             <UserFollower>

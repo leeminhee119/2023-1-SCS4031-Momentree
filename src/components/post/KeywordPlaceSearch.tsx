@@ -39,7 +39,7 @@ const KeywordPlaceSearch = () => {
         addressGu: curPlaceKakao.road_address_name.substring(guStartIdx, guEndIdx),
         addressX: curPlaceKakao.x.toString(),
         addressY: curPlaceKakao.y.toString(),
-        image: [],
+        images: [],
       },
     ]);
   }

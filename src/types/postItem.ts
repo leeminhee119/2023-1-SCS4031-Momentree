@@ -1,5 +1,6 @@
 import { PlaceInformation } from './placeInformation';
 export interface PostItemProps {
+  recordedId: number;
   title: string;
   bookMarkStatus: boolean;
   likeCnt: number;
