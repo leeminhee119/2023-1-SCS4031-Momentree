@@ -36,9 +36,6 @@ const Map = ({ places }: MapProps) => {
       const map = new kakao.maps.Map(container, options);
       addMarker(map);
     }
-  }, []);
-
-  useEffect(() => {
     if (places.length !== 0 && map) {
       addMarker(map);
     }
