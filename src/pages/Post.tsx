@@ -60,14 +60,6 @@ const Post = () => {
     }
   }, [recordData]);
 
-  function handleClickSave() {
-    postMutation.mutate();
-  }
-
-  function handleClickBack() {
-    navigate(`/selectTags`);
-  }
-
   function handleChangeTitle(event: React.ChangeEvent<HTMLInputElement>) {
     setRecordData((prevState) => {
       return {
@@ -89,7 +81,7 @@ const Post = () => {
     <PostLayout>
       <PostBox>
         <HeaderLayout>
-          <button onClick={handleClickBack}>
+          <button onClick={() => navigate(`/selectTags`)}>
             <BackIcon src={backIcon} alt="뒤로가기 버튼" />
           </button>
           <Header>글 작성</Header>
@@ -110,7 +102,7 @@ const Post = () => {
           onChange={handleChangeContent}
         />
       </PostBox>
-      <SaveButton isActive={isSaveActive} handleClickSave={handleClickSave} />
+      <SaveButton isActive={isSaveActive} handleClickSave={() => postMutation.mutate()} />
     </PostLayout>
   );
 };

@@ -6,6 +6,7 @@ import { IRecordedPlace } from 'types/post';
 import { useState } from 'react';
 import searchIcon from '../../assets/icons/search.svg';
 import SearchModal from './SearchModal';
+import PlaceItem from './PlaceItem';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { useRecoilState } from 'recoil';
 
@@ -38,7 +39,7 @@ const KeywordPlaceSearch = () => {
         addressGu: curPlaceKakao.road_address_name.substring(guStartIdx, guEndIdx),
         addressX: curPlaceKakao.x.toString(),
         addressY: curPlaceKakao.y.toString(),
-        image: [],
+        images: [],
       },
     ]);
   }
@@ -55,11 +56,12 @@ const KeywordPlaceSearch = () => {
           handleClickListItem={handleClickListItem}
         />
       )}
+      {places.length > 0 && <PlaceItem />}
     </KeywordPlaceSearchLayout>
   );
 };
 const KeywordPlaceSearchLayout = styled.div`
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 `;
 /* Search Box */
 const SearchContainer = styled.section`

@@ -46,6 +46,7 @@ const fonts = {
 
   caption1: FONT({ weight: 700, size: 1.2, lineHeight: 18 }),
   caption2: FONT({ weight: 400, size: 1.2, lineHeight: 18 }),
+  caption3: FONT({ weight: 400, size: 0.7, lineHeight: 16 }),
 } as const;
 
 const theme = {
