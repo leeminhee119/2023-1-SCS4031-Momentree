@@ -18,7 +18,9 @@ const PlaceModal = ({ placeIdx, handleModalClose }: PlaceModalProps) => {
   const [filesArray, setFilesArray] = useState<File[]>(() => {
     const files: File[] = [];
     placesData[placeIdx].images.forEach((imgObj: IImage) => {
-      files.push(imgObj.imgFile);
+      if (imgObj.imgFile instanceof File) {
+        files.push(imgObj.imgFile);
+      }
     });
     return files;
   });

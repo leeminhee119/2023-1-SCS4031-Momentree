@@ -10,7 +10,7 @@ import Margin from '../components/main/Margin';
 import Map from 'components/common/Map';
 import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
 import SaveButton from 'components/common/SaveButton';
-import { IHashtag, IRecord, IRecordedPlace } from 'types/post';
+import { IHashtag, IImage, IRecord, IRecordedPlace } from 'types/post';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectedTagsState } from '\brecoil/atoms/selectedTagsState';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
@@ -18,7 +18,6 @@ import { recordState } from '\brecoil/atoms/recordState';
 import { usePostMutation } from 'hooks/queries/usePost';
 import { userState } from '\brecoil/atoms/userState';
 import { useResetRecoilState } from 'recoil';
-
 const Post = () => {
   const navigate = useNavigate();
   // 로그인한 유저 토큰 값 불러오기
@@ -42,14 +41,64 @@ const Post = () => {
   });
 
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
-  // places가 KeywordPlaceSearch에서 변경될 때마다 recordData.recordedPlaces 업데이트
-  // 선택한 해시태그 recordData.hashtags에 업데이트
+  function getBase64(file: File) {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = function () {
+        // Get base64 string
+        const base64 = reader.result as string;
+        resolve(base64);
+      };
+      reader.onerror = function () {
+        reject(new Error('Error reading file'));
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   useEffect(() => {
-    setRecordData((prevRecordData: IRecord) => ({
-      ...prevRecordData,
-      hashtags: hashtags,
-      recordedPlaces: places,
+    const copyPlaces = places.map((place) => ({
+      ...place,
+      images: place.images.map((image: IImage) => ({
+        ...image,
+        imgFile: image.imgFile
+          ? new File([image.imgFile], image.imgFile.name, { type: image.imgFile.type })
+          : undefined,
+      })),
     }));
+    const promises: Promise<any>[] = [];
+
+    copyPlaces.forEach((place: IRecordedPlace, placeIdx: number) => {
+      place.images.forEach((imgObj: IImage, imgIdx: number) => {
+        const copyImgObj = { ...imgObj };
+
+        if (copyImgObj.imgFile instanceof File) {
+          const promise = getBase64(copyImgObj.imgFile)
+            .then((base64) => {
+              copyImgObj.imgFormData = base64.replace(/^data:image\/[a-z]+;base64,/, '');
+              copyImgObj.fileName = copyImgObj.imgFile?.name;
+              copyImgObj.contentType = copyImgObj.imgFile?.type;
+              delete copyImgObj.imgFile;
+              return { placeIdx, imgIdx, imgObj: copyImgObj };
+            })
+            .catch((err) => console.log(err));
+          promises.push(promise);
+        }
+      });
+    });
+
+    Promise.all(promises)
+      .then((result) => {
+        result.forEach(({ placeIdx, imgIdx, imgObj }) => {
+          copyPlaces[placeIdx].images[imgIdx] = imgObj;
+        });
+        setRecordData((prevRecordData: IRecord) => ({
+          ...prevRecordData,
+          hashtags: hashtags,
+          recordedPlaces: copyPlaces,
+        }));
+      })
+      .catch((err) => console.log(err));
   }, [places]);
 
   useEffect(() => {
@@ -102,7 +151,12 @@ const Post = () => {
           onChange={handleChangeContent}
         />
       </PostBox>
-      <SaveButton isActive={isSaveActive} handleClickSave={() => postMutation.mutate()} />
+      <SaveButton
+        isActive={isSaveActive}
+        handleClickSave={() => {
+          postMutation.mutate();
+        }}
+      />
     </PostLayout>
   );
 };
