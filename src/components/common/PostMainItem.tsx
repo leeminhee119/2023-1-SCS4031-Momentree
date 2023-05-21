@@ -22,7 +22,7 @@ const PostMainItem = ({
   const navigate = useNavigate();
   const [cookies] = useCookies(['user']);
   const body = {};
-  const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, cookies.user.userToken);
+  const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, cookies?.user?.userToken);
 
   return (
     <PostItemContainer>
@@ -32,7 +32,7 @@ const PostMainItem = ({
       {bookMarkStatus ? (
         <BookmarkIcon
           onClick={() => {
-            postBookmarkMutation.mutate();
+            cookies?.user?.userToken ? postBookmarkMutation.mutate() : navigate('/login');
           }}
           src={clickbookmarkIcon}
           alt="북마크 한 아이콘"
@@ -41,7 +41,7 @@ const PostMainItem = ({
         <BookmarkIcon
           src={unclickbookmarkIcon}
           onClick={() => {
-            postBookmarkMutation.mutate();
+            cookies?.user?.userToken ? postBookmarkMutation.mutate() : navigate('/login');
           }}
           alt="북마크 하지 않은 아이콘"
         />

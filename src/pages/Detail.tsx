@@ -24,12 +24,12 @@ const Detail = () => {
   const [cookies] = useCookies(['user']);
 
   const body = {};
-  const postBookmarkMutation = usePostBookmarkMutation(Number(postId), body, cookies.user.userToken);
-  const postLikeMutation = usePostLikekMutation(Number(postId), body, cookies.user.userToken);
-  const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), cookies.user.userToken);
+  const postBookmarkMutation = usePostBookmarkMutation(Number(postId), body, cookies?.user?.userToken);
+  const postLikeMutation = usePostLikekMutation(Number(postId), body, cookies?.user?.userToken);
+  const { mutate: handleClickDeleteButton } = usedeleteCommunityDetail(Number(postId), cookies?.user?.userToken);
   const [iscopyed, setIscopyed] = useState<boolean>(false);
 
-  const { data } = useCommunityDetailQuery(Number(postId), cookies.user.userToken);
+  const { data } = useCommunityDetailQuery(Number(postId), cookies?.user?.userToken);
 
   const deleteConfirmModal = () => {
     if (confirm('게시글을 정말 삭제하시겠습니까?')) {
@@ -72,7 +72,7 @@ const Detail = () => {
               src={fillheartIcon}
               alt="좋아요 한 아이콘"
               onClick={() => {
-                postLikeMutation.mutate();
+                cookies?.user?.userToken ? postLikeMutation.mutate() : navigate('/login');
               }}
             />
           ) : (
@@ -80,7 +80,7 @@ const Detail = () => {
               src={heartIcon}
               alt="좋아요 하지 않은 아이콘"
               onClick={() => {
-                postLikeMutation.mutate();
+                cookies?.user?.userToken ? postLikeMutation.mutate() : navigate('/login');
               }}
             />
           )}
@@ -89,7 +89,7 @@ const Detail = () => {
               src={clickbookmarkIcon}
               alt="북마크 한 아이콘"
               onClick={() => {
-                postBookmarkMutation.mutate();
+                cookies?.user?.userToken ? postBookmarkMutation.mutate() : navigate('/login');
               }}
             />
           ) : (
@@ -97,11 +97,11 @@ const Detail = () => {
               src={bookmarkIcon}
               alt="북마크 하지 않은 아이콘"
               onClick={() => {
-                postBookmarkMutation.mutate();
+                cookies?.user?.userToken ? postBookmarkMutation.mutate() : navigate('/login');
               }}
             />
           )}
-          {data?.result.userName === cookies.user.userName && (
+          {data?.result.userName === cookies?.user?.userName && (
             <Icon
               src={deleteIcon}
               alt="삭제 아이콘"

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postBookmark, postLike } from 'apis/user';
 

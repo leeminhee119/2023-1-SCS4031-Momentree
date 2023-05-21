@@ -19,7 +19,6 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
 
   // 로그아웃 처리 함수
   const handleLogout = () => {
-    console.log('쿠키를 삭제합니다.');
     removeCookie('user', { path: '/' });
     navigate('/'); // 필요하다면 홈 페이지로 리다이렉트합니다.
   };
@@ -30,7 +29,7 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
         <IconImage>
           <img src={closeIcon} alt="닫기 아이콘" onClick={() => setIsNavOpen(false)} />
         </IconImage>
-        {cookies.user.userToken ? (
+        {cookies?.user?.userToken ? (
           <>
             <UserInfo>
               <UserImage
