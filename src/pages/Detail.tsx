@@ -73,7 +73,6 @@ const Detail = () => {
               alt="좋아요 한 아이콘"
               onClick={() => {
                 postLikeMutation.mutate();
-                window.location.reload();
               }}
             />
           ) : (
@@ -82,7 +81,6 @@ const Detail = () => {
               alt="좋아요 하지 않은 아이콘"
               onClick={() => {
                 postLikeMutation.mutate();
-                window.location.reload();
               }}
             />
           )}
@@ -92,7 +90,6 @@ const Detail = () => {
               alt="북마크 한 아이콘"
               onClick={() => {
                 postBookmarkMutation.mutate();
-                window.location.reload();
               }}
             />
           ) : (
@@ -101,7 +98,6 @@ const Detail = () => {
               alt="북마크 하지 않은 아이콘"
               onClick={() => {
                 postBookmarkMutation.mutate();
-                window.location.reload();
               }}
             />
           )}
