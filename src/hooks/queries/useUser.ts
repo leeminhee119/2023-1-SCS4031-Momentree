@@ -6,6 +6,7 @@ export const usePostBookmarkMutation = (record_id: number, body: object, token: 
   const queryClient = useQueryClient();
   return useMutation(() => postBookmark(record_id, body, token), {
     onSuccess: () => {
+      queryClient.invalidateQueries(['getCommunity']);
       queryClient.invalidateQueries(['getCommunityDetail']);
     },
   });

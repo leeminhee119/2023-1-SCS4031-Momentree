@@ -33,7 +33,6 @@ const PostMainItem = ({
         <BookmarkIcon
           onClick={() => {
             postBookmarkMutation.mutate();
-            window.location.reload();
           }}
           src={clickbookmarkIcon}
           alt="북마크 한 아이콘"
@@ -43,7 +42,6 @@ const PostMainItem = ({
           src={unclickbookmarkIcon}
           onClick={() => {
             postBookmarkMutation.mutate();
-            window.location.reload();
           }}
           alt="북마크 하지 않은 아이콘"
         />
