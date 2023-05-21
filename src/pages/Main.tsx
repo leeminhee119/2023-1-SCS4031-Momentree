@@ -9,7 +9,7 @@ import { useCommunityQuery } from '../hooks/queries/useCommunity';
 
 const Main = () => {
   const [cookies] = useCookies(['user']);
-  const { data } = useCommunityQuery(cookies.user.userToken);
+  const { data } = useCommunityQuery(cookies?.user?.userToken);
 
   return (
     <MainContainer>

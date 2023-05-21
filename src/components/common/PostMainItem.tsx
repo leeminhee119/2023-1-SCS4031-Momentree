@@ -22,7 +22,7 @@ const PostMainItem = ({
   const navigate = useNavigate();
   const [cookies] = useCookies(['user']);
   const body = {};
-  const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, cookies.user.userToken);
+  const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, cookies?.user?.userToken);
 
   return (
     <PostItemContainer>

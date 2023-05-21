@@ -9,7 +9,7 @@ interface NavProps {
 
 const Nav = ({ setIsNavOpen }: NavProps) => {
   const navigate = useNavigate();
-  const [cookies] = useCookies(['user']);
+  const [cookies, , removeCookie] = useCookies(['user']);
 
   const USERPAGE_LIST = [
     { title: '나의 데이트 코스', url: 'userPage/myPostList' },
@@ -17,13 +17,19 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
     { title: '팔로잉 유저', url: 'userPage/myPostList' },
   ];
 
+  // 로그아웃 처리 함수
+  const handleLogout = () => {
+    removeCookie('user', { path: '/' });
+    navigate('/'); // 필요하다면 홈 페이지로 리다이렉트합니다.
+  };
+
   return (
     <NavBackground>
       <NavContainer>
         <IconImage>
           <img src={closeIcon} alt="닫기 아이콘" onClick={() => setIsNavOpen(false)} />
         </IconImage>
-        {cookies.user.userToken ? (
+        {cookies?.user?.userToken ? (
           <>
             <UserInfo>
               <UserImage
@@ -31,8 +37,8 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
                 alt="유저 이미지"
               />
               <UserName>{cookies.user.userName}</UserName>
+              <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
             </UserInfo>
-            <p>로그아웃</p>
             <UserFollower>
               <article>
                 <h1>팔로워</h1>
@@ -83,14 +89,13 @@ const NavContainer = styled.section`
   width: 271px;
   background-color: ${({ theme }) => theme.colors.gray100};
   ${({ theme }) => theme.fonts.body1};
-
   padding: 47px 1.6rem 3.2rem;
 `;
 
 const UserInfo = styled.section`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: flex-start;
   margin-bottom: 12px;
 `;
 
@@ -102,6 +107,15 @@ const UserImage = styled.img`
 `;
 
 const UserName = styled.h1``;
+
+const LogoutButton = styled.p`
+  color: ${({ theme }) => theme.colors.gray400};
+  ${({ theme }) => theme.fonts.caption3};
+  display: flex;
+  margin: 0.7rem;
+  justify-content: flex-end;
+  width: 100%;
+`;
 
 const UserFollower = styled.section`
   display: flex;
