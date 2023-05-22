@@ -10,11 +10,6 @@ const SignUp = () => {
   );
 };
 
-const PageLayout = styled.div`
-  display: flex;
-  justify-content: flex-start; /* 수정: 센터 정렬 대신 상단 정렬 */
-  align-items: center;
-  // height: 100vh;
-`;
+const PageLayout = styled.div``;
 
 export default SignUp;
