@@ -24,6 +24,10 @@ const PostMainItem = ({
   const body = {};
   const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, cookies?.user?.userToken);
 
+  const handleTagClick = (tag: string) => {
+    navigate(`/post/tag/${tag}`);
+  };
+
   return (
     <PostItemContainer>
       <MapContainer>
@@ -62,12 +66,20 @@ const PostMainItem = ({
         <div>
           <MoodTagContainer>
             {vibeTag?.map((item, index) => {
-              return <article key={index}>{item.tagName}</article>;
+              return (
+                <article key={index} onClick={() => handleTagClick(item.tagName)}>
+                  {item.tagName}
+                </article>
+              );
             })}
           </MoodTagContainer>
           <ActivityTagContainer>
             {activityTag?.map((item, index) => {
-              return <article key={index}>{item.tagName}</article>;
+              return (
+                <article key={index} onClick={() => handleTagClick(item.tagName)}>
+                  {item.tagName}
+                </article>
+              );
             })}
           </ActivityTagContainer>
         </div>
