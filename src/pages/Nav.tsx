@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import closeIcon from '../assets/icons/close.svg';
-import defaultProfileIcon from '../assets/icons/profile.svg';
+import defaultProfileIcon from '../assets/icons/profile_grey.svg';
 import { useCookies } from 'react-cookie';
 import { useUserInfoQuery } from 'hooks/queries/useUser';
 
