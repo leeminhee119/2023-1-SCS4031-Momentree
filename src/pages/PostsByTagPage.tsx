@@ -4,47 +4,41 @@ import axios from 'axios';
 import { CommunityData } from '../types/communityData';
 import PostItem from 'components/common/PostMainItem';
 
-async function fetchPostsByTag(tag: string) {
-  try {
-    // API에서 태그에 해당하는 게시물들을 가져옵니다.
-    const response = await axios.get(`http://3.39.153.141/posts?tag=${tag}`);
-    // 가져온 데이터를 CommunityData 타입으로 변환합니다.
-    return response.data as CommunityData[];
-  } catch (error) {
-    console.error('Failed to get posts: ', error);
-    return [];
-  }
-}
-
 const PostsByTagPage = () => {
   const { tag } = useParams<{ tag?: string }>();
-  // 가져온 게시물들을 상태로 관리하기 위한 state를 선언합니다.
-  const [filteredPosts, setFilteredPosts] = useState<CommunityData[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [posts, setPosts] = useState<CommunityData[]>([]);
+  console.log('tag: ', tag); // tag 확인
 
-  // 컴포넌트가 마운트되거나 tag가 변경될 때마다, 게시물을 새로 가져옵니다.
   useEffect(() => {
-    if (tag) {
-      fetchPostsByTag(tag).then((posts) => {
-        // 가져온 게시물들을 저장합니다.
-        setFilteredPosts(posts);
-      });
-    }
+    const fetchPosts = async () => {
+      if (!tag) {
+        return; // tag이 undefined일 경우 요청을 보내지 않음
+      }
+      try {
+        const response = await axios.get(`http://3.39.153.141/search?hashtagName=${tag}`);
+        setPosts(response?.data?.result?.content);
+        console.log('Posts: ', response.data); // posts 확인
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      }
+    };
+    fetchPosts();
   }, [tag]);
 
   return (
     <div>
-      {filteredPosts.map((data: CommunityData, index: number) => (
+      {posts.map((data) => (
         <PostItem
-          key={index}
-          recordedId={data.recordedId}
-          title={data.title}
-          bookMarkStatus={data.bookMarkStatus}
-          likeCnt={data.likeCnt}
-          bookmarkCnt={data.bookMarkCnt}
-          vibeTag={data.vibeTags}
-          activityTag={data.activityTags}
-          place={data.recordedPlaces}
-        />
+          recordedId={data?.recordedId}
+          title={data?.title}
+          bookMarkStatus={data?.bookMarkStatus}
+          likeCnt={data?.likeCnt}
+          bookmarkCnt={data?.bookMarkCnt}
+          vibeTag={data?.vibeTags}
+          activityTag={data?.activityTags}
+          place={data?.recordedPlaces}
+          key={data?.recordedId}></PostItem>
       ))}
     </div>
   );

@@ -25,7 +25,7 @@ const PostMainItem = ({
   const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, cookies?.user?.userToken);
 
   const handleTagClick = (tag: string) => {
-    navigate(`/post/tag/${tag}`);
+    navigate(`/search/${tag}`);
   };
 
   return (

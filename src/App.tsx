@@ -48,7 +48,7 @@ export default function App() {
               <AppLayout>
                 <Suspense fallback={<h1>로딩중입니다.</h1>}>
                   <Routes>
-                    <Route path="/post/tag/:tag" element={<PostsByTagPage />} />
+                    <Route path="/search/:tag" element={<PostsByTagPage />} />
                     <Route path="/" element={<MainPage />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
