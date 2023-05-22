@@ -60,9 +60,14 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
             })}
           </>
         ) : (
-          <GotoLoginButton type="button" onClick={() => navigate('/login')}>
-            로그인하기
-          </GotoLoginButton>
+          <>
+            <GotoButton type="button" onClick={() => navigate('/signup')}>
+              회원가입하기
+            </GotoButton>
+            <GotoButton type="button" onClick={() => navigate('/login')}>
+              로그인하기
+            </GotoButton>
+          </>
         )}
       </NavContainer>
     </NavBackground>
@@ -173,10 +178,11 @@ const List = styled.p`
   margin-bottom: 20px;
 `;
 
-const GotoLoginButton = styled.button`
+const GotoButton = styled.button`
   color: ${({ theme }) => theme.colors.gray900};
   background-color: ${({ theme }) => theme.colors.mainLight};
   ${({ theme }) => theme.fonts.body3};
   border-radius: 30px;
   height: 3rem;
+  margin-bottom: 2rem;
 `;
