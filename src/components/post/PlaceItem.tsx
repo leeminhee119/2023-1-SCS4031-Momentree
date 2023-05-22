@@ -8,7 +8,6 @@ import { IRecordedPlace } from 'types/post';
 
 const PlaceItem = () => {
   const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
-  console.log(places);
   const draggingItemIdx = useRef<number>(-1);
   const draggingOverItemIdx = useRef<number>(-1);
 

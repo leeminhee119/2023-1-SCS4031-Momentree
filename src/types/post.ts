@@ -4,7 +4,10 @@ export interface IHashtag {
 }
 export interface IImage {
   orders: number;
-  imgFile: File;
+  imgFile?: File;
+  imgFormData?: string;
+  fileName?: string;
+  contentType?: string;
 }
 export interface IRecordedPlace {
   orders: number;
