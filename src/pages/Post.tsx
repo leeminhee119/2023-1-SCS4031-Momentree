@@ -16,12 +16,12 @@ import { selectedTagsState } from '\brecoil/atoms/selectedTagsState';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { recordState } from '\brecoil/atoms/recordState';
 import { usePostMutation } from 'hooks/queries/usePost';
-import { userState } from '\brecoil/atoms/userState';
 import { useResetRecoilState } from 'recoil';
+import { useCookies } from 'react-cookie';
 const Post = () => {
   const navigate = useNavigate();
   // 로그인한 유저 토큰 값 불러오기
-  const token = useRecoilValue(userState).token;
+  const [cookies] = useCookies(['user']);
 
   const hashtags = useRecoilValue<IHashtag[]>(selectedTagsState);
   const places = useRecoilValue<IRecordedPlace[]>(recordedPlacesState);
@@ -31,7 +31,7 @@ const Post = () => {
   const resetPlaces = useResetRecoilState(recordedPlacesState);
   const resetRecord = useResetRecoilState(recordState);
 
-  const postMutation = usePostMutation(recordData, token, function () {
+  const postMutation = usePostMutation(recordData, cookies?.user?.userToken, function () {
     // API post 후 success 콜백
     // recoil atom 초기화
     resetHashtags();
