@@ -87,6 +87,7 @@ const RecommendationSlider = styled.section`
 // const Recommendation = () => {
 // const [cookies] = useCookies(['user']);
 //   const navigate = useNavigate();
+// const { data } = useRecommendQuery(cookies.user.userToken);
 //   const Recommendations = [
 //     {
 //       recordedId: 1,
