@@ -28,7 +28,7 @@ const Community = () => {
   const onIntersect = ([entry]: any, observer: { unobserve: (arg0: any) => void; observe: (arg0: any) => void }) => {
     if (entry.isIntersecting && !isLoaded) {
       observer.unobserve(entry.target); // 관찰요소 리셋
-      if (page < data?.result.totalPages) {
+      if (page < data?.result.totalPages - 1) {
         setIsLoaded(true);
         setPage((page) => page + 1);
       }

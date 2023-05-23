@@ -1,6 +1,6 @@
 import { GET } from 'apis/api';
 
-export const getMyPostList = async (token: string) => {
-  const { data } = await GET('/myPage/myRecord?page=1&size=2', token);
+export const getMyPostList = async (page: number, size: number, token: string) => {
+  const { data } = await GET(`/myPage/myRecord?page=${page}&size=${size}`, token);
   return data;
 };
