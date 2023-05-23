@@ -3,5 +3,14 @@ export interface RecommendationItemProps {
   bookMarkStatus: boolean;
   likeCnt: number;
   bookmarkCnt: number;
-  place: string[];
+  place: string[]; //구
 }
+
+// export interface RecommendationItemProps {
+//   title: string;
+//   bookMarkStatus: boolean;
+//   likeCnt: number;
+//   bookmarkCnt: number;
+//   place?: Array<PlaceInformation>; //지도
+//   placeGu: string[]; //구
+// }
