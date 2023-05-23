@@ -102,20 +102,14 @@ const RecommendationSlider = styled.section`
 //                navigate(`/post/${data.recordedId}`);
 //                window.location.reload();
 //              }}>
-//              <div>
-//            )
-//          }
-//
-//         {Recommendations.map((data, index: number) => {
-//           return (
-//             <div key={index} onClick={() => navigate(`/post/${data.recordedId}`)}>
 //               <RecommendationItem
 //                 title={data.title}
 //                 bookMarkStatus={data.bookMarkStatus}
 //                 likeCnt={data.likeCnt}
 //                 bookmarkCnt={data.bookmarkCnt}
 //                 place={data.place}
-//                 key={index}></RecommendationItem>
+//                 key={index}>
+//              </RecommendationItem>
 //             </div>
 //           );
 //         })}
