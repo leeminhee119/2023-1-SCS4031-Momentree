@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import RecommendationItem from './RecommendationItem';
 import { useNavigate } from 'react-router-dom';
+// import { CommunityData } from 'types/communityData';
 // import { useCookies } from 'react-cookie';
 
 const Recommendation = () => {
@@ -93,6 +94,18 @@ const RecommendationSlider = styled.section`
 //     <RecommendationContainer>
 //       <RecommendationContainerTitle>당신을 위한 추천 코스</RecommendationContainerTitle>
 //       <RecommendationSlider>
+//         {data?.result.content.map(CommunityData, number)} =>
+//          {
+//            return (
+//            <div
+//              onClick={() => {
+//                navigate(`/post/${data.recordedId}`);
+//                window.location.reload();
+//              }}>
+//              <div>
+//            )
+//          }
+//
 //         {Recommendations.map((data, index: number) => {
 //           return (
 //             <div key={index} onClick={() => navigate(`/post/${data.recordedId}`)}>
