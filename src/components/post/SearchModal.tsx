@@ -54,13 +54,17 @@ const SearchModal = ({ setResultsParent, handleModalClose, handleClickListItem }
         <SearchResultList>
           {results.map((place: IPlaceKakao, index: number) => {
             return (
-              <li
-                key={index}
-                onClick={() => {
-                  handleClickListItem(index);
-                }}>
-                {place.place_name}
-              </li>
+              <>
+                <ListItem
+                  key={index}
+                  onClick={() => {
+                    handleClickListItem(index);
+                  }}>
+                  <div id="placeName">{place.place_name}</div>
+                  <div id="placeAddress">{place.road_address_name}</div>
+                </ListItem>
+                {index !== results.length - 1 && <Bar />}
+              </>
             );
           })}
         </SearchResultList>
@@ -97,6 +101,7 @@ const TitleBox = styled.div`
   ${({ theme }) => theme.fonts.subtitle1};
   display: flex;
   justify-content: space-between;
+  margin-bottom: 0.5rem;
 `;
 
 /* Search Box */
@@ -133,12 +138,26 @@ const SearchResultList = styled.ul`
   height: 90%;
   padding: 1rem;
   overflow-y: scroll;
-  li {
-    ${({ theme }) => theme.fonts.subtitle1};
-    padding: 1.5rem 0;
+`;
+const ListItem = styled.li`
+  height: 6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  div#placeName {
+    ${({ theme }) => theme.fonts.body2};
     :hover {
       color: ${({ theme }) => theme.colors.mainDark};
     }
   }
+  div#placeAddress {
+    ${({ theme }) => theme.fonts.caption2};
+    color: ${({ theme }) => theme.colors.gray400};
+  }
+`;
+const Bar = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${({ theme }) => theme.colors.gray300};
 `;
 export default SearchModal;
