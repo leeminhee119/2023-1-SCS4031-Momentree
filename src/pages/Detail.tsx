@@ -62,8 +62,7 @@ const Detail = () => {
           src={leftIcon}
           alt="뒤로가기 아이콘"
           onClick={() => {
-            navigate('/');
-            window.location.reload();
+            navigate(-1);
           }}
         />
         <div>
