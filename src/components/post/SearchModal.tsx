@@ -44,6 +44,7 @@ const SearchModal = ({ setResultsParent, handleModalClose, handleClickListItem }
         <>
           <SearchContainer>
             <SearchContainder
+              autoFocus
               placeholder="추가할 코스를 검색해주세요"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKeyword(e.target.value)}
             />
