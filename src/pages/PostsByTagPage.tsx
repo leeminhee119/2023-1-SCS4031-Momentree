@@ -40,7 +40,7 @@ const PostsByTagPage = () => {
               window.location.reload();
             }}
           />
-          <h1>\'{tag}\'가 포함된 게시물 리스트</h1>
+          <h1>{tag} 해시태그가 포함된 게시물</h1>
         </PostByPageHeader>
         {posts.map((data) => (
           <PostItem
