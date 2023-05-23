@@ -15,6 +15,7 @@ const Map = ({ places }: MapProps) => {
   const { kakao } = window;
   const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
   const [clickedMarkerIdx, setClickedMarkerIdx] = useState<number>(0); // 지도에서 클릭한 마커의 인덱스
+  const [markers, setMarkers] = useState<any>(null);
   const [map, setMap] = useState<any>(null);
 
   // 지도를 불러옵니다
@@ -36,6 +37,13 @@ const Map = ({ places }: MapProps) => {
       const map = new kakao.maps.Map(container, options);
       addMarker(map);
     }
+  }, []);
+
+  useEffect(() => {
+    // 기존 마커 초기화
+    markers.forEach((marker: any) => marker.setMap(null));
+    setMarkers([]);
+    // 새 마커 추가
     if (places.length !== 0 && map) {
       addMarker(map);
     }
@@ -70,6 +78,7 @@ const Map = ({ places }: MapProps) => {
         setIsOpenPlace(true);
         setClickedMarkerIdx(i);
       });
+      setMarkers((prevArr: any) => [...prevArr, marker]);
 
       /* 3. 지도 범위 재설정 */
       bounds.extend(new kakao.maps.LatLng(places[i].addressY, places[i].addressX));
