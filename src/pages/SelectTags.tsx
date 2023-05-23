@@ -39,7 +39,6 @@ const SelectTags = () => {
     '운동',
     '캠핑',
     '공연',
-    '피크닉',
     '연극',
     '게임',
     '여행',
@@ -54,6 +53,7 @@ const SelectTags = () => {
   ];
 
   const [selectedTags, setSelectedTags] = useRecoilState<IHashtag[]>(selectedTagsState);
+
   const [moodTags, setMoodTags] = useState<string[]>(
     selectedTags.filter((tag) => tag.type === 'VIBE').map((tag) => tag.tagName)
   );
@@ -63,6 +63,7 @@ const SelectTags = () => {
   const [customTags, setCustomTags] = useState<string[]>(
     selectedTags.filter((tag) => tag.type === 'CUSTOM').map((tag) => tag.tagName)
   );
+
   const [inputTag, setInputTag] = useState('');
 
   const [isSaveActive, setIsSaveActive] = useState(false);
@@ -70,34 +71,44 @@ const SelectTags = () => {
   // recoil atom에 선택한 태그들을 저장해줍니다.
   const handleSelectTagMood = (event: React.MouseEvent<HTMLButtonElement>) => {
     const selectedTagName = event.currentTarget.innerHTML;
+
     if (moodTags.includes(selectedTagName)) {
       setMoodTags(moodTags.filter((tag) => tag != selectedTagName));
       setSelectedTags((prevArray: IHashtag[]) => prevArray.filter((item) => item.tagName !== selectedTagName));
     } else {
-      setMoodTags([...moodTags, selectedTagName]);
-      setSelectedTags((prevArray: IHashtag[]) => [
-        ...prevArray,
-        {
-          tagName: selectedTagName,
-          type: 'VIBE',
-        } as IHashtag,
-      ]);
+      if (moodTags.length === 5) {
+        alert('분위기, 활동 태그 각각 5개까지 선택 가능합니다.');
+      } else {
+        setMoodTags([...moodTags, selectedTagName]);
+        setSelectedTags((prevArray: IHashtag[]) => [
+          ...prevArray,
+          {
+            tagName: selectedTagName,
+            type: 'VIBE',
+          } as IHashtag,
+        ]);
+      }
     }
   };
   const handleSelectTagActivity = (event: React.MouseEvent<HTMLButtonElement>) => {
     const selectedTagName = event.currentTarget.innerHTML;
+
     if (activityTags.includes(selectedTagName)) {
       setActivityTags(activityTags.filter((tag) => tag != selectedTagName));
       setSelectedTags((prevArray: IHashtag[]) => prevArray.filter((item) => item.tagName !== selectedTagName));
     } else {
-      setActivityTags([...activityTags, selectedTagName]);
-      setSelectedTags((prevArray: IHashtag[]) => [
-        ...prevArray,
-        {
-          tagName: selectedTagName,
-          type: 'ACTIVITY',
-        } as IHashtag,
-      ]);
+      if (activityTags.length === 5) {
+        alert('분위기, 활동 태그 각각 5개까지 선택 가능합니다.');
+      } else {
+        setActivityTags([...activityTags, selectedTagName]);
+        setSelectedTags((prevArray: IHashtag[]) => [
+          ...prevArray,
+          {
+            tagName: selectedTagName,
+            type: 'ACTIVITY',
+          } as IHashtag,
+        ]);
+      }
     }
   };
 
