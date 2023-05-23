@@ -60,6 +60,11 @@ const Login = () => {
               };
             })
           }
+          onKeyDown={(e: React.KeyboardEvent) => {
+            if (e.key == 'Enter' && loginInput.userName && loginInput.password) {
+              handleLogin();
+            }
+          }}
         />
       </LoginRow>
       <SaveButton label="로그인" isActive={isActive} handleClickSave={handleLogin} />
