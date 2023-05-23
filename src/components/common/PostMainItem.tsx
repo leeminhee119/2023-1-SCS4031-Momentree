@@ -135,7 +135,7 @@ const MoodTagContainer = styled.article`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 4.8rem;
+    width: 5.5rem;
     height: 2.2rem;
     background-color: rgba(247, 213, 78, 0.2);
     color: ${({ theme }) => theme.colors.mainDark};
