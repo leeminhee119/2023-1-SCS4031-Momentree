@@ -7,6 +7,7 @@ export interface RecommendationItemProps {
 }
 
 // export interface RecommendationItemProps {
+//   recoredId: number;
 //   title: string;
 //   bookMarkStatus: boolean;
 //   likeCnt: number;

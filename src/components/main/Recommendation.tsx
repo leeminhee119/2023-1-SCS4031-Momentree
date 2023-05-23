@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import RecommendationItem from './RecommendationItem';
 import { useNavigate } from 'react-router-dom';
+// import { useRecommendQuery } from '../../hooks/queries/useRecommend';
 // import { CommunityData } from 'types/communityData';
 // import { useCookies } from 'react-cookie';
 
@@ -88,7 +89,7 @@ const RecommendationSlider = styled.section`
 // const Recommendation = () => {
 // const [cookies] = useCookies(['user']);
 //   const navigate = useNavigate();
-//   const { data } = useRecommendQuery(cookies.user.userToken);
+//   const { data } = useRecommendQuery(cookies?.user?.userToken);
 
 //   return (
 //     <RecommendationContainer>
@@ -103,13 +104,14 @@ const RecommendationSlider = styled.section`
 //                window.location.reload();
 //              }}>
 //               <RecommendationItem
+//                 recordedId={data?.recordedId}
 //                 title={data.title}
 //                 bookMarkStatus={data.bookMarkStatus}
 //                 likeCnt={data.likeCnt}
 //                 bookmarkCnt={data.bookmarkCnt}
-//                 place={data.place}
-//                 key={index}>
-//              </RecommendationItem>
+//                 place={data.recordedPlaces}
+//                 key={index}></RecommendationItem>
+//                 );
 //             </div>
 //           );
 //         })}

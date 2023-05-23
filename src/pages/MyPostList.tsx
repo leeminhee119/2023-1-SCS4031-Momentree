@@ -32,14 +32,14 @@ const MyPostList = () => {
               window.location.reload();
             }}>
             <PostItem
-              title={data.title}
-              bookMarkStatus={data.bookMarkStatus}
-              likeCnt={data.likeCnt}
-              bookmarkCnt={data.bookMarkCnt}
-              vibeTag={data.vibeTags}
-              activityTag={data.activityTags}
-              place={data.recordedPlaces}
-              recordedId={data.recordedId}
+              title={data?.title}
+              bookMarkStatus={data?.bookMarkStatus}
+              likeCnt={data?.likeCnt}
+              bookmarkCnt={data?.bookMarkCnt}
+              vibeTag={data?.vibeTags}
+              activityTag={data?.activityTags}
+              place={data?.recordedPlaces}
+              recordedId={data?.recordedId}
               key={index}></PostItem>
           </div>
         );
