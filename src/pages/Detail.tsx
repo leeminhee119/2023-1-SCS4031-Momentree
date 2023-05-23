@@ -129,7 +129,7 @@ const Detail = () => {
         <p>데이트일 {data?.result.dateDate}</p>
       </DetailInfo>
       <DetailTitle>{data?.result.title}</DetailTitle>
-      <WriterInfo userName={data?.result.userName} />
+      <WriterInfo />
       <MapLayout>
         <Map places={data?.result.recordedPlaces} />
       </MapLayout>

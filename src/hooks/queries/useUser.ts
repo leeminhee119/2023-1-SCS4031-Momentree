@@ -1,5 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postBookmark, postLike } from 'apis/user';
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import { postBookmark, postLike, getUserInfo } from 'apis/user';
 
 export const usePostBookmarkMutation = (record_id: number, body: object, token: string) => {
   const queryClient = useQueryClient();
@@ -18,4 +19,9 @@ export const usePostLikekMutation = (record_id: number, body: object, token: str
       queryClient.invalidateQueries(['getCommunityDetail']);
     },
   });
+};
+
+export const useUserInfoQuery = (token: string) => {
+  const data = useQuery(['getUserInfo'], () => getUserInfo(token));
+  return data;
 };
