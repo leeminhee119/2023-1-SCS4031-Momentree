@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logoIcon from '../assets/logo.png';
 import SaveButton from 'components/common/SaveButton';
 import { useLoginMutation } from 'hooks/queries/useLogin';
@@ -60,9 +60,17 @@ const Login = () => {
               };
             })
           }
+          onKeyDown={(e: React.KeyboardEvent) => {
+            if (e.key == 'Enter' && loginInput.userName && loginInput.password) {
+              handleLogin();
+            }
+          }}
         />
       </LoginRow>
       <SaveButton label="로그인" isActive={isActive} handleClickSave={handleLogin} />
+      <LoginLink>
+        아직 계정이 없으신가요? <StyledLink to="/signup">회원가입하기</StyledLink>
+      </LoginLink>
     </LoginLayout>
   );
 };
@@ -94,6 +102,21 @@ const LoginInput = styled.input`
   border-bottom: 1px solid ${({ theme }) => theme.colors.gray300};
   &:focus {
     border-color: ${({ theme }) => theme.colors.mainDark};
+  }
+`;
+
+const LoginLink = styled.p`
+  margin-top: 2rem;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.gray400};
+  font: ${({ theme }) => theme.fonts.caption2};
+`;
+
+const StyledLink = styled(Link)`
+  && {
+    color: ${({ theme }) => theme.colors.gray500};
+    font: ${({ theme }) => theme.fonts.caption1};
+    text-decoration: none;
   }
 `;
 

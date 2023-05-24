@@ -1,15 +1,21 @@
 import styled from 'styled-components';
-interface WriterInfoProps {
-  userName: string;
-}
-const WriterInfo = ({ userName }: WriterInfoProps) => {
+import { useUserInfoQuery } from 'hooks/queries/useUser';
+import { useCookies } from 'react-cookie';
+import defaultProfileIcon from '../../assets/icons/profile_white.svg';
+
+const WriterInfo = () => {
+  const [cookies] = useCookies(['user']);
+  const { data } = useUserInfoQuery(cookies?.user?.userToken);
+
   return (
     <WriterInfoContainer>
       <div>
-        <img src="https://user-images.githubusercontent.com/62867581/234172890-03b605e4-9e8d-4661-8142-cb94bae8e3a4.png"></img>
+        <img src={data?.result.profileImg ? data?.result.profileImg : defaultProfileIcon} alt="유저 이미지" />
         <Info>
-          <h1>{userName}</h1>
-          <p>글 119 · 팔로워 33</p>
+          <h1>{data?.result.nickname}</h1>
+          <p>
+            글 {data?.result.recordCnt} · 팔로워 {data?.result.follower}
+          </p>
         </Info>
       </div>
       <AddFollowerButton type="button"> + 팔로우 </AddFollowerButton>

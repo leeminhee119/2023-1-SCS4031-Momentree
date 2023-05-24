@@ -4,20 +4,15 @@ import Search from 'components/main/Search';
 import Margin from 'components/main/Margin';
 import Recommendation from 'components/main/Recommendation';
 import Community from 'components/main/Community';
-import { useCookies } from 'react-cookie';
-import { useCommunityQuery } from '../hooks/queries/useCommunity';
 
 const Main = () => {
-  const [cookies] = useCookies(['user']);
-  const { data } = useCommunityQuery(cookies?.user?.userToken);
-
   return (
     <MainContainer>
       <Header />
       <Search />
       <Recommendation />
       <Margin />
-      {data && <Community communityData={data?.result?.content} />}
+      <Community />
     </MainContainer>
   );
 };
