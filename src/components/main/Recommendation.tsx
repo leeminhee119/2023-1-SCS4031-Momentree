@@ -91,10 +91,8 @@ const RecommendationSlider = styled.section`
 //   const [cookies] = useCookies(['user']);
 //   const navigate = useNavigate();
 //   const [posts, setPosts] = useState<CommunityData[]>([]);
-
 //   const { data } = useRecommendQuery(cookies?.user?.userToken);
 //   setPosts(data?.result?.content);
-
 //   return (
 //     <RecommendationContainer>
 //       <RecommendationContainerTitle>당신을 위한 추천 코스</RecommendationContainerTitle>

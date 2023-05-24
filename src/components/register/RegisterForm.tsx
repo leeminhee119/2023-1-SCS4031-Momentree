@@ -123,9 +123,7 @@ const Register = () => {
           }
         />
       </RegisterForm>
-      {/* 회원가입 버튼 */}
       <RegisterButton label="회원가입" isActive={isActive} handleClickSave={handleRegister} />
-      {/* 로그인 링크 */}
       <LoginLink>
         계정이 있으신가요? <StyledLink to="/login">로그인하기</StyledLink>
       </LoginLink>
