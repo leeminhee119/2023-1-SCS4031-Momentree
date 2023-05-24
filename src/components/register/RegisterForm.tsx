@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logoIcon from '../../assets/logo.png';
 import RegisterButton from './RegisterButton';
-
 import { useSignupMtutation } from 'hooks/queries/useSignup';
 
 const Register = () => {
@@ -32,7 +31,6 @@ const Register = () => {
         <LogoImage src={logoIcon} alt="Logo" />
       </LogoRow>
       <RegisterForm>
-        {/* 아이디 입력 필드 */}
         <Input
           type="text"
           name="username"
@@ -61,7 +59,6 @@ const Register = () => {
             })
           }
         />
-        {/* 비밀번호 입력 필드 */}
         <Input
           type="password"
           name="password"
@@ -76,7 +73,6 @@ const Register = () => {
             })
           }
         />
-        {/* 닉네임 입력 필드 */}
         <Input
           type="text"
           name="nickname"
@@ -92,9 +88,7 @@ const Register = () => {
           }
         />
       </RegisterForm>
-      {/* 회원가입 버튼 */}
       <RegisterButton label="회원가입" isActive={isActive} handleClickSave={() => handleRegister.mutate()} />
-      {/* 로그인 링크 */}
       <LoginLink>
         계정이 있으신가요? <StyledLink to="/login">로그인하기</StyledLink>
       </LoginLink>
