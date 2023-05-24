@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 // import { useRecommendQuery } from '../../hooks/queries/useRecommend';
 // import { CommunityData } from 'types/communityData';
 // import { useCookies } from 'react-cookie';
+// import { useState } from 'react';
 
 const Recommendation = () => {
   const navigate = useNavigate();
@@ -87,31 +88,34 @@ const RecommendationSlider = styled.section`
 `;
 
 // const Recommendation = () => {
-// const [cookies] = useCookies(['user']);
+//   const [cookies] = useCookies(['user']);
 //   const navigate = useNavigate();
+//   const [posts, setPosts] = useState<CommunityData[]>([]);
+
 //   const { data } = useRecommendQuery(cookies?.user?.userToken);
+//   setPosts(data?.result?.content);
 
 //   return (
 //     <RecommendationContainer>
 //       <RecommendationContainerTitle>당신을 위한 추천 코스</RecommendationContainerTitle>
 //       <RecommendationSlider>
-//         {data?.result.content.map(CommunityData, number)} =>
-//          {
-//            return (
-//            <div
-//              onClick={() => {
-//                navigate(`/post/${data.recordedId}`);
-//                window.location.reload();
-//              }}>
+//         {posts.map(() => {
+//           return (
+//             <div
+//               onClick={() => {
+//                 navigate(`/post/${data.recordedId}`);
+//                 window.location.reload();
+//               }}>
 //               <RecommendationItem
-//                 recordedId={data?.recordedId}
+//                 recoredId={data?.recordedId}
 //                 title={data.title}
 //                 bookMarkStatus={data.bookMarkStatus}
 //                 likeCnt={data.likeCnt}
 //                 bookmarkCnt={data.bookmarkCnt}
 //                 place={data.recordedPlaces}
+//                 placegu={data.recordedPlaces.addressGu}
 //                 key={index}></RecommendationItem>
-//                 );
+//               );
 //             </div>
 //           );
 //         })}
@@ -119,25 +123,3 @@ const RecommendationSlider = styled.section`
 //     </RecommendationContainer>
 //   );
 // };
-
-// export default Recommendation;
-
-// const RecommendationContainer = styled.section`
-//   display: flex;
-//   flex-direction: column;
-// `;
-
-// const RecommendationContainerTitle = styled.h1`
-//   margin-top: 2rem;
-//   margin-bottom: 1.6rem;
-//   ${({ theme }) => theme.fonts.body1};
-//   color: ${({ theme }) => theme.colors.gray900};
-// `;
-
-// const RecommendationSlider = styled.section`
-//   display: flex;
-//   flex-direction: row;
-//   align-items: center;
-//   overflow: auto;
-//   white-space: nowrap;
-// `;
