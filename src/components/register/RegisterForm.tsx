@@ -5,12 +5,9 @@ import styled from 'styled-components';
 import logoIcon from '../../assets/logo.png';
 import RegisterButton from './RegisterButton';
 import { postSignup } from '../../apis/signup';
-// import axios from 'axios';
 
 const Register = () => {
   const navigate = useNavigate();
-
-  // 회원가입 창의 상태와 활성화 여부를 관리하는 상태 변수들
   const [isActive, setIsActive] = useState<boolean>(false);
   const [registerInput, setRegisterInput] = useState({
     userName: '',
@@ -41,20 +38,6 @@ const Register = () => {
       console.error('Error:', error);
     }
   };
-
-  // const handleRegister = async () => {
-  //   try {
-  //     const response = await axios.post('http://3.39.153.141/join', registerInput);
-  //     if (response.status === 200) {
-  //       navigate('/');
-  //       console.log('회원가입 성공');
-  //     } else {
-  //       console.log('회원가입 실패');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // };
 
   return (
     <RegisterLayout>
@@ -149,9 +132,9 @@ const LogoImage = styled.img`
 `;
 
 const RegisterForm = styled.form`
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Input = styled.input`
