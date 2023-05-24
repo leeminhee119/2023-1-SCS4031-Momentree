@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logoIcon from '../../assets/logo.png';
 import RegisterButton from './RegisterButton';
 import axios from 'axios';
 
 const Register = () => {
+  const navigate = useNavigate();
+
   // 회원가입 창의 상태와 활성화 여부를 관리하는 상태 변수들
   const [isActive, setIsActive] = useState<boolean>(false);
   const [registerInput, setRegisterInput] = useState({
@@ -16,9 +18,7 @@ const Register = () => {
     nickname: '',
   });
 
-  // const navigate = useNavigate();
   useEffect(() => {
-    // 회원가입 입력 필드가 모두 채워졌을 때만 활성화 상태로 설정
     const { userName, email, password, nickname } = registerInput;
     if (userName !== '' && email !== '' && password !== '' && nickname !== '') {
       setIsActive(true);
@@ -27,16 +27,29 @@ const Register = () => {
     }
   }, [registerInput]);
 
+  // apis로 회원가입 API요청
+  // const handleRegister = async () => {
+  //   //console.log(registerInput);
+  //   try {
+  //     const response = await registerUser(registerInput);
+  //     if (response.status === 200) {
+  //       navigate('/');
+  //       console.log('회원가입 성공');
+  //     } else {
+  //       console.log('회원가입 실패');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
+
   const handleRegister = async () => {
-    //console.log(registerInput);
     try {
       const response = await axios.post('http://3.39.153.141/join', registerInput);
       if (response.status === 200) {
-        // 회원가입 성공 처리
-        // navigate('/login');
+        navigate('/');
         console.log('회원가입 성공');
       } else {
-        // 회원가입 실패 처리
         console.log('회원가입 실패');
       }
     } catch (error) {
