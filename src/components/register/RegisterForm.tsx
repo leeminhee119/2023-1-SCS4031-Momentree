@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import logoIcon from '../../assets/logo.png';
 import RegisterButton from './RegisterButton';
-import { postSignup } from '../../apis/signup';
+
+import { useSignupMtutation } from 'hooks/queries/useSignup';
 
 const Register = () => {
-  const navigate = useNavigate();
   const [isActive, setIsActive] = useState<boolean>(false);
   const [registerInput, setRegisterInput] = useState({
     userName: '',
@@ -15,6 +15,7 @@ const Register = () => {
     password: '',
     nickname: '',
   });
+  const handleRegister = useSignupMtutation(registerInput);
 
   useEffect(() => {
     const { userName, email, password, nickname } = registerInput;
@@ -25,26 +26,12 @@ const Register = () => {
     }
   }, [registerInput]);
 
-  const handleRegister = async () => {
-    try {
-      const response = await postSignup(registerInput);
-      if (response.status === 200) {
-        navigate('/');
-        console.log('회원가입 성공');
-      } else {
-        console.log('회원가입 실패');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
   return (
     <RegisterLayout>
       <LogoRow>
         <LogoImage src={logoIcon} alt="Logo" />
       </LogoRow>
-      <RegisterForm onSubmit={handleRegister}>
+      <RegisterForm>
         {/* 아이디 입력 필드 */}
         <Input
           type="text"
@@ -106,7 +93,7 @@ const Register = () => {
         />
       </RegisterForm>
       {/* 회원가입 버튼 */}
-      <RegisterButton label="회원가입" isActive={isActive} handleClickSave={handleRegister} />
+      <RegisterButton label="회원가입" isActive={isActive} handleClickSave={() => handleRegister.mutate()} />
       {/* 로그인 링크 */}
       <LoginLink>
         계정이 있으신가요? <StyledLink to="/login">로그인하기</StyledLink>
