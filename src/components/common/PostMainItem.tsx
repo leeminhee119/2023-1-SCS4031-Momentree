@@ -5,9 +5,7 @@ import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { PostItemProps } from '../../types/postItem';
 import MapThumbnail from 'components/common/MapThumbnail';
-import { usePostBookmarkMutation } from 'hooks/queries/useUser';
 import { useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
 
 const PostMainItem = ({
   recordedId,
@@ -20,9 +18,6 @@ const PostMainItem = ({
   activityTag,
 }: PostItemProps) => {
   const navigate = useNavigate();
-  const [cookies] = useCookies(['user']);
-  const body = {};
-  const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, cookies?.user?.userToken);
 
   const handleTagClick = (tag: string) => {
     navigate(`/search/${tag}`);
@@ -34,21 +29,9 @@ const PostMainItem = ({
         <MapThumbnail recordedId={recordedId} places={place} />
       </MapContainer>
       {bookMarkStatus ? (
-        <BookmarkIcon
-          onClick={() => {
-            cookies?.user?.userToken ? postBookmarkMutation.mutate() : navigate('/login');
-          }}
-          src={clickbookmarkIcon}
-          alt="북마크 한 아이콘"
-        />
+        <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" />
       ) : (
-        <BookmarkIcon
-          src={unclickbookmarkIcon}
-          onClick={() => {
-            cookies?.user?.userToken ? postBookmarkMutation.mutate() : navigate('/login');
-          }}
-          alt="북마크 하지 않은 아이콘"
-        />
+        <BookmarkIcon src={unclickbookmarkIcon} alt="북마크 하지 않은 아이콘" />
       )}
       <h1
         onClick={() => {
@@ -164,7 +147,7 @@ const MoodTagContainer = styled.article`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 4.8rem;
+    width: 5.5rem;
     height: 2.2rem;
     background-color: rgba(247, 213, 78, 0.2);
     color: ${({ theme }) => theme.colors.mainDark};

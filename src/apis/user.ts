@@ -1,4 +1,5 @@
 import { POST } from 'apis/api';
+import { GET } from 'apis/api';
 
 export const postBookmark = async (record_id: number, body: object, token: string) => {
   const { data } = await POST(`/community/${record_id}/bookmark`, body, token);
@@ -7,5 +8,10 @@ export const postBookmark = async (record_id: number, body: object, token: strin
 
 export const postLike = async (record_id: number, body: object, token: string) => {
   const { data } = await POST(`/community/${record_id}/likes`, body, token);
+  return data;
+};
+
+export const getUserInfo = async (token: string) => {
+  const { data } = await GET(`/UserInfo`, token);
   return data;
 };

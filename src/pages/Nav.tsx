@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import closeIcon from '../assets/icons/close.svg';
+import defaultProfileIcon from '../assets/icons/profile_grey.svg';
 import { useCookies } from 'react-cookie';
+import { useUserInfoQuery } from 'hooks/queries/useUser';
 
 interface NavProps {
   setIsNavOpen(state: boolean): void;
@@ -10,6 +12,7 @@ interface NavProps {
 const Nav = ({ setIsNavOpen }: NavProps) => {
   const navigate = useNavigate();
   const [cookies, , removeCookie] = useCookies(['user']);
+  const { data } = useUserInfoQuery(cookies?.user?.userToken);
 
   const USERPAGE_LIST = [
     { title: '나의 데이트 코스', url: 'userPage/myPostList' },
@@ -33,24 +36,23 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
           <>
             <UserInfo>
               <UserImage
-                src="https://user-images.githubusercontent.com/62867581/234172890-03b605e4-9e8d-4661-8142-cb94bae8e3a4.png"
+                src={data?.result.profileImg ? data?.result.profileImg : defaultProfileIcon}
                 alt="유저 이미지"
               />
-              <UserName>{cookies.user.userName}</UserName>
-              <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
+              <UserName>{data?.result.nickname}</UserName>
             </UserInfo>
             <UserFollower>
               <article>
                 <h1>팔로워</h1>
-                <p>1125</p>
+                <p>{data?.result.follower}</p>
               </article>
               <article>
                 <h1>팔로잉</h1>
-                <p>58</p>
+                <p>{data?.result.following}</p>
               </article>
             </UserFollower>
             <List onClick={() => navigate(`/selectTags`)}>코스 등록하기</List>
-            <Bar></Bar>
+            <Bar />
             {USERPAGE_LIST.map((item, index) => {
               return (
                 <List key={index} onClick={() => navigate(`${item.url}`)}>
@@ -58,11 +60,18 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
                 </List>
               );
             })}
+            <Bar />
+            <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
           </>
         ) : (
-          <GotoLoginButton type="button" onClick={() => navigate('/login')}>
-            로그인하기
-          </GotoLoginButton>
+          <>
+            <GotoButton type="button" onClick={() => navigate('/signup')}>
+              회원가입하기
+            </GotoButton>
+            <GotoButton type="button" onClick={() => navigate('/login')}>
+              로그인하기
+            </GotoButton>
+          </>
         )}
       </NavContainer>
     </NavBackground>
@@ -95,7 +104,7 @@ const NavContainer = styled.section`
 const UserInfo = styled.section`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  align-items: center;
   margin-bottom: 12px;
 `;
 
@@ -110,11 +119,9 @@ const UserName = styled.h1``;
 
 const LogoutButton = styled.p`
   color: ${({ theme }) => theme.colors.gray400};
-  ${({ theme }) => theme.fonts.caption3};
+  ${({ theme }) => theme.fonts.caption2};
   display: flex;
-  margin: 0.7rem;
   justify-content: flex-end;
-  width: 100%;
 `;
 
 const UserFollower = styled.section`
@@ -137,7 +144,7 @@ const UserFollower = styled.section`
   }
 
   div {
-    color: ${({ theme }) => theme.colors.border};
+    background-color: ${({ theme }) => theme.colors.border};
     height: 1px;
   }
   h1 {
@@ -163,20 +170,23 @@ const IconImage = styled.section`
 `;
 
 const Bar = styled.div`
-  color: ${({ theme }) => theme.colors.border};
+  background-color: ${({ theme }) => theme.colors.border};
   height: 1px;
+  width: 100%;
+  margin-bottom: 2rem;
 `;
 
 const List = styled.p`
   color: ${({ theme }) => theme.colors.gray900};
   ${({ theme }) => theme.fonts.body3};
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
 `;
 
-const GotoLoginButton = styled.button`
+const GotoButton = styled.button`
   color: ${({ theme }) => theme.colors.gray900};
   background-color: ${({ theme }) => theme.colors.mainLight};
   ${({ theme }) => theme.fonts.body3};
   border-radius: 30px;
   height: 3rem;
+  margin-bottom: 2rem;
 `;
