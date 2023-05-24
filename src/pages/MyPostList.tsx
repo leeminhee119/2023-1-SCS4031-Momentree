@@ -9,15 +9,23 @@ import { useCookies } from 'react-cookie';
 import { CommunityData } from 'types/communityData';
 
 const MyPostList = () => {
+  //링크 이동에 사용되는 navigate;
   const navigate = useNavigate();
+  //쿠키를 가져올때 사용되는 cookies;
   const [cookies] = useCookies(['user']);
+  //무한스크롤 기능에 사용되는 ref변수
   const target = useRef<HTMLDivElement>(null);
+  //
   const SIZE = 4;
+
+  //페이지네이션에 필요한 페이지 0으로 초기화
   const [page, setPage] = useState<number>(0);
+  //useMyPostListQuery이 쿼리를 통해 data를 불러옴.
   const { data } = useMyPostListQuery(page, SIZE, cookies.user.userToken);
   const [communityDataList, setCommunityDataLists] = useState<CommunityData[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
+  //반환된 데이터 관찰 및 변화있을 때마다 communityDataList에 추가.
   useEffect(() => {
     const result = data?.result.content;
     if (result) {
@@ -26,6 +34,7 @@ const MyPostList = () => {
     setIsLoaded(false);
   }, [data]);
 
+  //스크롤이 target 요소에 도달했을 때 새로운 데이터를 불러오는 역할을 함.
   const onIntersect = ([entry]: any, observer: { unobserve: (arg0: any) => void; observe: (arg0: any) => void }) => {
     if (entry.isIntersecting && !isLoaded) {
       observer.unobserve(entry.target); // 관찰요소 리셋

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 // import { useRecommendQuery } from '../../hooks/queries/useRecommend';
 // import { CommunityData } from 'types/communityData';
 // import { useCookies } from 'react-cookie';
-// import { useState } from 'react';
+// import { useEffect, useState } from 'react';
 
 const Recommendation = () => {
   const navigate = useNavigate();
@@ -65,8 +65,6 @@ const Recommendation = () => {
   );
 };
 
-export default Recommendation;
-
 const RecommendationContainer = styled.section`
   display: flex;
   flex-direction: column;
@@ -91,13 +89,19 @@ const RecommendationSlider = styled.section`
 //   const [cookies] = useCookies(['user']);
 //   const navigate = useNavigate();
 //   const [posts, setPosts] = useState<CommunityData[]>([]);
+
 //   const { data } = useRecommendQuery(cookies?.user?.userToken);
-//   setPosts(data?.result?.content);
+//   useEffect(() => {
+//     if (data?.result?.content) {
+//       setPosts(data.result.content);
+//     }
+//   }, [data]);
+
 //   return (
 //     <RecommendationContainer>
 //       <RecommendationContainerTitle>당신을 위한 추천 코스</RecommendationContainerTitle>
 //       <RecommendationSlider>
-//         {posts.map(() => {
+//         {posts.map((data, index) => {
 //           return (
 //             <div
 //               onClick={() => {
@@ -109,7 +113,7 @@ const RecommendationSlider = styled.section`
 //                 title={data.title}
 //                 bookMarkStatus={data.bookMarkStatus}
 //                 likeCnt={data.likeCnt}
-//                 bookmarkCnt={data.bookmarkCnt}
+//                 bookmarkCnt={data.bookMarkCnt}
 //                 place={data.recordedPlaces}
 //                 key={index}></RecommendationItem>
 //               );
@@ -120,3 +124,5 @@ const RecommendationSlider = styled.section`
 //     </RecommendationContainer>
 //   );
 // };
+
+export default Recommendation;

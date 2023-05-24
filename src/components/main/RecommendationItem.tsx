@@ -6,6 +6,7 @@ import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { RecommendationItemProps } from '../../types/recommendationItem';
 // import MapThumbnail from 'components/common/MapThumbnail';
 // import { usePostBookmarkMutation } from 'hooks/queries/useUser';
+// import { useCookies } from 'react-cookie';
 
 const RecommendationItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place }: RecommendationItemProps) => {
   return (
@@ -29,8 +30,6 @@ const RecommendationItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place
     </RecommendationItemContainer>
   );
 };
-
-export default RecommendationItem;
 
 const RecommendationItemContainer = styled.section`
   display: flex;
@@ -103,8 +102,14 @@ const RecommendationItemInfo = styled.article`
   }
 `;
 
-// const RecommendationItem = ({ recoredId, title, bookMarkStatus, likeCnt, bookmarkCnt, place}: RecommendationItemProps) => {
-
+// const RecommendationItem = ({
+//   recoredId,
+//   title,
+//   bookMarkStatus,
+//   likeCnt,
+//   bookmarkCnt,
+//   place,
+// }: RecommendationItemProps) => {
 //   const [cookies] = useCookies(['user']);
 //   const body = {};
 //   const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, cookies?.user?.userToken);
@@ -112,7 +117,7 @@ const RecommendationItemInfo = styled.article`
 //   return (
 //     <RecommendationItemContainer>
 //       <Map>
-//          <MapThumbnail recordedId={recordedId} places={place} />
+//         <MapThumbnail recordedId={recordedId} places={place} />
 //       </Map>
 //       {bookMarkStatus ? (
 //         <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" />
@@ -133,4 +138,4 @@ const RecommendationItemInfo = styled.article`
 //   );
 // };
 
-// export default RecommendationItem;
+export default RecommendationItem;
