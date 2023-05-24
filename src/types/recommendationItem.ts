@@ -15,5 +15,4 @@ export interface RecommendationItemProps {
 //   likeCnt: number;
 //   bookmarkCnt: number;
 //   place?: Array<PlaceInformation>; //지도
-//   placegu: string[];
 // }

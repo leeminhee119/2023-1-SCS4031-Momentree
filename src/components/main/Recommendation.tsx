@@ -113,7 +113,6 @@ const RecommendationSlider = styled.section`
 //                 likeCnt={data.likeCnt}
 //                 bookmarkCnt={data.bookmarkCnt}
 //                 place={data.recordedPlaces}
-//                 placegu={data.recordedPlaces.addressGu}
 //                 key={index}></RecommendationItem>
 //               );
 //             </div>
