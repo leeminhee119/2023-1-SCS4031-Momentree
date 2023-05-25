@@ -27,22 +27,6 @@ const Register = () => {
     }
   }, [registerInput]);
 
-  // apis로 회원가입 API요청
-  // const handleRegister = async () => {
-  //   //console.log(registerInput);
-  //   try {
-  //     const response = await registerUser(registerInput);
-  //     if (response.status === 200) {
-  //       navigate('/');
-  //       console.log('회원가입 성공');
-  //     } else {
-  //       console.log('회원가입 실패');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // };
-
   const handleRegister = async () => {
     try {
       const response = await axios.post('http://3.39.153.141/join', registerInput);
