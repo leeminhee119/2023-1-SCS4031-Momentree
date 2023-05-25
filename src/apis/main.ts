@@ -9,8 +9,3 @@ export const getCommunity = async (page: number, size: number, token?: string) =
     return data;
   }
 };
-
-export const getRecommendList = async (token?: string) => {
-  const { data } = await GET('/community/recommend', token);
-  return data;
-};
