@@ -89,7 +89,6 @@ const Register = () => {
         />
       </RegisterForm>
       <RegisterButton label="회원가입" isActive={isActive} handleClickSave={() => handleRegister.mutate()} />
-      <RegisterButton label="회원가입" isActive={isActive} handleClickSave={handleRegister} />
       <LoginLink>
         계정이 있으신가요? <StyledLink to="/login">로그인하기</StyledLink>
       </LoginLink>
