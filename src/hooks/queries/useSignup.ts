@@ -9,9 +9,8 @@ interface IBody {
   nickname: string;
 }
 
-const navigator = useNavigate();
-
 export const useSignupMtutation = (body: IBody) => {
+  const navigator = useNavigate();
   return useMutation(() => postSignup(body), {
     onSuccess: () => {
       navigator('/');
