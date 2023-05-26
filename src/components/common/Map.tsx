@@ -90,7 +90,7 @@ const Map = ({ places }: MapProps) => {
   return (
     <MapLayout>
       <MapBox id="map" />
-      {isOpenPlace ? <PlaceModal placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} /> : null}
+      {isOpenPlace && <PlaceModal placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} />}
     </MapLayout>
   );
 };
