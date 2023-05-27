@@ -1,13 +1,16 @@
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import dragIcon from '../../assets/icons/drag.svg';
 import closeIcon from '../../assets/icons/close.svg';
 import { IRecordedPlace } from 'types/post';
+import PlaceModal from './PlaceModal';
 
 const PlaceItem = () => {
   const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
+  const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
+  const [clickedMarkerIdx, setClickedMarkerIdx] = useState<number>(0); // 클릭한 장소의 인덱스
   const draggingItemIdx = useRef<number>(-1);
   const draggingOverItemIdx = useRef<number>(-1);
 
@@ -47,6 +50,10 @@ const PlaceItem = () => {
         return (
           <PlaceItemBox
             key={index}
+            onClick={() => {
+              setClickedMarkerIdx(index);
+              setIsOpenPlace(true);
+            }}
             onDragStart={(e) => onDragStart(e, index)}
             onDragEnter={(e) => onDragEnter(e, index)}
             onDragEnd={(e) => onDragEnd(e, index)}
@@ -57,10 +64,18 @@ const PlaceItem = () => {
               <div id="name">{place.placeName}</div>
               <div id="address">{place.address}</div>
             </PlaceItemInfo>
-            <CloseIcon src={closeIcon} alt="닫기 버튼" onClick={(e) => handleDeletePlace(e, index)} />
+            <CloseIcon
+              src={closeIcon}
+              alt="닫기 버튼"
+              onClick={(e) => {
+                e.stopPropagation(); // PlaceItemBox의 이벤트 핸들러 막기
+                handleDeletePlace(e, index);
+              }}
+            />
           </PlaceItemBox>
         );
       })}
+      {isOpenPlace && <PlaceModal placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} />}
     </PlaceItemContainer>
   );
 };

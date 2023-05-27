@@ -50,6 +50,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:98449bcd1a995107381bb2a9bb025eddcbfc97f53a77200ba549e5724810901dfb40398b7d55932ef7f965e46a338566339ecc4f531b87f778707c73bfad3365#npm:4.2.1"],\
             ["eslint-plugin-react", "virtual:98449bcd1a995107381bb2a9bb025eddcbfc97f53a77200ba549e5724810901dfb40398b7d55932ef7f965e46a338566339ecc4f531b87f778707c73bfad3365#npm:7.32.2"],\
             ["eslint-plugin-react-app", "virtual:98449bcd1a995107381bb2a9bb025eddcbfc97f53a77200ba549e5724810901dfb40398b7d55932ef7f965e46a338566339ecc4f531b87f778707c73bfad3365#npm:6.2.2"],\
+            ["moment", "npm:2.29.4"],\
             ["prettier", "npm:2.8.7"],\
             ["react", "npm:18.2.0"],\
             ["react-cookie", "virtual:98449bcd1a995107381bb2a9bb025eddcbfc97f53a77200ba549e5724810901dfb40398b7d55932ef7f965e46a338566339ecc4f531b87f778707c73bfad3365#npm:4.1.1"],\
@@ -5729,6 +5730,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:98449bcd1a995107381bb2a9bb025eddcbfc97f53a77200ba549e5724810901dfb40398b7d55932ef7f965e46a338566339ecc4f531b87f778707c73bfad3365#npm:4.2.1"],\
             ["eslint-plugin-react", "virtual:98449bcd1a995107381bb2a9bb025eddcbfc97f53a77200ba549e5724810901dfb40398b7d55932ef7f965e46a338566339ecc4f531b87f778707c73bfad3365#npm:7.32.2"],\
             ["eslint-plugin-react-app", "virtual:98449bcd1a995107381bb2a9bb025eddcbfc97f53a77200ba549e5724810901dfb40398b7d55932ef7f965e46a338566339ecc4f531b87f778707c73bfad3365#npm:6.2.2"],\
+            ["moment", "npm:2.29.4"],\
             ["prettier", "npm:2.8.7"],\
             ["react", "npm:18.2.0"],\
             ["react-cookie", "virtual:98449bcd1a995107381bb2a9bb025eddcbfc97f53a77200ba549e5724810901dfb40398b7d55932ef7f965e46a338566339ecc4f531b87f778707c73bfad3365#npm:4.1.1"],\
@@ -13097,6 +13099,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/mkdirp-npm-1.0.4-37f6ef56b9-a96865108c.zip/node_modules/mkdirp/",\
           "packageDependencies": [\
             ["mkdirp", "npm:1.0.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["moment", [\
+        ["npm:2.29.4", {\
+          "packageLocation": "./.yarn/cache/moment-npm-2.29.4-902943305d-0ec3f9c2bc.zip/node_modules/moment/",\
+          "packageDependencies": [\
+            ["moment", "npm:2.29.4"]\
           ],\
           "linkType": "HARD"\
         }]\

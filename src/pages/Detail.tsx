@@ -30,6 +30,7 @@ const Detail = () => {
   const [iscopyed, setIscopyed] = useState<boolean>(false);
 
   const { data } = useCommunityDetailQuery(Number(postId), cookies?.user?.userToken);
+  const createdDate = new Date(data?.result.createdAt).toLocaleDateString();
 
   const deleteConfirmModal = () => {
     if (confirm('게시글을 정말 삭제하시겠습니까?')) {
@@ -125,7 +126,7 @@ const Detail = () => {
             })}
           </ActivityTagContainer>
         </TagContainer>
-        <p>작성일 {data?.result.createdAt}</p> <br />
+        <p>작성일 {createdDate}</p> <br />
         <p>데이트일 {data?.result.dateDate}</p>
       </DetailInfo>
       <DetailTitle>{data?.result.title}</DetailTitle>

@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { PlaceInformation } from 'types/placeInformation';
 
-interface IMapOptions {
+interface MapOptions {
   center: any;
+  draggable: boolean;
   level: number;
 }
 interface MapThumbnailProps {
@@ -13,13 +14,14 @@ interface MapThumbnailProps {
 
 const MapThumbnail = ({ recordedId, places }: MapThumbnailProps) => {
   const { kakao } = window;
-  const [map, setMap] = useState<any>(null);
+  const [map, setMap] = useState(null);
 
   // 지도를 불러옵니다
   useEffect(() => {
     const container = document.getElementById(`map-${recordedId}`);
-    const options: IMapOptions = {
+    const options: MapOptions = {
       center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표
+      draggable: false,
       level: 4, //지도의 레벨(확대, 축소 정도)
     };
     const map = new kakao.maps.Map(container, options);
