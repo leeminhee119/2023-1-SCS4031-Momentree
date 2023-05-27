@@ -39,9 +39,13 @@ const PlaceItem = ({ isEdit }: { isEdit?: boolean }) => {
       });
       setPlaces(copyPlaces);
     } else {
-      // 게시글 수정의 경우 - newOrders에 새로운 순서 저장
+      // 게시글 수정의 경우 - newOrders(새로 추가한 장소의 경우 orders)에 새로운 순서 저장
       const copyPlaces = places.map((place: IRecordedPlace, index: number) => {
-        return { ...place, newOrders: index + 1 };
+        if (place.placeId) {
+          return { ...place, newOrders: index + 1 };
+        } else {
+          return { ...place, orders: index + 1 };
+        }
       });
       setPlaces(copyPlaces);
     }
