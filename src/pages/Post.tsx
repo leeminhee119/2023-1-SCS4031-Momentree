@@ -140,7 +140,7 @@ const Post = () => {
         </HeaderLayout>
         <TitleInput placeholder="제목을 입력해주세요" defaultValue={recordData.title} onChange={handleChangeTitle} />
         <HorizontalLine />
-        <DatePicker dateDate={recordData.dateDate} setRecordData={setRecordData} />
+        <DatePicker dateDate={recordData.dateDate} />
         <Margin />
         <Map places={places} />
         <KeywordPlaceSearch />

@@ -4,16 +4,18 @@ import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import downIcon from '../../assets/icons/down.svg';
 import { IRecord } from 'types/post';
+import { useSetRecoilState } from 'recoil';
+import { recordState } from '\brecoil/atoms/recordState';
 
 interface IDatePicker {
   dateDate: string;
-  setRecordData: React.Dispatch<React.SetStateAction<IRecord>>;
 }
 const DatePicker = (props: IDatePicker) => {
   const [isOpen, setIsOpen] = useState(false);
+  const setRecordData = useSetRecoilState(recordState);
   const handleChange = (e: Date) => {
     setIsOpen(!isOpen);
-    props.setRecordData((prevState: IRecord) => {
+    setRecordData((prevState: IRecord) => {
       return {
         ...prevState,
         dateDate: e.toLocaleDateString(),
