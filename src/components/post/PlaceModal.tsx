@@ -9,8 +9,9 @@ import { useEffect, useState } from 'react';
 interface PlaceModalProps {
   placeIdx: number;
   handleModalClose: () => void;
+  isEdit?: boolean;
 }
-const PlaceModal = ({ placeIdx, handleModalClose }: PlaceModalProps) => {
+const PlaceModal = ({ placeIdx, handleModalClose, isEdit }: PlaceModalProps) => {
   const [placesData, setPlacesData] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
   const [placeContent, setPlaceContent] = useState<string>(placesData[placeIdx].placeContent);
@@ -44,22 +45,44 @@ const PlaceModal = ({ placeIdx, handleModalClose }: PlaceModalProps) => {
     setIsSaveActive(true);
   }
   function handleClickSave() {
-    setPlacesData((prevArr: IRecordedPlace[]) => {
-      const placeImages: IImage[] = [];
-      filesArray.forEach((file: File, idx: number) => {
-        placeImages.push({
-          orders: idx + 1,
-          imgFile: file,
+    if (!isEdit) {
+      setPlacesData((prevArr: IRecordedPlace[]) => {
+        const placeImages: IImage[] = [];
+        filesArray.forEach((file: File, idx: number) => {
+          placeImages.push({
+            orders: idx + 1,
+            imgFile: file,
+          });
         });
+        const newPlacesData = [...prevArr];
+        newPlacesData[placeIdx] = {
+          ...newPlacesData[placeIdx],
+          placeContent: placeContent,
+          images: placeImages,
+        };
+        return newPlacesData;
       });
-      const newPlacesData = [...prevArr];
-      newPlacesData[placeIdx] = {
-        ...newPlacesData[placeIdx],
-        placeContent: placeContent,
-        images: placeImages,
-      };
-      return newPlacesData;
-    });
+    } else {
+      // 글 수정의 경우 - 이미지 수정 X, newPlaceContent에 수정 내용 반영
+      setPlacesData((prevArr: IRecordedPlace[]) => {
+        const newPlacesData = [...prevArr];
+        if (newPlacesData[placeIdx].placeId) {
+          // 기존에 있던 장소라면
+          newPlacesData[placeIdx] = {
+            ...newPlacesData[placeIdx],
+            newPlaceContent: placeContent,
+          };
+        } else {
+          // 수정하면서 새로 추가한 장소라면
+          newPlacesData[placeIdx] = {
+            ...newPlacesData[placeIdx],
+            placeContent: placeContent,
+          };
+        }
+        return newPlacesData;
+      });
+    }
+
     handleModalClose();
   }
   return (
@@ -92,7 +115,7 @@ const PlaceModal = ({ placeIdx, handleModalClose }: PlaceModalProps) => {
           }}
         />
         <UploadImageRow>
-          {placesData[placeIdx].images && placesData[placeIdx].images.length <= 3 ? (
+          {!isEdit && placesData[placeIdx].images && placesData[placeIdx].images.length <= 3 ? (
             <UploadButton as={'label'} htmlFor={'fileUpload'}>
               <CameraIcon src={cameraIcon} alt="카메라 아이콘" />
             </UploadButton>

@@ -20,15 +20,8 @@ export const useEditMainMutation = (
   });
 };
 
-export const useEditPlaceContentMutation = (
-  postId: number,
-  newPlaceContent: IEditPlaceContent,
-  token: string,
-  successCallBack: () => void
-) => {
-  return useMutation(() => editPostPlaceContent(postId, newPlaceContent, token), {
-    onSuccess: successCallBack,
-  });
+export const useEditPlaceContentMutation = (postId: number, newPlaceContent: IEditPlaceContent[], token: string) => {
+  return useMutation(() => editPostPlaceContent(postId, newPlaceContent, token));
 };
 
 export const useEditPlaceOrderMutation = (

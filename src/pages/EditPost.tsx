@@ -11,8 +11,12 @@ import Map from 'components/common/Map';
 import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
 import SaveButton from 'components/common/SaveButton';
 import { useEffect, useState } from 'react';
-import { IEditMainPost } from 'types/editPost';
-import { useEditMainMutation } from 'hooks/queries/useEditPost';
+import { IEditMainPost, IEditPlaceContent } from 'types/editPost';
+import { useEditMainMutation, useEditPlaceContentMutation } from 'hooks/queries/useEditPost';
+import { useRecoilState } from 'recoil';
+import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
+import { PlaceInformation } from 'types/placeInformation';
+import { IRecordedPlace } from 'types/post';
 
 const EditPost = () => {
   const { postId } = useParams();
@@ -22,16 +26,49 @@ const EditPost = () => {
   const { data } = useCommunityDetailQuery(Number(postId), token);
 
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
-  const [oriPlaces, setOriPlaces] = useState([]);
-
+  const [places, setPlaces] = useRecoilState(recordedPlacesState);
+  //   const [oriPlaces, setOriPlaces] = useState([]);
   const [newRecordMain, setNewRecordMain] = useState<IEditMainPost>({});
 
-  const editPostMainMutation = useEditMainMutation(Number(postId), newRecordMain, token, () => {
+  // 본문 수정 API
+  const editPostMain = useEditMainMutation(Number(postId), newRecordMain, token, () => {
     navigate('/');
   });
+
+  // 장소 후기 수정 API
+  const newPlacesContents: IEditPlaceContent[] = [];
+  useEffect(() => {
+    places.forEach((place: IRecordedPlace) => {
+      if (place.placeId && place.newPlaceContent) {
+        newPlacesContents.push({
+          placeId: place.placeId,
+          newPlaceContent: place.newPlaceContent,
+        });
+      }
+    });
+  }, [places]);
+  const editPostPlaceContent = useEditPlaceContentMutation(Number(postId), newPlacesContents, token);
+
   useEffect(() => {
     if (data?.result.recordedPlaces) {
-      setOriPlaces(data?.result.recordedPlaces);
+      //   setOriPlaces(data?.result.recordedPlaces);
+      setPlaces(() => {
+        const newPlaces: IRecordedPlace[] = [];
+        data?.result.recordedPlaces.forEach((place: PlaceInformation) => {
+          newPlaces.push({
+            placeId: place.placeId,
+            orders: place.orders,
+            placeName: place.placeName,
+            placeContent: place.placeContent,
+            address: place.address,
+            addressGu: place.addressGu,
+            addressX: place.addressX,
+            addressY: place.addressY,
+            images: place.placeImages,
+          });
+        });
+        return newPlaces;
+      });
     }
     setIsSaveActive(true);
   }, [data]);
@@ -62,7 +99,7 @@ const EditPost = () => {
         <HorizontalLine />
         <DatePicker dateDate={data?.result.dateDate} newDate={newRecordMain.dateDate} setNewDate={setNewRecordMain} />
         <Margin />
-        <Map places={oriPlaces} />
+        <Map isEdit={true} places={places} />
         <KeywordPlaceSearch />
         <Margin />
         <ContentTextBox
@@ -81,7 +118,8 @@ const EditPost = () => {
       <SaveButton
         isActive={isSaveActive}
         handleClickSave={() => {
-          editPostMainMutation.mutate();
+          editPostMain.mutate();
+          newPlacesContents.length > 0 ? editPostPlaceContent.mutate() : null; // newPlaceContent가 있는 경우
         }}
       />
     </PostLayout>

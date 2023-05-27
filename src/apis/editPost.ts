@@ -18,7 +18,7 @@ export const editPostPlaceOrder = async (postId: number, body: IEditPlaceOrder, 
 };
 
 // 장소 세부 후기 수정
-export const editPostPlaceContent = async (postId: number, body: IEditPlaceContent, token: string) => {
+export const editPostPlaceContent = async (postId: number, body: IEditPlaceContent[], token: string) => {
   const { data } = await PATCH(`/community/${postId}/placeContentChange`, body, token);
   return data;
 };
