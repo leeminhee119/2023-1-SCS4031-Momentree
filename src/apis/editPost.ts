@@ -30,7 +30,7 @@ export const editPostDeletePlace = async (postId: number, token: string) => {
 };
 
 // 장소 추가
-export const editPostAddPlace = async (postId: number, body: IRecordedPlace, token: string) => {
+export const editPostAddPlace = async (postId: number, body: IRecordedPlace[], token: string) => {
   const { data } = await PATCH(`/community/${postId}/addPlace`, body, token);
   return data;
 };

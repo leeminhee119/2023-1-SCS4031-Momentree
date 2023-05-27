@@ -83,7 +83,9 @@ const PlaceItem = ({ isEdit }: { isEdit?: boolean }) => {
           </PlaceItemBox>
         );
       })}
-      {isOpenPlace && <PlaceModal placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} />}
+      {isOpenPlace && (
+        <PlaceModal isEdit={isEdit} placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} />
+      )}
     </PlaceItemContainer>
   );
 };

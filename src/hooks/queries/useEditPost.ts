@@ -28,15 +28,8 @@ export const useEditPlaceOrderMutation = (postId: number, newOrder: IEditPlaceOr
   return useMutation(() => editPostPlaceOrder(postId, newOrder, token));
 };
 
-export const useEditAddPlaceMutation = (
-  postId: number,
-  newPlace: IRecordedPlace,
-  token: string,
-  successCallBack: () => void
-) => {
-  return useMutation(() => editPostAddPlace(postId, newPlace, token), {
-    onSuccess: successCallBack,
-  });
+export const useEditAddPlaceMutation = (postId: number, newPlaces: IRecordedPlace[], token: string) => {
+  return useMutation(() => editPostAddPlace(postId, newPlaces, token));
 };
 
 export const useEditDeletePlaceMutation = (postId: number, token: string, successCallBack: () => void) => {

@@ -12,7 +12,12 @@ import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
 import SaveButton from 'components/common/SaveButton';
 import { useEffect, useState } from 'react';
 import { IEditMainPost, IEditPlaceContent, IEditPlaceOrder } from 'types/editPost';
-import { useEditMainMutation, useEditPlaceContentMutation, useEditPlaceOrderMutation } from 'hooks/queries/useEditPost';
+import {
+  useEditAddPlaceMutation,
+  useEditMainMutation,
+  useEditPlaceContentMutation,
+  useEditPlaceOrderMutation,
+} from 'hooks/queries/useEditPost';
 import { useRecoilState } from 'recoil';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { PlaceInformation } from 'types/placeInformation';
@@ -29,39 +34,6 @@ const EditPost = () => {
   const [places, setPlaces] = useRecoilState(recordedPlacesState);
   //   const [oriPlaces, setOriPlaces] = useState([]);
   const [newRecordMain, setNewRecordMain] = useState<IEditMainPost>({});
-
-  console.log('places', places);
-  /* 본문 수정 API */
-  const editPostMain = useEditMainMutation(Number(postId), newRecordMain, token, () => {
-    navigate('/');
-  });
-
-  /* 장소 관련 수정 API */
-  const newPlacesContents: IEditPlaceContent[] = []; // API에 보낼 데이터 (장소 후기 수정 사항)
-  const newPlacesOrders: IEditPlaceOrder[] = []; // API에 보낼 데이터 (장소 순서 수정 사항)
-  useEffect(() => {
-    places.forEach((place: IRecordedPlace) => {
-      // 기존에 있던 장소의 경우
-      if (place.placeId) {
-        // 수정한 장소 후기가 있는 경우
-        if (place.newPlaceContent) {
-          newPlacesContents.push({
-            placeId: place.placeId,
-            newPlaceContent: place.newPlaceContent,
-          });
-        }
-        // 수정한 장소 순서가 있는 경우
-        if (place.newOrders) {
-          newPlacesOrders.push({
-            placeId: place.placeId,
-            newOrders: place.newOrders,
-          });
-        }
-      }
-    });
-  }, [places]);
-  const editPostPlaceContent = useEditPlaceContentMutation(Number(postId), newPlacesContents, token);
-  const editPostPlaceOrder = useEditPlaceOrderMutation(Number(postId), newPlacesOrders, token);
 
   useEffect(() => {
     if (data?.result.recordedPlaces) {
@@ -86,6 +58,51 @@ const EditPost = () => {
     }
     setIsSaveActive(true);
   }, [data]);
+
+  /* 본문 수정 API */
+  const editPostMain = useEditMainMutation(Number(postId), newRecordMain, token, () => {
+    navigate('/');
+  });
+
+  /* 장소 관련 수정 API */
+  const [newPlacesContents, setNewPlacesContents] = useState<IEditPlaceContent[]>([]); // API에 보낼 데이터 (장소 후기 수정 사항)
+  const [newPlacesOrders, setNewPlacesOrders] = useState<IEditPlaceOrder[]>([]); // API에 보낼 데이터 (장소 순서 수정 사항)
+  const [newPlaces, setNewPlaces] = useState<IRecordedPlace[]>([]); // API에 보낼 데이터 (장소 추가 사항)
+  useEffect(() => {
+    const newPlacesContentsUpdates: IEditPlaceContent[] = [];
+    const newPlacesOrdersUpdates: IEditPlaceOrder[] = [];
+    const newPlacesUpdates: IRecordedPlace[] = [];
+    places.forEach((place: IRecordedPlace) => {
+      if (place.placeId) {
+        // 기존에 있던 장소의 경우
+
+        if (place.newPlaceContent) {
+          // 수정한 장소 후기가 있는 경우
+          newPlacesContentsUpdates.push({
+            placeId: place.placeId,
+            newPlaceContent: place.newPlaceContent,
+          });
+        }
+        if (place.newOrders) {
+          // 수정한 장소 순서가 있는 경우
+          newPlacesOrdersUpdates.push({
+            placeId: place.placeId,
+            newOrders: place.newOrders,
+          });
+        }
+      } else {
+        // 수정하면서 새로 장소를 추가한 경우
+        newPlacesUpdates.push(place);
+      }
+    });
+    setNewPlacesContents(newPlacesContentsUpdates);
+    setNewPlacesOrders(newPlacesOrdersUpdates);
+    setNewPlaces(newPlacesUpdates);
+  }, [places]);
+  const editPostPlaceContent = useEditPlaceContentMutation(Number(postId), newPlacesContents, token);
+  const editPostPlaceOrder = useEditPlaceOrderMutation(Number(postId), newPlacesOrders, token);
+  const editPostAdd = useEditAddPlaceMutation(Number(postId), newPlaces, token);
+
   return (
     <PostLayout>
       <PostBox>
@@ -134,7 +151,8 @@ const EditPost = () => {
         handleClickSave={() => {
           editPostMain.mutate();
           newPlacesContents.length > 0 ? editPostPlaceContent.mutate() : null;
-          newPlacesContents.length > 0 ? editPostPlaceOrder.mutate() : null;
+          newPlacesOrders.length > 0 ? editPostPlaceOrder.mutate() : null;
+          newPlaces.length > 0 ? editPostAdd.mutate() : null;
         }}
       />
     </PostLayout>
