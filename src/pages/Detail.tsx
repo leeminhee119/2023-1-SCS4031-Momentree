@@ -7,6 +7,7 @@ import heartIcon from '../assets/icons/heart.svg';
 import fillheartIcon from '../assets/icons/fillheart.svg';
 import bookmarkIcon from '../assets/icons/bookmark.svg';
 import leftIcon from '../assets/icons/left.svg';
+import editIcon from '../assets/icons/pen.svg';
 import deleteIcon from '../assets/icons/delete.svg';
 import shareIcon from '../assets/icons/share.svg';
 import WriterInfo from 'components/detail/WriterInfo';
@@ -98,6 +99,15 @@ const Detail = () => {
               alt="북마크 하지 않은 아이콘"
               onClick={() => {
                 cookies?.user?.userToken ? postBookmarkMutation.mutate() : navigate('/login');
+              }}
+            />
+          )}
+          {data?.result.userName === cookies?.user?.userName && (
+            <Icon
+              src={editIcon}
+              alt="수정 아이콘"
+              onClick={() => {
+                navigate('./edit');
               }}
             />
           )}
