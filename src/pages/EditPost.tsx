@@ -11,8 +11,8 @@ import Map from 'components/common/Map';
 import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
 import SaveButton from 'components/common/SaveButton';
 import { useEffect, useState } from 'react';
-import { IEditMainPost, IEditPlaceContent } from 'types/editPost';
-import { useEditMainMutation, useEditPlaceContentMutation } from 'hooks/queries/useEditPost';
+import { IEditMainPost, IEditPlaceContent, IEditPlaceOrder } from 'types/editPost';
+import { useEditMainMutation, useEditPlaceContentMutation, useEditPlaceOrderMutation } from 'hooks/queries/useEditPost';
 import { useRecoilState } from 'recoil';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { PlaceInformation } from 'types/placeInformation';
@@ -30,24 +30,38 @@ const EditPost = () => {
   //   const [oriPlaces, setOriPlaces] = useState([]);
   const [newRecordMain, setNewRecordMain] = useState<IEditMainPost>({});
 
-  // 본문 수정 API
+  console.log('places', places);
+  /* 본문 수정 API */
   const editPostMain = useEditMainMutation(Number(postId), newRecordMain, token, () => {
     navigate('/');
   });
 
-  // 장소 후기 수정 API
-  const newPlacesContents: IEditPlaceContent[] = [];
+  /* 장소 관련 수정 API */
+  const newPlacesContents: IEditPlaceContent[] = []; // API에 보낼 데이터 (장소 후기 수정 사항)
+  const newPlacesOrders: IEditPlaceOrder[] = []; // API에 보낼 데이터 (장소 순서 수정 사항)
   useEffect(() => {
     places.forEach((place: IRecordedPlace) => {
-      if (place.placeId && place.newPlaceContent) {
-        newPlacesContents.push({
-          placeId: place.placeId,
-          newPlaceContent: place.newPlaceContent,
-        });
+      // 기존에 있던 장소의 경우
+      if (place.placeId) {
+        // 수정한 장소 후기가 있는 경우
+        if (place.newPlaceContent) {
+          newPlacesContents.push({
+            placeId: place.placeId,
+            newPlaceContent: place.newPlaceContent,
+          });
+        }
+        // 수정한 장소 순서가 있는 경우
+        if (place.newOrders) {
+          newPlacesOrders.push({
+            placeId: place.placeId,
+            newOrders: place.newOrders,
+          });
+        }
       }
     });
   }, [places]);
   const editPostPlaceContent = useEditPlaceContentMutation(Number(postId), newPlacesContents, token);
+  const editPostPlaceOrder = useEditPlaceOrderMutation(Number(postId), newPlacesOrders, token);
 
   useEffect(() => {
     if (data?.result.recordedPlaces) {
@@ -100,7 +114,7 @@ const EditPost = () => {
         <DatePicker dateDate={data?.result.dateDate} newDate={newRecordMain.dateDate} setNewDate={setNewRecordMain} />
         <Margin />
         <Map isEdit={true} places={places} />
-        <KeywordPlaceSearch />
+        <KeywordPlaceSearch isEdit={true} />
         <Margin />
         <ContentTextBox
           placeholder="오늘 데이트가 어땠는지 알려주세요"
@@ -119,7 +133,8 @@ const EditPost = () => {
         isActive={isSaveActive}
         handleClickSave={() => {
           editPostMain.mutate();
-          newPlacesContents.length > 0 ? editPostPlaceContent.mutate() : null; // newPlaceContent가 있는 경우
+          newPlacesContents.length > 0 ? editPostPlaceContent.mutate() : null;
+          newPlacesContents.length > 0 ? editPostPlaceOrder.mutate() : null;
         }}
       />
     </PostLayout>

@@ -12,7 +12,7 @@ export const editPostMain = async (postId: number, body: IEditMainPost, token: s
 };
 
 // 장소 순서 수정
-export const editPostPlaceOrder = async (postId: number, body: IEditPlaceOrder, token: string) => {
+export const editPostPlaceOrder = async (postId: number, body: IEditPlaceOrder[], token: string) => {
   const { data } = await PATCH(`/community/${postId}/orderChange`, body, token);
   return data;
 };

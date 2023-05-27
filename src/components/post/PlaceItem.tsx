@@ -7,7 +7,7 @@ import closeIcon from '../../assets/icons/close.svg';
 import { IRecordedPlace } from 'types/post';
 import PlaceModal from './PlaceModal';
 
-const PlaceItem = () => {
+const PlaceItem = ({ isEdit }: { isEdit?: boolean }) => {
   const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
   const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
   const [clickedMarkerIdx, setClickedMarkerIdx] = useState<number>(0); // 클릭한 장소의 인덱스
@@ -33,10 +33,18 @@ const PlaceItem = () => {
   // 드랍될 때
   const onDragEnd = (e: React.DragEvent<HTMLDivElement>, index: number) => {
     draggingOverItemIdx.current = index;
-    const copyPlaces = places.map((place: IRecordedPlace, index: number) => {
-      return { ...place, orders: index + 1 };
-    });
-    setPlaces(copyPlaces);
+    if (!isEdit) {
+      const copyPlaces = places.map((place: IRecordedPlace, index: number) => {
+        return { ...place, orders: index + 1 };
+      });
+      setPlaces(copyPlaces);
+    } else {
+      // 게시글 수정의 경우 - newOrders에 새로운 순서 저장
+      const copyPlaces = places.map((place: IRecordedPlace, index: number) => {
+        return { ...place, newOrders: index + 1 };
+      });
+      setPlaces(copyPlaces);
+    }
   };
 
   const handleDeletePlace = (e: React.MouseEvent<HTMLImageElement, MouseEvent>, index: number) => {

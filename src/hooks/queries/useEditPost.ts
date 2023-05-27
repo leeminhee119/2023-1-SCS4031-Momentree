@@ -24,15 +24,8 @@ export const useEditPlaceContentMutation = (postId: number, newPlaceContent: IEd
   return useMutation(() => editPostPlaceContent(postId, newPlaceContent, token));
 };
 
-export const useEditPlaceOrderMutation = (
-  postId: number,
-  newOrder: IEditPlaceOrder,
-  token: string,
-  successCallBack: () => void
-) => {
-  return useMutation(() => editPostPlaceOrder(postId, newOrder, token), {
-    onSuccess: successCallBack,
-  });
+export const useEditPlaceOrderMutation = (postId: number, newOrder: IEditPlaceOrder[], token: string) => {
+  return useMutation(() => editPostPlaceOrder(postId, newOrder, token));
 };
 
 export const useEditAddPlaceMutation = (
