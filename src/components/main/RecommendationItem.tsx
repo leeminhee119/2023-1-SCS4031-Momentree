@@ -4,38 +4,14 @@ import clickbookmarkIcon from '../../assets/icons/clickbookmark.svg';
 import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { RecommendationItemProps } from '../../types/recommendationItem';
-// import MapThumbnail from 'components/common/MapThumbnail';
-// import { usePostBookmarkMutation } from 'hooks/queries/useUser';
-// import { useCookies } from 'react-cookie';
-
-const RecommendationItem = ({ title, bookMarkStatus, likeCnt, bookmarkCnt, place }: RecommendationItemProps) => {
-  return (
-    <RecommendationItemContainer>
-      <Map></Map>
-      {bookMarkStatus ? (
-        <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" />
-      ) : (
-        <BookmarkIcon src={unclickbookmarkIcon} alt="북마크 하지 않은 아이콘" />
-      )}
-      <h1>{title}</h1>
-      <PlaceContainer>
-        {place.map((item, index) => {
-          return <article key={index}>{item}</article>;
-        })}
-      </PlaceContainer>
-      <RecommendationItemInfo>
-        <Icon src={heartIcon} alt="좋아요 아이콘" /> <p>{likeCnt}</p>
-        <Icon src={bookmarkIcon} alt="북마크 아이콘" /> <p>{bookmarkCnt}</p>
-      </RecommendationItemInfo>
-    </RecommendationItemContainer>
-  );
-};
+import MapThumbnail from 'components/common/MapThumbnail';
 
 const RecommendationItemContainer = styled.section`
   display: flex;
   flex-direction: column;
   position: relative;
-  width: 12.4rem;
+  width: 24rem;
+  height: 24rem;
   margin-right: 0.8rem;
   cursor: pointer;
 
@@ -47,8 +23,8 @@ const RecommendationItemContainer = styled.section`
 `;
 
 const Map = styled.article`
-  width: 12.4rem;
-  height: 12.4rem;
+  width: 24rem;
+  height: 16.2rem;
 
   background-color: ${({ theme }) => theme.colors.gray500};
   border-radius: 4px;
@@ -58,7 +34,7 @@ const Map = styled.article`
 const BookmarkIcon = styled.img`
   position: absolute;
   top: 0;
-  left: 9.5rem;
+  left: 21.4rem;
   margin-right: 1.175rem;
   margin-top: 0.925rem;
   z-index: 1;
@@ -102,40 +78,36 @@ const RecommendationItemInfo = styled.article`
   }
 `;
 
-// const RecommendationItem = ({
-//   recoredId,
-//   title,
-//   bookMarkStatus,
-//   likeCnt,
-//   bookmarkCnt,
-//   place,
-// }: RecommendationItemProps) => {
-//   const [cookies] = useCookies(['user']);
-//   const body = {};
-//   const postBookmarkMutation = usePostBookmarkMutation(recordedId, body, cookies?.user?.userToken);
-
-//   return (
-//     <RecommendationItemContainer>
-//       <Map>
-//         <MapThumbnail recordedId={recordedId} places={place} />
-//       </Map>
-//       {bookMarkStatus ? (
-//         <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" />
-//       ) : (
-//         <BookmarkIcon src={unclickbookmarkIcon} alt="북마크 하지 않은 아이콘" />
-//       )}
-//       <h1>{title}</h1>
-//       <PlaceContainer>
-//         {place?.map((item, index) => {
-//           return <article key={index}>{item}</article>;
-//         })}
-//       </PlaceContainer>
-//       <RecommendationItemInfo>
-//         <Icon src={heartIcon} alt="좋아요 아이콘" /> <p>{likeCnt}</p>
-//         <Icon src={bookmarkIcon} alt="북마크 아이콘" /> <p>{bookmarkCnt}</p>
-//       </RecommendationItemInfo>
-//     </RecommendationItemContainer>
-//   );
-// };
+const RecommendationItem = ({
+  recordedId,
+  title,
+  bookMarkStatus,
+  likeCnt,
+  bookmarkCnt,
+  place,
+}: RecommendationItemProps) => {
+  return (
+    <RecommendationItemContainer>
+      <Map>
+        <MapThumbnail recordedId={recordedId} places={place} />
+      </Map>
+      {bookMarkStatus ? (
+        <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" />
+      ) : (
+        <BookmarkIcon src={unclickbookmarkIcon} alt="북마크 하지 않은 아이콘" />
+      )}
+      <h1>{title}</h1>
+      <PlaceContainer>
+        {place?.map((item, index: number) => {
+          return <article key={index}> {item.addressGu.split(' ')[1]} </article>;
+        })}
+      </PlaceContainer>
+      <RecommendationItemInfo>
+        <Icon src={heartIcon} alt="좋아요 아이콘" /> <p>{likeCnt}</p>
+        <Icon src={bookmarkIcon} alt="북마크 아이콘" /> <p>{bookmarkCnt}</p>
+      </RecommendationItemInfo>
+    </RecommendationItemContainer>
+  );
+};
 
 export default RecommendationItem;
