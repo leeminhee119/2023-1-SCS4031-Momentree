@@ -29,12 +29,13 @@ const EditPost = () => {
   const navigate = useNavigate();
   const [cookies] = useCookies(['user']);
   const token = cookies?.user?.userToken;
-  const { data } = useCommunityDetailQuery(Number(postId), token);
+  const { data, isLoading, isFetching } = useCommunityDetailQuery(Number(postId), token);
 
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
   const [places, setPlaces] = useRecoilState(recordedPlacesState);
   const deletedPlaces = useRecoilValue(deletedPlacesState);
   const [newRecordMain, setNewRecordMain] = useState<IEditMainPost>({});
+
   useEffect(() => {
     if (data?.result.recordedPlaces) {
       setPlaces(() => {
@@ -105,6 +106,11 @@ const EditPost = () => {
   const editPostPlaceOrder = useEditPlaceOrderMutation(Number(postId), newPlacesOrders, token);
   const editPostAdd = useEditAddPlaceMutation(Number(postId), newPlaces, token);
   const editPostDeletePlace = useEditDeletePlaceMutation(Number(postId), deletedPlaceIds, token);
+
+  if (isLoading || isFetching) {
+    // data 모두 불러올 때까지
+    return <>잠시만 기다려주세요.</>;
+  }
   return (
     <PostLayout>
       <PostBox>
