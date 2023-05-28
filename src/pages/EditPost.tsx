@@ -109,11 +109,11 @@ const EditPost = () => {
     <PostLayout>
       <PostBox>
         <HeaderLayout>
-          <button onClick={() => navigate(`/selectTags`)}>
+          <button onClick={() => navigate(-1)}>
             <BackIcon src={backIcon} alt="뒤로가기 버튼" />
           </button>
-          <Header>글 작성</Header>
-          <button>
+          <Header>글 수정</Header>
+          <button onClick={() => navigate(-1)}>
             <CloseIcon src={closeIcon} alt="닫기 버튼" />
           </button>
         </HeaderLayout>
@@ -149,6 +149,7 @@ const EditPost = () => {
         />
       </PostBox>
       <SaveButton
+        label="수정 완료"
         isActive={isSaveActive}
         handleClickSave={async () => {
           try {
