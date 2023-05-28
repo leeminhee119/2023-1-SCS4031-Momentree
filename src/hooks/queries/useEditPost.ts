@@ -32,6 +32,6 @@ export const useEditAddPlaceMutation = (postId: number, newPlaces: IRecordedPlac
   return useMutation(() => editPostAddPlace(postId, newPlaces, token));
 };
 
-export const useEditDeletePlaceMutation = (postId: number, placeIds: number[], token: string) => {
+export const useEditDeletePlaceMutation = (postId: number, placeIds: (number | undefined)[], token: string) => {
   return useMutation(() => editPostDeletePlace(postId, placeIds, token));
 };
