@@ -11,6 +11,6 @@ export const getCommunityDetail = async (postId: number, token?: string) => {
 };
 
 export const deleteCommunityDetail = async (postId: number, token: string) => {
-  const { data } = await DELETE(`/community/${postId}`, token);
+  const { data } = await DELETE(`/community/${postId}`, undefined, token);
   return data;
 };

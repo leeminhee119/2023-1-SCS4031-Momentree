@@ -58,7 +58,16 @@ const PlaceItem = ({ isEdit }: { isEdit?: boolean }) => {
     if (removed[0].placeId) {
       setDeletedPlaces((placeIds: (number | undefined)[]) => [...placeIds, removed[0].placeId]);
     }
-    setPlaces(copyPlaces);
+
+    setPlaces(
+      copyPlaces.map((place: IRecordedPlace, index: number) => {
+        if (place.placeId) {
+          return { ...place, newOrders: index + 1 };
+        } else {
+          return { ...place, orders: index + 1 };
+        }
+      })
+    );
   };
   return (
     <PlaceItemContainer>

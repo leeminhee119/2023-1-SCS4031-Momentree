@@ -11,25 +11,37 @@ export const editPostMain = async (postId: number, body: IEditMainPost, token: s
 };
 
 // 장소 순서 수정
-export const editPostPlaceOrder = async (postId: number, body: IEditPlaceOrder[], token: string) => {
+export const editPostPlaceOrder = async (
+  postId: number,
+  body: { changingOrders: IEditPlaceOrder[] },
+  token: string
+) => {
   const { data } = await PATCH(`/community/${postId}/orderChange`, body, token);
   return data;
 };
 
 // 장소 세부 후기 수정
-export const editPostPlaceContent = async (postId: number, body: IEditPlaceContent[], token: string) => {
-  const { data } = await PATCH(`/community/${postId}/placeContentChange`, body, token);
+export const editPostPlaceContent = async (
+  postId: number,
+  body: { modifyInfo: IEditPlaceContent[] },
+  token: string
+) => {
+  const { data } = await PATCH(`/community/${postId}/modifyPlace`, body, token);
   return data;
 };
 
 // 장소 삭제
-export const editPostDeletePlace = async (postId: number, body: (number | undefined)[], token: string) => {
-  const { data } = await POST(`/community/${postId}/placeDelete`, body, token);
+export const editPostDeletePlace = async (
+  postId: number,
+  body: { deletePlace: { placeId: number | undefined }[] },
+  token: string
+) => {
+  const { data } = await PATCH(`/community/${postId}/placeDelete`, body, token);
   return data;
 };
 
 // 장소 추가
-export const editPostAddPlace = async (postId: number, body: IRecordedPlace[], token: string) => {
-  const { data } = await PATCH(`/community/${postId}/addPlace`, body, token);
+export const editPostAddPlace = async (postId: number, body: { newPlaces: IRecordedPlace[] }, token: string) => {
+  const { data } = await POST(`/community/${postId}/addPlace`, body, token);
   return data;
 };

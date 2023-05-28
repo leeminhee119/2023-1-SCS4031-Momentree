@@ -19,7 +19,7 @@ import {
   useEditPlaceContentMutation,
   useEditPlaceOrderMutation,
 } from 'hooks/queries/useEditPost';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { deletedPlacesState, recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { PlaceInformation } from 'types/placeInformation';
 import { IRecordedPlace } from 'types/post';
@@ -33,6 +33,7 @@ const EditPost = () => {
 
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
   const [places, setPlaces] = useRecoilState(recordedPlacesState);
+  const resetPlaces = useResetRecoilState(recordedPlacesState);
   const deletedPlaces = useRecoilValue(deletedPlacesState);
   const [newRecordMain, setNewRecordMain] = useState<IEditMainPost>({});
 
@@ -60,20 +61,23 @@ const EditPost = () => {
   }, [data]);
 
   /* 본문 수정 API */
-  const editPostMain = useEditMainMutation(Number(postId), newRecordMain, token, () => {
-    navigate('/');
-  });
+  const editPostMain = useEditMainMutation(Number(postId), newRecordMain, token);
 
   /* 장소 관련 수정 API */
   const [newPlacesContents, setNewPlacesContents] = useState<IEditPlaceContent[]>([]); // API에 보낼 데이터 (장소 후기 수정 사항)
   const [newPlacesOrders, setNewPlacesOrders] = useState<IEditPlaceOrder[]>([]); // API에 보낼 데이터 (장소 순서 수정 사항)
   const [newPlaces, setNewPlaces] = useState<IRecordedPlace[]>([]); // API에 보낼 데이터 (장소 추가 사항)
-  const [deletedPlaceIds, setDeletedPlaceIds] = useState<(number | undefined)[]>([]);
+  const [deletedPlaceIds, setDeletedPlaceIds] = useState<{ placeId: number | undefined }[]>([]);
   useEffect(() => {
     const newPlacesContentsUpdates: IEditPlaceContent[] = [];
     const newPlacesOrdersUpdates: IEditPlaceOrder[] = [];
     const newPlacesUpdates: IRecordedPlace[] = [];
-    const deletedPlaceIdsUpdates = [...deletedPlaces];
+    const deletedPlaceIdsUpdates: { placeId: number | undefined }[] = [];
+    deletedPlaces.forEach((placeId: number | undefined) => {
+      deletedPlaceIdsUpdates.push({
+        placeId: placeId,
+      });
+    });
     places.forEach((place: IRecordedPlace) => {
       if (place.placeId) {
         // 기존에 있던 장소의 경우
@@ -102,10 +106,10 @@ const EditPost = () => {
     setNewPlaces(newPlacesUpdates);
     setDeletedPlaceIds(deletedPlaceIdsUpdates);
   }, [places]);
-  const editPostPlaceContent = useEditPlaceContentMutation(Number(postId), newPlacesContents, token);
-  const editPostPlaceOrder = useEditPlaceOrderMutation(Number(postId), newPlacesOrders, token);
-  const editPostAdd = useEditAddPlaceMutation(Number(postId), newPlaces, token);
-  const editPostDeletePlace = useEditDeletePlaceMutation(Number(postId), deletedPlaceIds, token);
+  const editPostPlaceContent = useEditPlaceContentMutation(Number(postId), { modifyInfo: newPlacesContents }, token);
+  const editPostPlaceOrder = useEditPlaceOrderMutation(Number(postId), { changingOrders: newPlacesOrders }, token);
+  const editPostAdd = useEditAddPlaceMutation(Number(postId), { newPlaces: newPlaces }, token);
+  const editPostDeletePlace = useEditDeletePlaceMutation(Number(postId), { deletePlace: deletedPlaceIds }, token);
 
   if (isLoading || isFetching) {
     // data 모두 불러올 때까지
@@ -115,11 +119,19 @@ const EditPost = () => {
     <PostLayout>
       <PostBox>
         <HeaderLayout>
-          <button onClick={() => navigate(-1)}>
+          <button
+            onClick={() => {
+              resetPlaces();
+              navigate(-1);
+            }}>
             <BackIcon src={backIcon} alt="뒤로가기 버튼" />
           </button>
           <Header>글 수정</Header>
-          <button onClick={() => navigate(-1)}>
+          <button
+            onClick={() => {
+              resetPlaces();
+              navigate(-1);
+            }}>
             <CloseIcon src={closeIcon} alt="닫기 버튼" />
           </button>
         </HeaderLayout>
@@ -166,6 +178,7 @@ const EditPost = () => {
               newPlaces.length > 0 ? editPostAdd.mutateAsync() : Promise.resolve(),
               deletedPlaceIds.length > 0 ? editPostDeletePlace.mutateAsync() : Promise.resolve(),
             ]);
+            resetPlaces();
             navigate(`/`);
           } catch (error) {
             console.error(error);

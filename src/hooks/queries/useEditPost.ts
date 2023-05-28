@@ -9,29 +9,34 @@ import { IEditPlaceOrder } from 'types/editPost';
 import { IEditPlaceContent } from 'types/editPost';
 import { IRecordedPlace } from 'types/post';
 
-export const useEditMainMutation = (
-  postId: number,
-  newMain: IEditMainPost,
-  token: string,
-  successCallBack: () => void
-) => {
-  return useMutation(() => editPostMain(postId, newMain, token), {
-    onSuccess: successCallBack,
-  });
+export const useEditMainMutation = (postId: number, newMain: IEditMainPost, token: string) => {
+  return useMutation(() => editPostMain(postId, newMain, token));
 };
 
-export const useEditPlaceContentMutation = (postId: number, newPlaceContent: IEditPlaceContent[], token: string) => {
+export const useEditPlaceContentMutation = (
+  postId: number,
+  newPlaceContent: { modifyInfo: IEditPlaceContent[] },
+  token: string
+) => {
   return useMutation(() => editPostPlaceContent(postId, newPlaceContent, token));
 };
 
-export const useEditPlaceOrderMutation = (postId: number, newOrder: IEditPlaceOrder[], token: string) => {
+export const useEditPlaceOrderMutation = (
+  postId: number,
+  newOrder: { changingOrders: IEditPlaceOrder[] },
+  token: string
+) => {
   return useMutation(() => editPostPlaceOrder(postId, newOrder, token));
 };
 
-export const useEditAddPlaceMutation = (postId: number, newPlaces: IRecordedPlace[], token: string) => {
+export const useEditAddPlaceMutation = (postId: number, newPlaces: { newPlaces: IRecordedPlace[] }, token: string) => {
   return useMutation(() => editPostAddPlace(postId, newPlaces, token));
 };
 
-export const useEditDeletePlaceMutation = (postId: number, placeIds: (number | undefined)[], token: string) => {
+export const useEditDeletePlaceMutation = (
+  postId: number,
+  placeIds: { deletePlace: { placeId: number | undefined }[] },
+  token: string
+) => {
   return useMutation(() => editPostDeletePlace(postId, placeIds, token));
 };

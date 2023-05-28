@@ -40,4 +40,4 @@ export const GET = (url: string, token?: string) => request({ url, method: 'get'
 export const POST = (url: string, body?: object, token?: string) => request({ url, method: 'post', body, token });
 export const PATCH = (url: string, body?: object, token?: string) => request({ url, method: 'patch', body, token });
 export const PUT = (url: string, body?: object, token?: string) => request({ url, method: 'put', body, token });
-export const DELETE = (url: string, token?: string) => request({ url, method: 'delete', token });
+export const DELETE = (url: string, body?: object, token?: string) => request({ url, method: 'delete', body, token });
