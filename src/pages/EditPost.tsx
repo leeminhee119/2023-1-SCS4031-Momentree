@@ -104,7 +104,7 @@ const EditPost = () => {
   const editPostPlaceContent = useEditPlaceContentMutation(Number(postId), newPlacesContents, token);
   const editPostPlaceOrder = useEditPlaceOrderMutation(Number(postId), newPlacesOrders, token);
   const editPostAdd = useEditAddPlaceMutation(Number(postId), newPlaces, token);
-  const editPostDeletePlace = useEditDeletePlaceMutation(Number(postId), token);
+  const editPostDeletePlace = useEditDeletePlaceMutation(Number(postId), deletedPlaceIds, token);
   return (
     <PostLayout>
       <PostBox>
