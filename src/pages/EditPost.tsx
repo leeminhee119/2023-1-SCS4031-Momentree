@@ -14,12 +14,13 @@ import { useEffect, useState } from 'react';
 import { IEditMainPost, IEditPlaceContent, IEditPlaceOrder } from 'types/editPost';
 import {
   useEditAddPlaceMutation,
+  useEditDeletePlaceMutation,
   useEditMainMutation,
   useEditPlaceContentMutation,
   useEditPlaceOrderMutation,
 } from 'hooks/queries/useEditPost';
-import { useRecoilState } from 'recoil';
-import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { deletedPlacesState, recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { PlaceInformation } from 'types/placeInformation';
 import { IRecordedPlace } from 'types/post';
 
@@ -32,12 +33,10 @@ const EditPost = () => {
 
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
   const [places, setPlaces] = useRecoilState(recordedPlacesState);
-  //   const [oriPlaces, setOriPlaces] = useState([]);
+  const deletedPlaces = useRecoilValue(deletedPlacesState);
   const [newRecordMain, setNewRecordMain] = useState<IEditMainPost>({});
-
   useEffect(() => {
     if (data?.result.recordedPlaces) {
-      //   setOriPlaces(data?.result.recordedPlaces);
       setPlaces(() => {
         const newPlaces: IRecordedPlace[] = [];
         data?.result.recordedPlaces.forEach((place: PlaceInformation) => {
@@ -68,10 +67,12 @@ const EditPost = () => {
   const [newPlacesContents, setNewPlacesContents] = useState<IEditPlaceContent[]>([]); // API에 보낼 데이터 (장소 후기 수정 사항)
   const [newPlacesOrders, setNewPlacesOrders] = useState<IEditPlaceOrder[]>([]); // API에 보낼 데이터 (장소 순서 수정 사항)
   const [newPlaces, setNewPlaces] = useState<IRecordedPlace[]>([]); // API에 보낼 데이터 (장소 추가 사항)
+  const [deletedPlaceIds, setDeletedPlaceIds] = useState<(number | undefined)[]>([]);
   useEffect(() => {
     const newPlacesContentsUpdates: IEditPlaceContent[] = [];
     const newPlacesOrdersUpdates: IEditPlaceOrder[] = [];
     const newPlacesUpdates: IRecordedPlace[] = [];
+    const deletedPlaceIdsUpdates = [...deletedPlaces];
     places.forEach((place: IRecordedPlace) => {
       if (place.placeId) {
         // 기존에 있던 장소의 경우
@@ -98,11 +99,12 @@ const EditPost = () => {
     setNewPlacesContents(newPlacesContentsUpdates);
     setNewPlacesOrders(newPlacesOrdersUpdates);
     setNewPlaces(newPlacesUpdates);
+    setDeletedPlaceIds(deletedPlaceIdsUpdates);
   }, [places]);
   const editPostPlaceContent = useEditPlaceContentMutation(Number(postId), newPlacesContents, token);
   const editPostPlaceOrder = useEditPlaceOrderMutation(Number(postId), newPlacesOrders, token);
   const editPostAdd = useEditAddPlaceMutation(Number(postId), newPlaces, token);
-
+  const editPostDeletePlace = useEditDeletePlaceMutation(Number(postId), token);
   return (
     <PostLayout>
       <PostBox>
@@ -148,11 +150,19 @@ const EditPost = () => {
       </PostBox>
       <SaveButton
         isActive={isSaveActive}
-        handleClickSave={() => {
-          editPostMain.mutate();
-          newPlacesContents.length > 0 ? editPostPlaceContent.mutate() : null;
-          newPlacesOrders.length > 0 ? editPostPlaceOrder.mutate() : null;
-          newPlaces.length > 0 ? editPostAdd.mutate() : null;
+        handleClickSave={async () => {
+          try {
+            await Promise.all([
+              Object.keys(newRecordMain).length > 0 ? editPostMain.mutateAsync() : Promise.resolve(),
+              newPlacesContents.length > 0 ? editPostPlaceContent.mutateAsync() : Promise.resolve(),
+              newPlacesOrders.length > 0 ? editPostPlaceOrder.mutateAsync() : Promise.resolve(),
+              newPlaces.length > 0 ? editPostAdd.mutateAsync() : Promise.resolve(),
+              deletedPlaceIds.length > 0 ? editPostDeletePlace.mutateAsync() : Promise.resolve(),
+            ]);
+            navigate(`/`);
+          } catch (error) {
+            console.error(error);
+          }
         }}
       />
     </PostLayout>

@@ -24,8 +24,8 @@ export const editPostPlaceContent = async (postId: number, body: IEditPlaceConte
 };
 
 // 장소 삭제
-export const editPostDeletePlace = async (postId: number, token: string) => {
-  const { data } = await DELETE(`/deletePlace/${postId}`, token);
+export const editPostDeletePlace = async (placeId: number, token: string) => {
+  const { data } = await DELETE(`/deletePlace/${placeId}`, token);
   return data;
 };
 
