@@ -81,8 +81,9 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
 export default Nav;
 
 const NavBackground = styled.main`
+  width: 43rem;
+  margin: 0px auto;
   background-color: rgba(0, 0, 0, 0.7);
-  width: 100vw;
   height: 100vh;
   z-index: 10;
   position: absolute;
@@ -122,6 +123,7 @@ const LogoutButton = styled.p`
   ${({ theme }) => theme.fonts.caption2};
   display: flex;
   justify-content: flex-end;
+  cursor: pointer;
 `;
 
 const UserFollower = styled.section`
@@ -163,6 +165,7 @@ const IconImage = styled.section`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  cursor: pointer;
 
   img {
     width: 2rem;
@@ -180,6 +183,7 @@ const List = styled.p`
   color: ${({ theme }) => theme.colors.gray900};
   ${({ theme }) => theme.fonts.body3};
   margin-bottom: 2rem;
+  cursor: pointer;
 `;
 
 const GotoButton = styled.button`
