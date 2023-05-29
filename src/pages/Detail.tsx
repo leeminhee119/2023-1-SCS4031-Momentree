@@ -103,7 +103,7 @@ const Detail = () => {
               }}
             />
           )}
-          {data?.result.userName === cookies?.user?.userName && (
+          {data?.result.nickname === cookies?.user?.nickname && (
             <Icon
               src={editIcon}
               alt="수정 아이콘"
@@ -112,7 +112,7 @@ const Detail = () => {
               }}
             />
           )}
-          {data?.result.userName === cookies?.user?.userName && (
+          {data?.result.nickname === cookies?.user?.nickname && (
             <Icon
               src={deleteIcon}
               alt="삭제 아이콘"
