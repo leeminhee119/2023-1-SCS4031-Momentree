@@ -34,7 +34,7 @@ const LodingTextContainer = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 6.2rem;
+  height: 8rem;
 `;
 
 const LodingText = styled.p`
@@ -48,7 +48,7 @@ const HeartIcon = styled.img`
   color: ${theme.colors.gray200};
   width: 2.2rem;
   height: 2.2rem;
-  margin: 0.8rem;
+  margin: 0.6rem;
 `;
 
 const RecommendationContainerTitle = styled.h1`
@@ -93,8 +93,8 @@ const Recommendation = () => {
   if (content.length === 0) {
     return (
       <LodingContainer>
+        <LodingContainerTitle>당신을 위한 추천 코스</LodingContainerTitle>
         <LodingTextContainer>
-          <LodingContainerTitle>당신을 위한 추천 코스</LodingContainerTitle>
           <HeartIcon src={heartIcon} alt="하트 아티콘"></HeartIcon>
           <LodingText>좋아요 및 북마크가 비어있네요!</LodingText>
           <LodingText>관심있는 게시글에 좋아요와 북마크를 표시해보세요.</LodingText>
