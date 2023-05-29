@@ -133,7 +133,7 @@ const Detail = () => {
       <DetailTitle>{data?.result.title}</DetailTitle>
       <WriterInfo
         profileImg={data?.result.profileImg}
-        nickname={data?.result.userName}
+        nickname={data?.result.nickname}
         recordCnt={data?.result.recordCnt}
         followerCnt={data?.result.followerCnt}
       />
