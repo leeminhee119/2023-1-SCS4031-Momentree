@@ -81,7 +81,7 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
 export default Nav;
 
 const NavBackground = styled.main`
-  width: 43rem;
+  width: 100vw;
   margin: 0px auto;
   background-color: rgba(0, 0, 0, 0.7);
   height: 100vh;
