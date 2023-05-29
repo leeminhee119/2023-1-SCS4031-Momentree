@@ -4,7 +4,8 @@ import clickbookmarkIcon from '../../assets/icons/clickbookmark.svg';
 import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { RecommendationItemProps } from '../../types/recommendationItem';
-import MapThumbnail from 'components/common/MapThumbnail';
+import RecommendMapThumbnail from 'components/common/RecommendMapThumnail';
+import { useEffect, useState } from 'react';
 
 const RecommendationItemContainer = styled.section`
   display: flex;
@@ -24,8 +25,7 @@ const RecommendationItemContainer = styled.section`
 
 const Map = styled.article`
   width: 24rem;
-  height: 16.2rem;
-
+  height: 13rem;
   background-color: ${({ theme }) => theme.colors.gray500};
   border-radius: 4px;
   margin-bottom: 1.2rem;
@@ -48,7 +48,7 @@ const PlaceContainer = styled.article`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.5rem;
 
   article {
     display: flex;
@@ -86,10 +86,17 @@ const RecommendationItem = ({
   bookmarkCnt,
   place,
 }: RecommendationItemProps) => {
+  const [addressGuArray, setAddressGuArray] = useState<string[]>([]);
+
+  useEffect(() => {
+    const uniqueAddressGu = Array.from(new Set(place?.map((item) => item.addressGu)));
+    setAddressGuArray(uniqueAddressGu);
+  }, [place]);
+
   return (
     <RecommendationItemContainer>
       <Map>
-        <MapThumbnail recordedId={recordedId} places={place} />
+        <RecommendMapThumbnail recordedId={recordedId} places={place} />
       </Map>
       {bookMarkStatus ? (
         <BookmarkIcon src={clickbookmarkIcon} alt="북마크 한 아이콘" />
@@ -98,8 +105,8 @@ const RecommendationItem = ({
       )}
       <h1>{title}</h1>
       <PlaceContainer>
-        {place?.map((item, index: number) => {
-          return <article key={index}> {item.addressGu.split(' ')[1]} </article>;
+        {addressGuArray.map((addressGu, index) => {
+          return <article key={index}>{addressGu}</article>;
         })}
       </PlaceContainer>
       <RecommendationItemInfo>

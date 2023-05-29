@@ -30,8 +30,8 @@ const Recommendation = () => {
   const navigate = useNavigate();
 
   const { data } = useRecommendQuery(cookies?.user?.userToken);
+  console.log(data?.result);
   const content = data?.result || [];
-  console.log(content);
 
   return (
     <RecommendationContainer>
