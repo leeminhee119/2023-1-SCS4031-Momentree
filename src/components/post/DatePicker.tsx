@@ -4,21 +4,31 @@ import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import downIcon from '../../assets/icons/down.svg';
 import { IRecord } from 'types/post';
+import { IEditMainPost } from 'types/editPost';
+import { useSetRecoilState } from 'recoil';
+import { recordState } from '\brecoil/atoms/recordState';
 
 interface IDatePicker {
   dateDate: string;
-  setRecordData: React.Dispatch<React.SetStateAction<IRecord>>;
+  newDate?: string;
+  setNewDate?: React.Dispatch<React.SetStateAction<IEditMainPost>>;
 }
-const DatePicker = (props: IDatePicker) => {
+const DatePicker = ({ dateDate, newDate, setNewDate }: IDatePicker) => {
   const [isOpen, setIsOpen] = useState(false);
+  const setRecordData = useSetRecoilState(recordState);
   const handleChange = (e: Date) => {
     setIsOpen(!isOpen);
-    props.setRecordData((prevState: IRecord) => {
-      return {
+
+    if (setNewDate) {
+      // 글 수정의 경우
+      setNewDate((prevState: IEditMainPost) => ({ ...prevState, dateDate: e.toLocaleDateString() }));
+    } else {
+      // 새 글 작성의 경우 (전역 상태 변경)
+      setRecordData((prevState: IRecord) => ({
         ...prevState,
         dateDate: e.toLocaleDateString(),
-      };
-    });
+      }));
+    }
   };
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
@@ -27,10 +37,10 @@ const DatePicker = (props: IDatePicker) => {
   return (
     <>
       <DatePickerButton onClick={handleClick}>
-        <div>{props.dateDate.substring(0, 11)}</div>
+        <div>{newDate ? newDate : dateDate}</div>
         <img src={downIcon} />
       </DatePickerButton>
-      {isOpen && <ReactDatePicker selected={new Date(props.dateDate)} onChange={handleChange} inline />}
+      {isOpen && <ReactDatePicker selected={new Date(dateDate)} onChange={handleChange} inline />}
     </>
   );
 };

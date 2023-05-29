@@ -10,7 +10,7 @@ import PlaceItem from './PlaceItem';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { useRecoilState } from 'recoil';
 
-const KeywordPlaceSearch = () => {
+const KeywordPlaceSearch = ({ isEdit }: { isEdit?: boolean }) => {
   const [results, setResults] = useState<IPlaceKakao[]>([]); // 키워드 검색 결과들을 담는 배열
 
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
@@ -56,7 +56,7 @@ const KeywordPlaceSearch = () => {
           handleClickListItem={handleClickListItem}
         />
       )}
-      {places.length > 0 && <PlaceItem />}
+      {places.length > 0 && <PlaceItem isEdit={isEdit} />}
     </KeywordPlaceSearchLayout>
   );
 };

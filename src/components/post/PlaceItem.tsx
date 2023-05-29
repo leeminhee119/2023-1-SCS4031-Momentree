@@ -1,4 +1,4 @@
-import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
+import { deletedPlacesState, recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { useState, useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
@@ -7,8 +7,9 @@ import closeIcon from '../../assets/icons/close.svg';
 import { IRecordedPlace } from 'types/post';
 import PlaceModal from './PlaceModal';
 
-const PlaceItem = () => {
+const PlaceItem = ({ isEdit }: { isEdit?: boolean }) => {
   const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
+  const [deletedPlaces, setDeletedPlaces] = useRecoilState<number[]>(deletedPlacesState);
   const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
   const [clickedMarkerIdx, setClickedMarkerIdx] = useState<number>(0); // 클릭한 장소의 인덱스
   const draggingItemIdx = useRef<number>(-1);
@@ -33,16 +34,41 @@ const PlaceItem = () => {
   // 드랍될 때
   const onDragEnd = (e: React.DragEvent<HTMLDivElement>, index: number) => {
     draggingOverItemIdx.current = index;
-    const copyPlaces = places.map((place: IRecordedPlace, index: number) => {
-      return { ...place, orders: index + 1 };
-    });
-    setPlaces(copyPlaces);
+    if (!isEdit) {
+      const copyPlaces = places.map((place: IRecordedPlace, index: number) => {
+        return { ...place, orders: index + 1 };
+      });
+      setPlaces(copyPlaces);
+    } else {
+      // 게시글 수정의 경우 - newOrders(새로 추가한 장소의 경우 orders)에 새로운 순서 저장
+      const copyPlaces = places.map((place: IRecordedPlace, index: number) => {
+        if (place.placeId) {
+          return { ...place, newOrders: index + 1 };
+        } else {
+          return { ...place, orders: index + 1 };
+        }
+      });
+      setPlaces(copyPlaces);
+    }
   };
 
   const handleDeletePlace = (e: React.MouseEvent<HTMLImageElement, MouseEvent>, index: number) => {
     const copyPlaces = [...places];
-    copyPlaces.splice(index, 1);
-    setPlaces(copyPlaces);
+    const removed = copyPlaces.splice(index, 1);
+    if (removed[0].placeId) {
+      const copyDeletedPlaces = [...deletedPlaces, removed[0].placeId];
+      setDeletedPlaces(copyDeletedPlaces);
+    }
+
+    setPlaces(
+      copyPlaces.map((place: IRecordedPlace, index: number) => {
+        if (place.placeId) {
+          return { ...place, newOrders: index + 1 };
+        } else {
+          return { ...place, orders: index + 1 };
+        }
+      })
+    );
   };
   return (
     <PlaceItemContainer>
@@ -75,7 +101,9 @@ const PlaceItem = () => {
           </PlaceItemBox>
         );
       })}
-      {isOpenPlace && <PlaceModal placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} />}
+      {isOpenPlace && (
+        <PlaceModal isEdit={isEdit} placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} />
+      )}
     </PlaceItemContainer>
   );
 };

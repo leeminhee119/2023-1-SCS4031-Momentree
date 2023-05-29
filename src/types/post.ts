@@ -10,9 +10,12 @@ export interface IImage {
   contentType?: string;
 }
 export interface IRecordedPlace {
+  placeId?: number;
   orders: number;
+  newOrders?: number;
   placeName: string; //파스타노
   placeContent: string; //정말 맛있어요
+  newPlaceContent?: string;
   address: string; //송파구 잠실동 ....
   addressGu: string; //서울시 송파구
   addressX: string; //x좌표

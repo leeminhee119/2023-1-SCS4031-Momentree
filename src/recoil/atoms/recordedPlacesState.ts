@@ -5,3 +5,8 @@ export const recordedPlacesState = atom<IRecordedPlace[]>({
   key: 'recordedPlacesState',
   default: [],
 });
+
+export const deletedPlacesState = atom<number[]>({
+  key: 'deletedPlacesState',
+  default: [],
+});
