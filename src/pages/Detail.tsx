@@ -63,7 +63,8 @@ const Detail = () => {
           src={leftIcon}
           alt="뒤로가기 아이콘"
           onClick={() => {
-            navigate(-1);
+            navigate('/');
+            window.location.reload();
           }}
         />
         <div>
@@ -130,7 +131,12 @@ const Detail = () => {
         <p>데이트일 {data?.result.dateDate}</p>
       </DetailInfo>
       <DetailTitle>{data?.result.title}</DetailTitle>
-      <WriterInfo />
+      <WriterInfo
+        profileImg={data?.result.profileImg}
+        nickname={data?.result.userName}
+        recordCnt={data?.result.recordCnt}
+        followerCnt={data?.result.followerCnt}
+      />
       <MapLayout>
         <Map places={data?.result.recordedPlaces} />
       </MapLayout>

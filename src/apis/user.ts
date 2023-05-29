@@ -12,6 +12,6 @@ export const postLike = async (record_id: number, body: object, token: string) =
 };
 
 export const getUserInfo = async (token: string) => {
-  const { data } = await GET(`/UserInfo`, token);
+  const { data } = await GET(`/userInfo`, token);
   return data;
 };

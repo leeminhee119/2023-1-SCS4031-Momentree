@@ -1,20 +1,21 @@
 import styled from 'styled-components';
-import { useUserInfoQuery } from 'hooks/queries/useUser';
-import { useCookies } from 'react-cookie';
 import defaultProfileIcon from '../../assets/icons/profile_white.svg';
 
-const WriterInfo = () => {
-  const [cookies] = useCookies(['user']);
-  const { data } = useUserInfoQuery(cookies?.user?.userToken);
-
+interface WriterInfoProps {
+  profileImg: string;
+  nickname: string;
+  recordCnt: number;
+  followerCnt: number;
+}
+const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt }: WriterInfoProps) => {
   return (
     <WriterInfoContainer>
       <div>
-        <img src={data?.result.profileImg ? data?.result.profileImg : defaultProfileIcon} alt="유저 이미지" />
+        <img src={profileImg ? profileImg : defaultProfileIcon} alt="유저 이미지" />
         <Info>
-          <h1>{data?.result.nickname}</h1>
+          <h1>{nickname}</h1>
           <p>
-            글 {data?.result.recordCnt} · 팔로워 {data?.result.follower}
+            글 {recordCnt} · 팔로워 {followerCnt}
           </p>
         </Info>
       </div>

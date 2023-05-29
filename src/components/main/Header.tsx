@@ -3,10 +3,19 @@ import sidebarIcon from '../../assets/icons/sidebar.svg';
 import logoIcon from '../../assets/logo.png';
 
 import Nav from 'pages/Nav';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isNavOpen) {
+      document.body.style.cssText = `overflow: hidden`;
+    } else {
+      document.body.style.cssText = `overflow: auto`;
+    }
+  }, [isNavOpen]);
+
   return (
     <MainHeader>
       <LogoImage src={logoIcon} />
@@ -41,4 +50,5 @@ const LogoImage = styled.img`
 const IconBox = styled.div`
   display: flex;
   gap: 1rem;
+  cursor: pointer;
 `;
