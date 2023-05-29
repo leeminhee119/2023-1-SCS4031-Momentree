@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import RecommendationItem from './RecommendationItem';
 import { useNavigate } from 'react-router-dom';
 import heartIcon from '../../assets/icons/loadheart.svg';
+import loadingIcon from '../../assets/icons/loading.svg';
 import { CommunityData } from 'types/communityData';
 import { useCookies } from 'react-cookie';
 import { useQuery } from '@tanstack/react-query';
@@ -44,11 +45,18 @@ const LodingText = styled.p`
   margin: 0.3rem 0rem;
 `;
 
+const LoadingIcon = styled.img`
+  color: ${theme.colors.gray200};
+  width: 2.2rem;
+  height: 2.2rem;
+  margin: 0.6em;
+`;
+
 const HeartIcon = styled.img`
   color: ${theme.colors.gray200};
   width: 2.2rem;
   height: 2.2rem;
-  margin: 0.6rem;
+  margin: 0.6em;
 `;
 
 const RecommendationContainerTitle = styled.h1`
@@ -78,13 +86,25 @@ const Recommendation = () => {
 
   const content = data?.result || [];
 
-  if (!token || isLoading) {
+  if (!token) {
     return (
       <LodingContainer>
         <LodingContainerTitle>당신을 위한 추천 코스</LodingContainerTitle>
         <LodingTextContainer>
           <HeartIcon src={heartIcon} alt="하트 아티콘"></HeartIcon>
           <LodingText>로그인 후 이용할 수 있는 서비스입니다.</LodingText>
+        </LodingTextContainer>
+      </LodingContainer>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <LodingContainer>
+        <LodingContainerTitle>당신을 위한 추천 코스</LodingContainerTitle>
+        <LodingTextContainer>
+          <LoadingIcon src={loadingIcon} alt="하트 아티콘"></LoadingIcon>
+          <LodingText>추천 리스트를 생성하고있어요!</LodingText>
         </LodingTextContainer>
       </LodingContainer>
     );
