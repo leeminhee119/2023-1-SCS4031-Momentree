@@ -1,6 +1,6 @@
 import { deletedPlacesState, recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { useState, useRef } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import dragIcon from '../../assets/icons/drag.svg';
 import closeIcon from '../../assets/icons/close.svg';
@@ -9,7 +9,7 @@ import PlaceModal from './PlaceModal';
 
 const PlaceItem = ({ isEdit }: { isEdit?: boolean }) => {
   const [places, setPlaces] = useRecoilState<IRecordedPlace[]>(recordedPlacesState);
-  const setDeletedPlaces = useSetRecoilState<(number | undefined)[]>(deletedPlacesState);
+  const [deletedPlaces, setDeletedPlaces] = useRecoilState<number[]>(deletedPlacesState);
   const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
   const [clickedMarkerIdx, setClickedMarkerIdx] = useState<number>(0); // 클릭한 장소의 인덱스
   const draggingItemIdx = useRef<number>(-1);
@@ -56,7 +56,8 @@ const PlaceItem = ({ isEdit }: { isEdit?: boolean }) => {
     const copyPlaces = [...places];
     const removed = copyPlaces.splice(index, 1);
     if (removed[0].placeId) {
-      setDeletedPlaces((placeIds: (number | undefined)[]) => [...placeIds, removed[0].placeId]);
+      const copyDeletedPlaces = [...deletedPlaces, removed[0].placeId];
+      setDeletedPlaces(copyDeletedPlaces);
     }
 
     setPlaces(

@@ -35,7 +35,7 @@ export const useEditAddPlaceMutation = (postId: number, newPlaces: { newPlaces: 
 
 export const useEditDeletePlaceMutation = (
   postId: number,
-  placeIds: { deletePlace: { placeId: number | undefined }[] },
+  placeIds: { deletePlace: { placeId: number }[] },
   token: string
 ) => {
   return useMutation(() => editPostDeletePlace(postId, placeIds, token));

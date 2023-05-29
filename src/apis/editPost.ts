@@ -1,4 +1,4 @@
-import { PATCH, POST } from 'apis/api';
+import { DELETE, PATCH, POST } from 'apis/api';
 import { IEditMainPost } from 'types/editPost';
 import { IEditPlaceOrder } from 'types/editPost';
 import { IEditPlaceContent } from 'types/editPost';
@@ -33,10 +33,10 @@ export const editPostPlaceContent = async (
 // 장소 삭제
 export const editPostDeletePlace = async (
   postId: number,
-  body: { deletePlace: { placeId: number | undefined }[] },
+  body: { deletePlace: { placeId: number }[] },
   token: string
 ) => {
-  const { data } = await PATCH(`/community/${postId}/placeDelete`, body, token);
+  const { data } = await DELETE(`/community/${postId}/placeDelete`, body, token);
   return data;
 };
 

@@ -28,7 +28,8 @@ const request = async ({ url, method, body, params, token }: RequestType): Promi
       (method === 'post' && (await axios.post(url, body, config))) ||
       (method === 'patch' && (await axios.patch(url, body, config))) ||
       (method === 'put' && (await axios.put(url, body, config))) ||
-      (method === 'delete' && (await axios.delete(url, config))) ||
+      (method === 'delete' &&
+        (await axios.delete(url, { baseURL, params, headers: { Authorization: token }, data: body }))) ||
       {};
     return data;
   } catch (error: any) {

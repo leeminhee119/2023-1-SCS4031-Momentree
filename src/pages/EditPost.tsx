@@ -67,13 +67,13 @@ const EditPost = () => {
   const [newPlacesContents, setNewPlacesContents] = useState<IEditPlaceContent[]>([]); // API에 보낼 데이터 (장소 후기 수정 사항)
   const [newPlacesOrders, setNewPlacesOrders] = useState<IEditPlaceOrder[]>([]); // API에 보낼 데이터 (장소 순서 수정 사항)
   const [newPlaces, setNewPlaces] = useState<IRecordedPlace[]>([]); // API에 보낼 데이터 (장소 추가 사항)
-  const [deletedPlaceIds, setDeletedPlaceIds] = useState<{ placeId: number | undefined }[]>([]);
+  const [deletedPlaceIds, setDeletedPlaceIds] = useState<{ placeId: number }[]>([]);
   useEffect(() => {
     const newPlacesContentsUpdates: IEditPlaceContent[] = [];
     const newPlacesOrdersUpdates: IEditPlaceOrder[] = [];
     const newPlacesUpdates: IRecordedPlace[] = [];
-    const deletedPlaceIdsUpdates: { placeId: number | undefined }[] = [];
-    deletedPlaces.forEach((placeId: number | undefined) => {
+    const deletedPlaceIdsUpdates: { placeId: number }[] = [];
+    deletedPlaces.forEach((placeId: number) => {
       deletedPlaceIdsUpdates.push({
         placeId: placeId,
       });
