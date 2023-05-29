@@ -40,11 +40,11 @@ const PostMainItem = ({
         }}>
         {title}
       </h1>
-      <PlaceContainer>
+      {/* <PlaceContainer>
         {place?.map((item, index: number) => {
           return <article key={index}> {item.addressGu.split(' ')[1]} </article>;
         })}
-      </PlaceContainer>
+      </PlaceContainer> */}
       <PostItemInfo>
         <div>
           <MoodTagContainer>
@@ -121,21 +121,21 @@ const PostItemInfo = styled.article`
   margin-top: 1.6rem;
 `;
 
-const PlaceContainer = styled.article`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 0.6rem;
+// const PlaceContainer = styled.article`
+//   display: flex;
+//   flex-direction: row;
+//   align-items: center;
+//   margin-bottom: 0.6rem;
 
-  article {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: ${({ theme }) => theme.colors.gray600};
-    ${({ theme }) => theme.fonts.body4};
-    margin-right: 0.6rem;
-  }
-`;
+//   article {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     color: ${({ theme }) => theme.colors.gray600};
+//     ${({ theme }) => theme.fonts.body4};
+//     margin-right: 0.6rem;
+//   }
+// `;
 
 const MoodTagContainer = styled.article`
   display: flex;
