@@ -14,6 +14,7 @@ const SignUp = lazy(() => import('./pages/SignUp'));
 const SelectTags = lazy(() => import('./pages/SelectTags'));
 const Post = lazy(() => import('./pages/Post'));
 const Detail = lazy(() => import('./pages/Detail'));
+const EditPost = lazy(() => import('./pages/EditPost'));
 const MyBookmarkList = lazy(() => import('./pages/MyBookmarkList'));
 const MyPostList = lazy(() => import('./pages/MyPostList'));
 const PostsByTagPage = lazy(() => import('./pages/PostsByTagPage'));
@@ -55,6 +56,7 @@ export default function App() {
                     <Route path="/selectTags" element={<SelectTags />} />
                     <Route path="/post" element={<Post />} />
                     <Route path="/post/:postId" element={<Detail />} />
+                    <Route path="/post/:postId/edit" element={<EditPost />} />
                     <Route path="/userPage/myBookmarkList" element={<MyBookmarkList />}></Route>
                     <Route path="/userPage/myPostList" element={<MyPostList />}></Route>
                   </Routes>

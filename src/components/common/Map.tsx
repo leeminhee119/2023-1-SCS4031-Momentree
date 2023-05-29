@@ -9,9 +9,10 @@ interface IMapOptions {
 }
 interface MapProps {
   places: IRecordedPlace[];
+  isEdit?: boolean;
 }
 
-const Map = ({ places }: MapProps) => {
+const Map = ({ places, isEdit }: MapProps) => {
   const { kakao } = window;
   const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
   const [clickedMarkerIdx, setClickedMarkerIdx] = useState<number>(0); // 지도에서 클릭한 마커의 인덱스
@@ -90,7 +91,9 @@ const Map = ({ places }: MapProps) => {
   return (
     <MapLayout>
       <MapBox id="map" />
-      {isOpenPlace && <PlaceModal placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} />}
+      {isOpenPlace && (
+        <PlaceModal isEdit={isEdit} placeIdx={clickedMarkerIdx} handleModalClose={() => setIsOpenPlace(false)} />
+      )}
     </MapLayout>
   );
 };
