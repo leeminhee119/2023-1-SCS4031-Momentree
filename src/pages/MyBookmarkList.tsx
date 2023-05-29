@@ -1,48 +1,52 @@
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import leftIcon from '../assets/icons/left.svg';
 import PostItem from 'components/common/PostMainItem';
+import { useMyBookMarkListQuery } from 'hooks/queries/useMyPage';
+import Loader from 'components/common/Loader';
+import { useCookies } from 'react-cookie';
+import { CommunityData } from 'types/communityData';
 
 const MyBookmarkList = () => {
   const navigate = useNavigate();
-  const PostData = [
-    {
-      recordedId: 123,
-      title: '충무로 데이트 코스',
-      record_content: '너무 즐거웠어요',
-      bookMarkStatus: true,
-      likeStatus: false,
-      likeCnt: 134,
-      bookmarkCnt: 13,
-      place: ['중구'],
-      vibeTag: [{ tagName: '맛집' }],
-      activityTag: [{ tagName: '맛집' }],
-    },
-    {
-      recordedId: 7,
-      title: '롯데월드 코스',
-      record_content: '무지개 분수 최고',
-      bookMarkStatus: true,
-      likeStatus: false,
-      likeCnt: 203,
-      bookmarkCnt: 34,
-      place: ['서초구', '강남구'],
-      vibeTag: [{ tagName: '맛집' }],
-      activityTag: [{ tagName: '맛집' }],
-    },
-    {
-      recordedId: 183,
-      title: '종로 코스',
-      record_content: '창덕궁, 경복궁',
-      bookMarkStatus: true,
-      likeStatus: false,
-      likeCnt: 203,
-      bookmarkCnt: 34,
-      place: ['광하문로', '강남구'],
-      vibeTag: [{ tagName: '맛집' }],
-      activityTag: [{ tagName: '맛집' }],
-    },
-  ];
+  const [cookies] = useCookies(['user']);
+  const target = useRef<HTMLDivElement>(null);
+  const SIZE = 4;
+  const [page, setPage] = useState<number>(0);
+  const { data } = useMyBookMarkListQuery(page, SIZE, cookies.user.userToken);
+  const [communityDataList, setCommunityDataLists] = useState<CommunityData[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const result = data?.result.content;
+    if (result) {
+      setCommunityDataLists([...communityDataList, ...result]);
+    }
+    setIsLoaded(false);
+  }, [data]);
+
+  const onIntersect = ([entry]: any, observer: { unobserve: (arg0: any) => void; observe: (arg0: any) => void }) => {
+    if (entry.isIntersecting && !isLoaded) {
+      observer.unobserve(entry.target); // 관찰요소 리셋
+      if (page < data?.result.totalPages - 1) {
+        setIsLoaded(true);
+        setPage((page) => page + 1);
+      }
+      observer.observe(entry.target); // 다시 관찰요소 지정
+    }
+  };
+
+  useEffect(() => {
+    let observer: IntersectionObserver;
+    if (target.current) {
+      observer = new IntersectionObserver(onIntersect, {
+        threshold: 0.2,
+      });
+      observer.observe(target.current);
+    }
+    return () => observer && observer.disconnect();
+  }, [onIntersect]);
 
   return (
     <MyBookmarkListContainer>
@@ -56,22 +60,33 @@ const MyBookmarkList = () => {
         />
         <h1>나의 북마크</h1>
       </MyBookmarkListHeader>
-      {PostData.map((data, index) => {
-        return (
-          <div onClick={() => navigate(`/post/${data.recordedId}`)}>
-            <PostItem
-              title={data.title}
-              bookMarkStatus={data.bookMarkStatus}
-              likeCnt={data.likeCnt}
-              bookmarkCnt={data.bookmarkCnt}
-              vibeTag={data.vibeTag}
-              activityTag={data.activityTag}
-              // place={data.place}
-              recordedId={data.recordedId}
-              key={index}></PostItem>
-          </div>
-        );
-      })}
+      <section ref={target} className="Target-Element">
+        {communityDataList && (
+          <>
+            {communityDataList.map((data: CommunityData, index: number) => {
+              return (
+                <div
+                  key={index}
+                  onClick={() => {
+                    navigate(`/post/${data.recordedId}`);
+                    window.location.reload();
+                  }}>
+                  <PostItem
+                    title={data.title}
+                    bookMarkStatus={data.bookMarkStatus}
+                    likeCnt={data.likeCnt}
+                    bookmarkCnt={data.bookMarkCnt}
+                    vibeTag={data.vibeTags}
+                    activityTag={data.activityTags}
+                    place={data.recordedPlaces}
+                    recordedId={data.recordedId}></PostItem>
+                </div>
+              );
+            })}
+          </>
+        )}
+        {isLoaded && <Loader />}
+      </section>
     </MyBookmarkListContainer>
   );
 };

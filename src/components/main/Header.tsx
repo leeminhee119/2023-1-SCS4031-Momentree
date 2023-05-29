@@ -41,4 +41,5 @@ const LogoImage = styled.img`
 const IconBox = styled.div`
   display: flex;
   gap: 1rem;
+  cursor: pointer;
 `;
