@@ -134,7 +134,7 @@ const Post = () => {
             <BackIcon src={backIcon} alt="뒤로가기 버튼" />
           </button>
           <Header>글 작성</Header>
-          <button>
+          <button onClick={() => navigate(`/`)}>
             <CloseIcon src={closeIcon} alt="닫기 버튼" />
           </button>
         </HeaderLayout>
