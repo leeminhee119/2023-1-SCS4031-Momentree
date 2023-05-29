@@ -4,7 +4,7 @@ import clickbookmarkIcon from '../../assets/icons/clickbookmark.svg';
 import heartIcon from '../../assets/icons/heart.svg';
 import bookmarkIcon from '../../assets/icons/bookmark.svg';
 import { RecommendationItemProps } from '../../types/recommendationItem';
-import RecommendMapThumbnail from 'components/common/RecommendMapThumnail';
+import RecommendMapThumbnail from 'components/recommend/RecommendMapThumnail';
 import { useEffect, useState } from 'react';
 
 const RecommendationItemContainer = styled.section`
@@ -25,7 +25,7 @@ const RecommendationItemContainer = styled.section`
 
 const Map = styled.article`
   width: 24rem;
-  height: 13rem;
+  height: 13em;
   background-color: ${({ theme }) => theme.colors.gray500};
   border-radius: 4px;
   margin-bottom: 1.2rem;
