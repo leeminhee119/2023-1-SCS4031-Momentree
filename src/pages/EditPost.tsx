@@ -222,6 +222,7 @@ const TitleInput = styled.input`
   border: none;
   padding: 0;
   height: 5rem;
+  width: 100%;
 `;
 const ContentTextBox = styled.textarea`
   width: 100%;
