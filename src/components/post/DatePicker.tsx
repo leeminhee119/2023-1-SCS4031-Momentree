@@ -7,6 +7,7 @@ import { IRecord } from 'types/post';
 import { IEditMainPost } from 'types/editPost';
 import { useSetRecoilState } from 'recoil';
 import { recordState } from '\brecoil/atoms/recordState';
+import moment from 'moment';
 
 interface IDatePicker {
   dateDate: string;
@@ -40,7 +41,7 @@ const DatePicker = ({ dateDate, newDate, setNewDate }: IDatePicker) => {
         <div>{newDate ? newDate : dateDate}</div>
         <img src={downIcon} />
       </DatePickerButton>
-      {isOpen && <ReactDatePicker selected={new Date(dateDate)} onChange={handleChange} inline />}
+      {isOpen && <ReactDatePicker selected={moment(dateDate, 'YYYY-MM-DD').toDate()} onChange={handleChange} inline />}
     </>
   );
 };
