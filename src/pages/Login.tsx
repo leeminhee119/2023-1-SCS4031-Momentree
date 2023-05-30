@@ -14,8 +14,10 @@ const Login = () => {
     password: '',
   }); // 사용자가 입력한 아이디 패스워드
 
+  //TODO: 로그인 실패 시 상태코드 다르게 가져오면 setIsRedirect 파라미터 제거 (성공 시 직접 리다이렉트)
+  const [isRedirect, setIsRedirect] = useState<boolean>(false);
   // API에 post 요청 보내기 위한 useMutation 훅 가져오기
-  const loginMutation = useLoginMutation(loginInput.userName, loginInput.password); // 입력한 userName, password 전달
+  const loginMutation = useLoginMutation(loginInput.userName, loginInput.password, setIsRedirect); // 입력한 userName, password 전달
 
   useEffect(() => {
     if (loginInput.userName !== '' && loginInput.password !== '') {
@@ -23,12 +25,14 @@ const Login = () => {
     } else {
       setIsActive(false);
     }
-  }, [loginInput]);
+    if (isRedirect) navigate('/');
+  }, [loginInput, isRedirect]);
 
   function handleLogin() {
     // API post 요청
     loginMutation.mutate();
-    navigate(`/`);
+
+    //TODO: 로그인 실패 시 loginMutation.isSuccess -> 리다이렉트
   }
 
   return (
