@@ -115,7 +115,7 @@ const PlaceModal = ({ placeIdx, handleModalClose, isEdit }: PlaceModalProps) => 
           }}
         />
         <UploadImageRow>
-          {!isEdit && placesData[placeIdx].images && placesData[placeIdx].images.length <= 3 ? (
+          {!isEdit && placesData[placeIdx].images && imagePreviews.length < 3 ? (
             <UploadButton as={'label'} htmlFor={'fileUpload'}>
               <CameraIcon src={cameraIcon} alt="카메라 아이콘" />
             </UploadButton>
