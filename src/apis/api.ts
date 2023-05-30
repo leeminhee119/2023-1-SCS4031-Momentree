@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-const baseURL = 'http://3.39.153.141';
+const baseURL = 'https://api.datebuzz.net';
 
 interface RequestType {
   url: string;
