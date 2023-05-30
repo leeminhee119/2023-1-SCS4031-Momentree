@@ -56,7 +56,7 @@ const SearchModal = ({ setResultsParent, handleModalClose, handleClickListItem }
             return (
               <>
                 <ListItem
-                  key={index}
+                  key={`kakao-place-result-${index}`}
                   onClick={() => {
                     handleClickListItem(index);
                   }}>
