@@ -39,7 +39,7 @@ const LodingTextContainer = styled.section`
 `;
 
 const LodingText = styled.p`
-  font: ${theme.fonts.caption4};
+  font: ${theme.fonts.body4};
   color: ${theme.colors.gray600};
   text-align: center;
   margin: 0.3rem 0rem;
@@ -54,8 +54,8 @@ const LoadingIcon = styled.img`
 
 const HeartIcon = styled.img`
   color: ${theme.colors.gray200};
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 3.2rem;
+  height: 3.2rem;
   margin: 0.6em;
 `;
 
