@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import closeIcon from '../../assets/icons/close.svg';
 import { PlaceImageProps } from 'types/placeInformation';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 interface PlaceMapModalProps {
   placeName: string;
@@ -10,6 +13,16 @@ interface PlaceMapModalProps {
 }
 
 const PlaceMapModal = ({ placeName, placeContent, placeImage, handleModalClose }: PlaceMapModalProps) => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 100,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    arrows: false,
+  };
+
   return (
     <ModalBackground>
       <ModalLayout>
@@ -19,10 +32,13 @@ const PlaceMapModal = ({ placeName, placeContent, placeImage, handleModalClose }
             <CloseIcon src={closeIcon} alt="닫기 버튼" />
           </div>
         </TitleBox>
+
         <PlaceContent>{placeContent}</PlaceContent>
-        {placeImage?.map((img, index: number): JSX.Element => {
-          return <p key={index}>{img.imageUrl}</p>;
-        })}
+        <ImgSlider {...settings}>
+          {placeImage?.map((img, index) => {
+            return <PlaceImage src={img.imageUrl} key={index} alt="장소 이미지" />;
+          })}
+        </ImgSlider>
       </ModalLayout>
     </ModalBackground>
   );
@@ -60,6 +76,7 @@ const TitleBox = styled.div`
   ${({ theme }) => theme.fonts.subtitle1};
   display: flex;
   justify-content: space-between;
+  margin-bottom: 2rem;
 `;
 
 const PlaceContent = styled.p`
@@ -70,5 +87,18 @@ const PlaceContent = styled.p`
   height: 50%;
   margin: 1.5rem 0;
   padding: 1.5rem;
+`;
+
+const ImgSlider = styled(Slider)`
+  .slick-dots {
+    bottom: 20px;
+  }
+`;
+
+const PlaceImage = styled.img`
+  position: relative;
+  height: 41rem;
+  border-radius: 1.8rem;
+  object-fit: cover;
 `;
 export default PlaceMapModal;
