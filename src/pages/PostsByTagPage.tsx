@@ -6,6 +6,8 @@ import { CommunityData } from '../types/communityData';
 import PostItem from 'components/common/PostMainItem';
 import styled from 'styled-components';
 import { useHashtagPostQuery } from 'hooks/queries/useCommunity';
+import Bar from '../components/common/Bar';
+import theme from '../styles/theme';
 
 const PostsByTagPage = () => {
   const navigate = useNavigate();
@@ -24,8 +26,11 @@ const PostsByTagPage = () => {
               window.location.reload();
             }}
           />
-          <h1>{tag} 해시태그가 포함된 게시물</h1>
+          <h1>
+            <span style={{ color: theme.colors.mainDark }}>{tag}</span> 해시태그가 포함된 게시물
+          </h1>
         </PostByPageHeader>
+        <Bar />
         {data?.result?.content.map((data: CommunityData) => (
           <PostItem
             recordedId={data?.recordedId}
