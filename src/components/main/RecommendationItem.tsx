@@ -20,6 +20,10 @@ const RecommendationItemContainer = styled.section`
     color: ${({ theme }) => theme.colors.gray700};
     ${({ theme }) => theme.fonts.body3};
     margin-bottom: 0.6rem;
+    overflow: hidden; // 을 사용해 영역을 감출 것
+    text-overflow: ellipsis; // 로 ... 을 만들기
+    white-space: nowrap; // 아래줄로 내려가는 것을 막기위해
+    word-break: break-all;
   }
 `;
 
