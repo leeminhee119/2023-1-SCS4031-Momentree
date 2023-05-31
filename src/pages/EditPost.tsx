@@ -179,7 +179,7 @@ const EditPost = () => {
               deletedPlaceIds.length > 0 ? editPostDeletePlace.mutateAsync() : Promise.resolve(),
             ]);
             resetPlaces();
-            navigate(`/`);
+            navigate(`/post/${Number(postId)}`);
           } catch (error) {
             console.error(error);
           }
