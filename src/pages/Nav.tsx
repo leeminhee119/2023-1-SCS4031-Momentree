@@ -81,16 +81,20 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
 export default Nav;
 
 const NavBackground = styled.main`
-  width: 100vw;
-  margin: 0px auto;
+  width: 43rem;
+  min-height: 100vh;
+  min-height: calc(var(--vh) * 100);
   background-color: rgba(0, 0, 0, 0.7);
-  height: 100vh;
   z-index: 10;
   position: absolute;
   display: flex;
   justify-content: flex-end;
   margin-left: -1.6rem;
   top: 0;
+
+  @media (max-width: 430px) {
+    width: 100%;
+  }
 `;
 
 const NavContainer = styled.section`
