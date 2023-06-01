@@ -21,16 +21,16 @@ const ModifyUserInfo = () => {
     nickname: data?.result?.nickname || '',
     image: null,
   });
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
   // 이미지 파일을 선택했을 때의 이벤트 핸들러
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedImage(file);
+      setModifyInput((prev) => ({ ...prev, image: file }));
     }
   };
 
-  const handleModify = useModifyUserMutation(modifyInput, token, selectedImage, setSelectedImage);
+  const handleModify = useModifyUserMutation(modifyInput, token);
 
   // 이 useEffect는 data가 변경될 때마다 실행됩니다. 따라서 data가 로드되면 modifyInput의 nickname을 업데이트합니다.
   useEffect(() => {
@@ -39,11 +39,6 @@ const ModifyUserInfo = () => {
       nickname: data?.result?.nickname || '',
     }));
   }, [data]);
-
-  // 이미지 파일 선택 후, 현재 선택된 이미지를 modifyInput에 설정
-  useEffect(() => {
-    setModifyInput((prev) => ({ ...prev, image: selectedImage }));
-  }, [selectedImage]);
 
   useEffect(() => {
     const { nickname } = modifyInput;
@@ -62,8 +57,8 @@ const ModifyUserInfo = () => {
       <ModifyForm>
         <UserImage
           src={
-            selectedImage
-              ? URL.createObjectURL(selectedImage)
+            modifyInput.image
+              ? URL.createObjectURL(modifyInput.image)
               : data?.result.profileImg
               ? data?.result.profileImg
               : defaultProfileIcon
@@ -123,7 +118,6 @@ const ModifyForm = styled.form`
   justify-content: center;
   align-items: center;
 `;
-
 const Input = styled.input`
   width: 100%;
   height: 3rem;
@@ -163,29 +157,23 @@ const UserImage = styled.img`
 
 interface IBody {
   nickname: string;
+  image: File | null;
 }
-// useModifyUserMutation은 아래와 같습니다.
-// patchModifyUserInfo 함수는 변경된 사용자 정보를 보내는 API를 호출
-export const patchModifyUserInfo = async (body: IBody, token: string, selectedImage: File | null) => {
-  const formData = new FormData(); // FormData 생성
-  formData.append('nickname', body.nickname); // 닉네임 추가
-  if (selectedImage) {
-    formData.append('image', selectedImage); // 이미지 추가
+
+export const patchModifyUserInfo = async (body: IBody, token: string) => {
+  const formData = new FormData();
+  formData.append('nickname', body.nickname);
+  if (body.image) {
+    formData.append('image', body.image);
   }
-  const { data } = await PATCH('/modifyUserInfo/data', formData, token); // FormData를 사용하여 PATCH 요청
+  const { data } = await PATCH('/modifyUserInfo/data', formData, token);
   return data;
 };
 
-export const useModifyUserMutation = (
-  body: IBody,
-  token: string,
-  selectedImage: File | null,
-  setSelectedImage: (image: File | null) => void
-) => {
+export const useModifyUserMutation = (body: IBody, token: string) => {
   const navigator = useNavigate();
-  return useMutation(() => patchModifyUserInfo(body, token, selectedImage), {
+  return useMutation(() => patchModifyUserInfo(body, token), {
     onSuccess: () => {
-      setSelectedImage(null); // onSuccess에서 setSelectedImage 함수 사용
       navigator('/');
     },
   });
