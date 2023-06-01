@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import closeIcon from '../assets/icons/close.svg';
 import defaultProfileIcon from '../assets/icons/profile_grey.svg';
@@ -61,7 +61,11 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
               );
             })}
             <Bar />
-            <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
+            <ButtonContainer>
+              <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
+              <Divider />
+              <ModifyUserInfoButton to="/modifyUserInfo">회원정보수정</ModifyUserInfoButton>
+            </ButtonContainer>
           </>
         ) : (
           <>
@@ -122,11 +126,29 @@ const UserImage = styled.img`
 
 const UserName = styled.h1``;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+`;
+
 const LogoutButton = styled.p`
   color: ${({ theme }) => theme.colors.gray400};
   ${({ theme }) => theme.fonts.caption2};
   display: flex;
-  justify-content: flex-end;
+  cursor: pointer;
+`;
+
+const Divider = styled.span`
+  height: 2rem; // Adjust the height as needed
+  width: 1px;
+  background-color: ${({ theme }) => theme.colors.gray300};
+`;
+
+const ModifyUserInfoButton = styled(Link)`
+  color: ${({ theme }) => theme.colors.gray400};
+  ${({ theme }) => theme.fonts.caption2};
+  text-decoration: none;
   cursor: pointer;
 `;
 
