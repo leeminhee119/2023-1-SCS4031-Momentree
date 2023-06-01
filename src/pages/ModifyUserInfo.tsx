@@ -8,6 +8,7 @@ import { PATCH } from '../apis/api';
 import { useMutation } from '@tanstack/react-query';
 import { useCookies } from 'react-cookie';
 import { useUserInfoQuery } from 'hooks/queries/useUser';
+import defaultProfileIcon from '../assets/icons/profile_white.svg';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ModifyUserInfo = () => {
@@ -16,10 +17,20 @@ const ModifyUserInfo = () => {
   const token = cookies?.user?.userToken;
 
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [modifyInput, setModifyInput] = useState({
+  const [modifyInput, setModifyInput] = useState<{ nickname: string; image: File | null }>({
     nickname: data?.result?.nickname || '',
+    image: null,
   });
-  const handleModify = useModifyUserMutation(modifyInput, token); // 사용자 정보를 수정하는 Mutation
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  // 이미지 파일을 선택했을 때의 이벤트 핸들러
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+    }
+  };
+
+  const handleModify = useModifyUserMutation(modifyInput, token, selectedImage, setSelectedImage);
 
   // 이 useEffect는 data가 변경될 때마다 실행됩니다. 따라서 data가 로드되면 modifyInput의 nickname을 업데이트합니다.
   useEffect(() => {
@@ -28,6 +39,11 @@ const ModifyUserInfo = () => {
       nickname: data?.result?.nickname || '',
     }));
   }, [data]);
+
+  // 이미지 파일 선택 후, 현재 선택된 이미지를 modifyInput에 설정
+  useEffect(() => {
+    setModifyInput((prev) => ({ ...prev, image: selectedImage }));
+  }, [selectedImage]);
 
   useEffect(() => {
     const { nickname } = modifyInput;
@@ -44,6 +60,23 @@ const ModifyUserInfo = () => {
         <LogoImage src={logoIcon} alt="Logo" />
       </LogoRow>
       <ModifyForm>
+        <UserImage
+          src={
+            selectedImage
+              ? URL.createObjectURL(selectedImage)
+              : data?.result.profileImg
+              ? data?.result.profileImg
+              : defaultProfileIcon
+          }
+          alt="유저 이미지"
+          onClick={() => document.getElementById('upload')?.click()}
+        />
+        <Input
+          id="upload"
+          type="file"
+          style={{ display: 'none' }} // 파일 업로드 창을 숨김
+          onChange={handleImageChange} // 파일 선택 시 이벤트 핸들러
+        />
         <Input
           type="text"
           name="nickname"
@@ -85,7 +118,9 @@ const LogoImage = styled.img`
 
 const ModifyForm = styled.form`
   width: 100%;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 `;
 
@@ -119,25 +154,41 @@ const StyledLink = styled(Link)`
   }
 `;
 
+const UserImage = styled.img`
+  width: 16.4rem;
+  height: 16.4rem;
+  border-radius: 50%;
+  margin: auto;
+`;
+
 interface IBody {
   nickname: string;
 }
 // useModifyUserMutation은 아래와 같습니다.
-
-export const useModifyUserMutation = (body: IBody, token: string) => {
-  const navigator = useNavigate();
-  return useMutation(() => patchModifyUserInfo(body, token), {
-    // 함수명을 patchModifyUserInfo로 변경
-    onSuccess: () => {
-      navigator('/'); // 수정 후 프로필 페이지로 이동
-    },
-  });
+// patchModifyUserInfo 함수는 변경된 사용자 정보를 보내는 API를 호출
+export const patchModifyUserInfo = async (body: IBody, token: string, selectedImage: File | null) => {
+  const formData = new FormData(); // FormData 생성
+  formData.append('nickname', body.nickname); // 닉네임 추가
+  if (selectedImage) {
+    formData.append('image', selectedImage); // 이미지 추가
+  }
+  const { data } = await PATCH('/modifyUserInfo/data', formData, token); // FormData를 사용하여 PATCH 요청
+  return data;
 };
 
-// patchModifyUserInfo 함수는 변경된 사용자 정보를 보내는 API를 호출
-export const patchModifyUserInfo = async (body: IBody, token: string) => {
-  const { data } = await PATCH('/modifyUserInfo/data', body, token); // 'PATCH' 메소드 사용
-  return data;
+export const useModifyUserMutation = (
+  body: IBody,
+  token: string,
+  selectedImage: File | null,
+  setSelectedImage: (image: File | null) => void
+) => {
+  const navigator = useNavigate();
+  return useMutation(() => patchModifyUserInfo(body, token, selectedImage), {
+    onSuccess: () => {
+      setSelectedImage(null); // onSuccess에서 setSelectedImage 함수 사용
+      navigator('/');
+    },
+  });
 };
 
 export default ModifyUserInfo;
