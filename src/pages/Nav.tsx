@@ -139,17 +139,19 @@ const LogoutButton = styled.p`
   cursor: pointer;
 `;
 
+const ModifyUserInfoButton = styled(Link)`
+  && {
+    color: ${({ theme }) => theme.colors.gray400};
+    ${({ theme }) => theme.fonts.caption2};
+    text-decoration: none;
+    cursor: pointer;
+  }
+`;
+
 const Divider = styled.span`
   height: 2rem; // Adjust the height as needed
   width: 1px;
   background-color: ${({ theme }) => theme.colors.gray300};
-`;
-
-const ModifyUserInfoButton = styled(Link)`
-  color: ${({ theme }) => theme.colors.gray400};
-  ${({ theme }) => theme.fonts.caption2};
-  text-decoration: none;
-  cursor: pointer;
 `;
 
 const UserFollower = styled.section`

@@ -18,6 +18,8 @@ const EditPost = lazy(() => import('./pages/EditPost'));
 const MyBookmarkList = lazy(() => import('./pages/MyBookmarkList'));
 const MyPostList = lazy(() => import('./pages/MyPostList'));
 const PostsByTagPage = lazy(() => import('./pages/PostsByTagPage'));
+const ModifyUserInfo = lazy(() => import('./pages/ModifyUserInfo'));
+const ModifyPassword = lazy(() => import('./pages/ModifyPassword'));
 
 import AppLayout from 'components/layout/AppLayout';
 
@@ -59,6 +61,8 @@ export default function App() {
                     <Route path="/post/:postId/edit" element={<EditPost />} />
                     <Route path="/userPage/myBookmarkList" element={<MyBookmarkList />}></Route>
                     <Route path="/userPage/myPostList" element={<MyPostList />}></Route>
+                    <Route path="/modifyUserInfo" element={<ModifyUserInfo />}></Route>
+                    <Route path="/modifyPassword" element={<ModifyPassword />}></Route>
                   </Routes>
                 </Suspense>
               </AppLayout>

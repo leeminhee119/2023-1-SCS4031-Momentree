@@ -1,24 +1,37 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logoIcon from '../assets/logo.png';
 import RegisterButton from 'components/register/RegisterButton';
-import { POST } from '../apis/api';
+import { PATCH } from '../apis/api';
 import { useMutation } from '@tanstack/react-query';
+import { useCookies } from 'react-cookie';
+import { useUserInfoQuery } from 'hooks/queries/useUser';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ModifyUserInfo = () => {
+  const [cookies] = useCookies(['user']);
+  const { data } = useUserInfoQuery(cookies?.user?.userToken);
+  const token = cookies?.user?.userToken;
+
   const [isActive, setIsActive] = useState<boolean>(false);
   const [modifyInput, setModifyInput] = useState({
-    password: '',
-    nickname: '',
+    nickname: data?.result?.nickname || '',
   });
-  const handleModify = useModifyUserMutation(modifyInput); // 사용자 정보를 수정하는 Mutation
+  const handleModify = useModifyUserMutation(modifyInput, token); // 사용자 정보를 수정하는 Mutation
+
+  // 이 useEffect는 data가 변경될 때마다 실행됩니다. 따라서 data가 로드되면 modifyInput의 nickname을 업데이트합니다.
+  useEffect(() => {
+    setModifyInput((prev) => ({
+      ...prev,
+      nickname: data?.result?.nickname || '',
+    }));
+  }, [data]);
 
   useEffect(() => {
-    const { password, nickname } = modifyInput;
-    if (password !== '' && nickname !== '') {
+    const { nickname } = modifyInput;
+    if (nickname !== '') {
       setIsActive(true);
     } else {
       setIsActive(false);
@@ -32,23 +45,9 @@ const ModifyUserInfo = () => {
       </LogoRow>
       <ModifyForm>
         <Input
-          type="password"
-          name="password"
-          placeholder="새로운 비밀번호를 입력해주세요"
-          value={modifyInput.password}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            setModifyInput((prev) => {
-              return {
-                ...prev,
-                password: event.target.value,
-              };
-            })
-          }
-        />
-        <Input
           type="text"
           name="nickname"
-          placeholder="새로운 닉네임을 입력해주세요"
+          placeholder="변경할 닉네임을 입력해주세요"
           value={modifyInput.nickname}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             setModifyInput((prev) => {
@@ -61,6 +60,9 @@ const ModifyUserInfo = () => {
         />
       </ModifyForm>
       <RegisterButton label="수정완료" isActive={isActive} handleClickSave={() => handleModify.mutate()} />
+      <ModifyPassword>
+        비밀번호를 변경하고 싶으신가요? <StyledLink to="/modifyPassword">비밀번호 변경</StyledLink>
+      </ModifyPassword>
     </ModifyLayout>
   );
 };
@@ -82,6 +84,7 @@ const LogoImage = styled.img`
 `;
 
 const ModifyForm = styled.form`
+  width: 100%;
   flex-direction: column;
   align-items: center;
 `;
@@ -101,23 +104,40 @@ const Input = styled.input`
   }
 `;
 
-// useModifyUserMutation은 아래와 같습니다.
+const ModifyPassword = styled.div`
+  margin-top: 2rem;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.gray400};
+  font: ${({ theme }) => theme.fonts.caption2};
+`;
+
+const StyledLink = styled(Link)`
+  && {
+    color: ${({ theme }) => theme.colors.gray500};
+    font: ${({ theme }) => theme.fonts.caption1};
+    text-decoration: none;
+  }
+`;
+
 interface IBody {
-  password: string;
   nickname: string;
 }
+// useModifyUserMutation은 아래와 같습니다.
 
-export const useModifyUserMutation = (body: IBody) => {
+export const useModifyUserMutation = (body: IBody, token: string) => {
   const navigator = useNavigate();
-  return useMutation(() => postModifyUserInfo(body), {
+  return useMutation(() => patchModifyUserInfo(body, token), {
+    // 함수명을 patchModifyUserInfo로 변경
     onSuccess: () => {
       navigator('/'); // 수정 후 프로필 페이지로 이동
     },
   });
 };
 
-// postModifyUserInfo 함수는 변경된 사용자 정보를 보내는 API를 호출
-export const postModifyUserInfo = async (body: IBody) => {
-  const { data } = await POST('/modifyUserInfo', body); // '/modifyUserInfo'는 사용자 정보 수정 API 엔드포인트
+// patchModifyUserInfo 함수는 변경된 사용자 정보를 보내는 API를 호출
+export const patchModifyUserInfo = async (body: IBody, token: string) => {
+  const { data } = await PATCH('/modifyUserInfo/data', body, token); // 'PATCH' 메소드 사용
   return data;
 };
+
+export default ModifyUserInfo;
