@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import closeIcon from '../../assets/icons/close.svg';
 import { PlaceImageProps } from 'types/placeInformation';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 interface PlaceMapModalProps {
   placeName: string;
@@ -10,6 +13,16 @@ interface PlaceMapModalProps {
 }
 
 const PlaceMapModal = ({ placeName, placeContent, placeImage, handleModalClose }: PlaceMapModalProps) => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 100,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    arrows: false,
+  };
+
   return (
     <ModalBackground>
       <ModalLayout>
@@ -19,10 +32,13 @@ const PlaceMapModal = ({ placeName, placeContent, placeImage, handleModalClose }
             <CloseIcon src={closeIcon} alt="닫기 버튼" />
           </div>
         </TitleBox>
+
         <PlaceContent>{placeContent}</PlaceContent>
-        {placeImage?.map((img, index: number): JSX.Element => {
-          return <p key={index}>{img.imageUrl}</p>;
-        })}
+        <ImgSlider {...settings}>
+          {placeImage?.map((img, index) => {
+            return <PlaceImage src={img.imageUrl} key={index} alt="장소 이미지" />;
+          })}
+        </ImgSlider>
       </ModalLayout>
     </ModalBackground>
   );
@@ -30,23 +46,33 @@ const PlaceMapModal = ({ placeName, placeContent, placeImage, handleModalClose }
 
 const CloseIcon = styled.img`
   width: 1.5rem;
+  cursor: pointer;
 `;
 const ModalBackground = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 0px;
+  width: 43rem;
+  margin: 0px auto;
+  min-height: calc(var(--vh) * 100);
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 999;
+  padding: 47px 1.6rem 3.2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 430px) {
+    width: 100%;
+    margin-left: -18px;
+  }
 `;
 const ModalLayout = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
+  position: absolute;
+  width: 40rem;
+  margin: 0px auto;
   height: 90%;
+
   padding: 1.5rem;
   background-color: ${({ theme }) => theme.colors.gray100};
   border-radius: 1.8rem;
@@ -55,11 +81,15 @@ const ModalLayout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media (max-width: 430px) {
+    width: 90%;
+  }
 `;
 const TitleBox = styled.div`
   ${({ theme }) => theme.fonts.subtitle1};
   display: flex;
   justify-content: space-between;
+  margin-bottom: 2rem;
 `;
 
 const PlaceContent = styled.p`
@@ -70,5 +100,18 @@ const PlaceContent = styled.p`
   height: 50%;
   margin: 1.5rem 0;
   padding: 1.5rem;
+`;
+
+const ImgSlider = styled(Slider)`
+  .slick-dots {
+    bottom: 20px;
+  }
+`;
+
+const PlaceImage = styled.img`
+  position: relative;
+  height: 41rem;
+  border-radius: 1.8rem;
+  object-fit: cover;
 `;
 export default PlaceMapModal;

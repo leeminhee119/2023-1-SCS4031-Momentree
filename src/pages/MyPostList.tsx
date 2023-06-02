@@ -7,6 +7,8 @@ import { useMyPostListQuery } from 'hooks/queries/useMyPage';
 import Loader from 'components/common/Loader';
 import { useCookies } from 'react-cookie';
 import { CommunityData } from 'types/communityData';
+import Blank from '../components/common/Blank';
+import Bar from '../components/common/Bar';
 
 const MyPostList = () => {
   //링크 이동에 사용되는 navigate;
@@ -70,32 +72,34 @@ const MyPostList = () => {
         />
         <h1>나의 데이트 코스</h1>
       </MyPostListHeader>
+      <Bar />
       <section ref={target} className="Target-Element">
-        {communityDataList && (
+        {communityDataList.length === 0 ? (
+          <Blank message1="작성한 게시물이 없어요." message2="자신만의 데이트 코스를 공유해보세요!" />
+        ) : (
           <>
-            {communityDataList.map((data: CommunityData, index: number) => {
-              return (
-                <div
-                  key={index}
-                  onClick={() => {
-                    navigate(`/post/${data.recordedId}`);
-                    window.location.reload();
-                  }}>
-                  <PostItem
-                    title={data.title}
-                    bookMarkStatus={data.bookMarkStatus}
-                    likeCnt={data.likeCnt}
-                    bookmarkCnt={data.bookMarkCnt}
-                    vibeTag={data.vibeTags}
-                    activityTag={data.activityTags}
-                    place={data.recordedPlaces}
-                    recordedId={data.recordedId}></PostItem>
-                </div>
-              );
-            })}
+            {communityDataList.map((data: CommunityData, index: number) => (
+              <div
+                key={index}
+                onClick={() => {
+                  navigate(`/post/${data.recordedId}`);
+                  window.location.reload();
+                }}>
+                <PostItem
+                  title={data.title}
+                  bookMarkStatus={data.bookMarkStatus}
+                  likeCnt={data.likeCnt}
+                  bookmarkCnt={data.bookMarkCnt}
+                  vibeTag={data.vibeTags}
+                  activityTag={data.activityTags}
+                  place={data.recordedPlaces}
+                  recordedId={data.recordedId}
+                />
+              </div>
+            ))}
+            {isLoaded && <Loader />}
           </>
         )}
-        {isLoaded && <Loader />}
       </section>
     </MyPostListContainer>
   );
