@@ -141,21 +141,30 @@ const CameraIcon = styled.img`
   filter: invert(80%) sepia(8%) saturate(311%) hue-rotate(169deg) brightness(93%) contrast(81%);
 `;
 const ModalBackground = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 0px;
+  width: 43rem;
+  margin: 0px auto;
+  min-height: calc(var(--vh) * 100);
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 999;
+  padding: 47px 1.6rem 3.2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-left: -1.6rem;
+  @media (max-width: 430px) {
+    width: 100%;
+  }
 `;
 const ModalLayout = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: absolute;
   width: 90%;
   height: 90%;
+  margin: 0px auto;
+
   padding: 1.5rem;
   background-color: ${({ theme }) => theme.colors.gray100};
   border-radius: 1.8rem;
