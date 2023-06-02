@@ -27,7 +27,7 @@ const BlankContainer = styled.section`
 
 interface BlankProps {
   message1: string;
-  message2: string;
+  message2?: string;
 }
 
 const Blank: React.FC<BlankProps> = ({ message1, message2 }) => (
