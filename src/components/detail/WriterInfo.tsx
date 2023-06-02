@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import defaultProfileIcon from '../../assets/icons/profile_white.svg';
+import { AddFollowerButton } from 'components/common/styled-components';
 
 interface WriterInfoProps {
   profileImg: string;
@@ -59,16 +60,4 @@ const Info = styled.article`
     color: ${({ theme }) => theme.colors.gray400};
     ${({ theme }) => theme.fonts.caption2};
   }
-`;
-
-const AddFollowerButton = styled.button`
-  width: 65px;
-  height: 26px;
-
-  border-radius: 99px;
-  color: ${({ theme }) => theme.colors.gray900};
-  background-color: ${({ theme }) => theme.colors.gray300};
-  ${({ theme }) => theme.fonts.caption1};
-
-  cursor: pointer;
 `;
