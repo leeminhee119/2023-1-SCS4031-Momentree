@@ -46,23 +46,33 @@ const PlaceMapModal = ({ placeName, placeContent, placeImage, handleModalClose }
 
 const CloseIcon = styled.img`
   width: 1.5rem;
+  cursor: pointer;
 `;
 const ModalBackground = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: 0px;
+  width: 43rem;
+  margin: 0px auto;
+  min-height: calc(var(--vh) * 100);
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 999;
+  padding: 47px 1.6rem 3.2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 430px) {
+    width: 100%;
+    margin-left: -18px;
+  }
 `;
 const ModalLayout = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
+  position: absolute;
+  width: 40rem;
+  margin: 0px auto;
   height: 90%;
+
   padding: 1.5rem;
   background-color: ${({ theme }) => theme.colors.gray100};
   border-radius: 1.8rem;
@@ -71,6 +81,9 @@ const ModalLayout = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media (max-width: 430px) {
+    width: 90%;
+  }
 `;
 const TitleBox = styled.div`
   ${({ theme }) => theme.fonts.subtitle1};
