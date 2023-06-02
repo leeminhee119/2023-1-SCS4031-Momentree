@@ -3,7 +3,7 @@ import { useCookies } from 'react-cookie';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCommunityDetailQuery } from 'hooks/queries/useCommunityDetail';
 import closeIcon from '../assets/icons/close.svg';
-import backIcon from '../assets/icons/back.svg';
+import backIcon from '../assets/icons/left.svg';
 import HorizontalLine from '../components/post/HorizontalLine';
 import DatePicker from '../components/post/DatePicker';
 import Margin from '../components/main/Margin';

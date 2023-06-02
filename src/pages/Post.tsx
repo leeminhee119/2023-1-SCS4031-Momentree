@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import closeIcon from '../assets/icons/close.svg';
-import backIcon from '../assets/icons/back.svg';
+import backIcon from '../assets/icons/left.svg';
 import HorizontalLine from '../components/post/HorizontalLine';
 import DatePicker from '../components/post/DatePicker';
 import Margin from '../components/main/Margin';
