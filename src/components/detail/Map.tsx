@@ -16,6 +16,14 @@ const Map = ({ places }: MapProps) => {
 
   const [map, setMap] = useState<any>(null);
 
+  useEffect(() => {
+    if (isOpenPlace) {
+      document.body.style.cssText = `overflow: hidden`;
+    } else {
+      document.body.style.cssText = `overflow: auto`;
+    }
+  }, [isOpenPlace]);
+
   // 지도를 불러옵니다
   useEffect(() => {
     const container = document.getElementById('map');
