@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import defaultProfileIcon from '../../assets/icons/profile_white.svg';
-import { AddFollowerButton } from 'components/common/styled-components';
+import { AddFollowerButton, CancelFollowButton } from 'components/common/styled-components';
+import { usePostFollowMutation } from 'hooks/queries/useUser';
+import { useMyFollowingUserListQuery } from 'hooks/queries/useMyPage';
+import { useCookies } from 'react-cookie';
+import { IUserFollowInfo } from 'types/user';
+import { useEffect, useState } from 'react';
 
 interface WriterInfoProps {
   profileImg: string;
@@ -9,6 +14,33 @@ interface WriterInfoProps {
   followerCnt: number;
 }
 const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt }: WriterInfoProps) => {
+  const [cookies] = useCookies(['user']);
+  const postFollow = usePostFollowMutation(
+    {
+      nickName: nickname,
+    },
+    cookies?.user?.userToken
+  );
+
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+
+  //TODO: useCommunityDetailQuery의 데이터에 나의 팔로우 여부 데이터 추가되면 아래 코드 삭제
+  const { data } = useMyFollowingUserListQuery(cookies?.user?.userToken);
+  useEffect(() => {
+    if (data) {
+      const copy = data.result.map((user: IUserFollowInfo) => {
+        return user.userName;
+      });
+      if (copy.includes(nickname)) {
+        setIsFollowing(true);
+      }
+    }
+  }, [data]);
+
+  const handleClickFollowBtn = () => {
+    setIsFollowing(() => !isFollowing);
+    postFollow.mutate();
+  };
   return (
     <WriterInfoContainer>
       <div>
@@ -20,7 +52,16 @@ const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt }: WriterInfo
           </p>
         </Info>
       </div>
-      <AddFollowerButton type="button"> + 팔로우 </AddFollowerButton>
+      {isFollowing ? (
+        <CancelFollowButton type="button" onClick={handleClickFollowBtn}>
+          팔로잉
+        </CancelFollowButton>
+      ) : (
+        <AddFollowerButton type="button" onClick={handleClickFollowBtn}>
+          {' '}
+          + 팔로우{' '}
+        </AddFollowerButton>
+      )}
     </WriterInfoContainer>
   );
 };

@@ -17,7 +17,8 @@ export const CancelFollowButton = styled.button`
 
   border-radius: 99px;
   color: ${({ theme }) => theme.colors.mainLight};
-  border: 1px solid ${({ theme }) => theme.colors.mainLight};
+  background-color: ${({ theme }) => theme.colors.gray100};
+  border: 1.5px solid ${({ theme }) => theme.colors.mainLight};
   ${({ theme }) => theme.fonts.caption1};
 
   cursor: pointer;
