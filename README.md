@@ -1,37 +1,25 @@
-# 관계 중심 기록 서비스 Momentree
+# 2023-1-융합캡스톤디자인-모멘트리팀
+## 커뮤니티 기반 데이트 코스 기록/공유 서비스
+✨서비스 운영자가 일방적으로 데이트 코스를 추천해주는 것이 아닌 사용가 자발적으로 좋았던 데이트 코스를 기록하고 공유하는 서비스
+<br> 
+<br />
 
+## 👩🏻‍💻 웹 팀원 소개
+|이서영|이민희|송우영|
+|:-:|:-:|:-:|
+|<img src="https://avatars.githubusercontent.com/u/124651984?v=4" width="200px" />|<img src="https://avatars.githubusercontent.com/u/91667853?v=4" width="200px" />|<img src="https://avatars.githubusercontent.com/u/62867581?v=4" width="200px" />|
+|[@banban555](https://github.com/banban555)|[@leeminhee119](https://github.com/leeminhee119)|[@f0rever0](https://github.com/f0rever0)|
+<br />
 
-
-
-### 1. 개요
-
-- 오랜만에 만난 친구들과의 대화, 사랑하는 사람과의 데이트, 가족과의 여행, 이 소중한 시간들을 어떻게 기록하고 계시나요?
-- Momentree는 소중한 순간을 쉽고, 생생하게 기록하고, 관련 있는 기록을 연결하여 오랫동안 기억할 수 있게 만들어줍니다.
-- 자주 방문한 장소, 한 주간의 기분 등 기록한 내용을 토대로 나도 몰랐던 나의 행동 패턴, 취향 등의 인사이트를 전달하고자 합니다.
-
-
-
-### 2. 서비스 방향
-
-> 
-- **쉽고 생생한 기록을 위해**
-    - **다양한 형식의 데이터**를 지원합니다. 사용자는 사진, 글, 날짜뿐만 아니라 장소, 향, 음악 등 그날의 기억을 더욱 풍부하게 만드는 항목을 선택할 수 있는 서비스를 제공하고자 합니다.
-    - **템플릿**을 제공합니다. 처음 글을 작성하는 사용자도 정형화된 템플릿을 이용하여 쉽고 빠르게 글을 작성할 수 있습니다.
-    
-> 
-- **인사이트 도출을 위해**
-    - **분류 기능을 지원합니다.**
-        - 사용자는 장소, 사람 등 원하는 주제에 따라 카테고리를 생성하고 기록을 분류할 수 있습니다.
-        - 카테고리 내 기록들을 시각적으로 연결하여 기록의 연결성을 한눈에 볼 수 있도록 돕습니다.
-
-    - **인사이트가 담긴 메시지를 제공합니다.**
-        - 가장 많이 간 곳, 기록에서 많이 사용한 단어 등 사용자의 기록을 통해 알 수 있는 다양한 인사이트를 메시지 형태로 제공합니다.
-        - 제안된 메시지를 통해 평소 놓치고 있었던 자신의 성격, 취향, 관계의 의미를 발견할 수 있습니다.
-
-
-### 팀원소개
-
-🥕 신서영  Back-end  
-🖤 이중원  Back-end  
-🌸 송우영  Front-end  
-🐤 이민희  Front-end  
+## 🛠 기술 스택
+|역할|종류|
+|-|-|
+|Framework|![React JS](https://img.shields.io/badge/React-black?style=for-the-badge&logo=react&logoColor=white)|
+|Styling|<img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"/>|
+|Programming Language|![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)|
+|Global State-management|![Recoil](https://img.shields.io/badge/Recoil-6DB33F?style=for-the-badge&logo=Recoil&logoColor=white)|
+|Data Fetching|![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white)|
+|Formatting|![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white) ![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=white)|
+|Package Manager|![Yarn](https://img.shields.io/badge/yarn-%232C8EBB.svg?style=for-the-badge&logo=yarn&logoColor=white)|                                             
+|Version Control|![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) |
+<br />
