@@ -1,39 +1,20 @@
 import { useState } from 'react';
-// import { useCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
+import { useMyFollowingUserListQuery } from 'hooks/queries/useMyPage';
 import styled from 'styled-components';
 import backIcon from '../assets/icons/left.svg';
 import profileIcon from '../assets/icons/profile_grey.svg';
 import { AddFollowerButton } from 'components/common/styled-components';
 import { CancelFollowButton } from 'components/common/styled-components';
+import { IUserFollowInfo } from 'types/user';
+import Blank from 'components/common/Blank';
+import { useNavigate } from 'react-router-dom';
 
-interface IUserFollowInfo {
-  userName: string;
-  follower: number;
-  following: number;
-}
 const FollowList = () => {
+  const navigate = useNavigate();
   const [isFollowing, setIsFollowing] = useState<boolean>(true);
-  // const [cookies] = useCookies(['user']);
-  const tempFollowingData = [
-    {
-      userName: 'hihi',
-      userImg: '#',
-      follower: 324,
-      following: 123,
-    },
-    {
-      userName: '맛잘알나야나',
-      userImg: '#',
-      follower: 324,
-      following: 123,
-    },
-    {
-      userName: '이동네내게맡겨',
-      userImg: '#',
-      follower: 324,
-      following: 123,
-    },
-  ];
+  const [cookies] = useCookies(['user']);
+  const { data } = useMyFollowingUserListQuery(cookies.user.userToken);
   const tempFollowersData = [
     {
       userName: '융융이',
@@ -57,54 +38,58 @@ const FollowList = () => {
   return (
     <FollowListLayout>
       <FollowListHeader>
-        <BackIcon src={backIcon} alt="뒤로가기 아이콘" />
+        <BackIcon src={backIcon} alt="뒤로가기 아이콘" onClick={() => navigate(-1)} />
         {/* <h1></h1> */}
       </FollowListHeader>
       <TypeSelectBox>
-        <TypeButton isActive={!isFollowing} onClick={() => setIsFollowing(false)}>
+        {/* <TypeButton isActive={!isFollowing} onClick={() => setIsFollowing(false)}>
           팔로워
-        </TypeButton>
+        </TypeButton> */}
         <TypeButton isActive={isFollowing} onClick={() => setIsFollowing(true)}>
           팔로잉
         </TypeButton>
       </TypeSelectBox>
-      <UsersList>
-        {isFollowing
-          ? tempFollowingData.map((userInfo: IUserFollowInfo) => {
-              return (
-                <UserListItem>
-                  <UserInfoBox>
-                    <UserProfileImg src={profileIcon} alt="기본 프로필 아이콘" />
-                    <UserTextInfo>
-                      <div>{userInfo.userName}</div>
-                      <div id="userSubInfo">
-                        <div>팔로워 {userInfo.follower}</div>
-                        <div>팔로잉 {userInfo.following}</div>
-                      </div>
-                    </UserTextInfo>
-                  </UserInfoBox>
-                  <CancelFollowButton>팔로잉</CancelFollowButton>
-                </UserListItem>
-              );
-            })
-          : tempFollowersData.map((userInfo: IUserFollowInfo) => {
-              return (
-                <UserListItem>
-                  <UserInfoBox>
-                    <UserProfileImg src={profileIcon} alt="기본 프로필 아이콘" />
-                    <UserTextInfo>
-                      <div>{userInfo.userName}</div>
-                      <div id="userSubInfo">
-                        <div>팔로워 {userInfo.follower}</div>
-                        <div>팔로잉 {userInfo.following}</div>
-                      </div>
-                    </UserTextInfo>
-                  </UserInfoBox>
-                  <AddFollowerButton>팔로우</AddFollowerButton>
-                </UserListItem>
-              );
-            })}
-      </UsersList>
+      {data?.result.length !== 0 ? (
+        <UsersList>
+          {isFollowing
+            ? data?.result.map((userInfo: IUserFollowInfo) => {
+                return (
+                  <UserListItem>
+                    <UserInfoBox>
+                      <UserProfileImg src={profileIcon} alt="기본 프로필 아이콘" />
+                      <UserTextInfo>
+                        <div>{userInfo.userName}</div>
+                        <div id="userSubInfo">
+                          <div>팔로워 {userInfo.follower}</div>
+                          <div>팔로잉 {userInfo.following}</div>
+                        </div>
+                      </UserTextInfo>
+                    </UserInfoBox>
+                    <CancelFollowButton>팔로잉</CancelFollowButton>
+                  </UserListItem>
+                );
+              })
+            : tempFollowersData.map((userInfo: IUserFollowInfo) => {
+                return (
+                  <UserListItem>
+                    <UserInfoBox>
+                      <UserProfileImg src={profileIcon} alt="기본 프로필 아이콘" />
+                      <UserTextInfo>
+                        <div>{userInfo.userName}</div>
+                        <div id="userSubInfo">
+                          <div>팔로워 {userInfo.follower}</div>
+                          <div>팔로잉 {userInfo.following}</div>
+                        </div>
+                      </UserTextInfo>
+                    </UserInfoBox>
+                    <AddFollowerButton>팔로우</AddFollowerButton>
+                  </UserListItem>
+                );
+              })}
+        </UsersList>
+      ) : (
+        <Blank message1="팔로우 중인 유저가 없습니다." />
+      )}
     </FollowListLayout>
   );
 };

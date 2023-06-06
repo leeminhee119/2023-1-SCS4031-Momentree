@@ -21,7 +21,7 @@ const PostsByTagPage = lazy(() => import('./pages/PostsByTagPage'));
 const ModifyUserInfo = lazy(() => import('./pages/ModifyUserInfo'));
 const ModifyPassword = lazy(() => import('./pages/ModifyPassword'));
 const Profile = lazy(() => import('./pages/Profile'));
-const FollowList = lazy(() => import('./pages/FollowList'));
+const MyFollowList = lazy(() => import('./pages/MyFollowList'));
 
 import AppLayout from 'components/layout/AppLayout';
 
@@ -63,7 +63,7 @@ export default function App() {
                     <Route path="/post/:postId/edit" element={<EditPost />} />
                     <Route path="/userPage/myBookmarkList" element={<MyBookmarkList />}></Route>
                     <Route path="/userPage/myPostList" element={<MyPostList />}></Route>
-                    <Route path="/userPage/followList" element={<FollowList />}></Route>
+                    <Route path="/userPage/myFollowList" element={<MyFollowList />}></Route>
                     <Route path="/modifyUserInfo" element={<ModifyUserInfo />}></Route>
                     <Route path="/modifyPassword" element={<ModifyPassword />}></Route>
                     <Route path="/user/:userName" element={<Profile />}></Route>
