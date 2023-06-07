@@ -128,7 +128,6 @@ export const useModifyUserMutation = (body: IBody, token: string) => {
 };
 
 export const patchModifyUserInfo = async (body: IBody, token: string) => {
-  console.log('수정된 비밀번호:', body);
   const { data } = await PATCH('/modifyPassword', body, token); // Changed from POST to PATCH
   return data;
 };
