@@ -3,61 +3,63 @@ import styled from 'styled-components';
 import { useParams, useNavigate } from 'react-router-dom';
 import leftIcon from '../assets/icons/left.svg';
 import defaultProfileIcon from '../assets/icons/profile_grey.svg';
-// import { useCookies } from 'react-cookie';
 import PostItem from 'components/common/PostMainItem';
 import { CommunityData } from 'types/communityData';
 import Blank from '../components/common/Blank';
 import Bar from '../components/common/Bar';
 import Loader from 'components/common/Loader';
+import { useGetUserProfile, useGetUserPost } from 'hooks/queries/useUser';
 
 const Profile = () => {
   const { userName } = useParams();
   const navigate = useNavigate();
-  // const [cookies] = useCookies(['user']);
   const target = useRef<HTMLDivElement>(null);
-  // const SIZE = 4;
-  // const [page, setPage] = useState<number>(0);
+  const SIZE = 4;
+  const [page, setPage] = useState<number>(0);
+  let nickName = '';
+  if (userName) {
+    nickName = userName;
+  }
+  const { data: profile } = useGetUserProfile(nickName);
+  const { data: post } = useGetUserPost(page, SIZE, nickName);
   const [isLoading, setIsLoading] = useState(true); // 초기 데이터를 불러오는 로딩
-  // const { data } = useMyBookMarkListQuery(page, SIZE, cookies.user.userToken);
-  // const [communityDataList, setCommunityDataLists] = useState<CommunityData[]>([]);
-  const communityDataList: CommunityData[] = [];
-  const isLoaded = false;
-  // const [isLoaded, setIsLoaded] = useState(false); // 새로운 데이터를 불러오는 로딩
+  const [communityDataList, setCommunityDataLists] = useState<CommunityData[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false); // 새로운 데이터를 불러오는 로딩
 
   useEffect(() => {
     setIsLoading(false);
   }, []);
 
-  // useEffect(() => {
-  //   const result = data?.result.content;
-  //   if (result) {
-  //     setCommunityDataLists([...communityDataList, ...result]);
-  //   }
-  //   setIsLoaded(false);
-  //   setIsLoading(false);
-  // }, [data]);
+  useEffect(() => {
+    const result = post?.result.content;
+    if (result) {
+      setCommunityDataLists([...communityDataList, ...result]);
+    }
+    setIsLoaded(false);
+    setIsLoading(false);
+  }, [post]);
 
-  // const onIntersect = ([entry]: any, observer: { unobserve: (arg0: any) => void; observe: (arg0: any) => void }) => {
-  //   if (entry.isIntersecting && !isLoaded) {
-  //     observer.unobserve(entry.target); // 관찰요소 리셋
-  //     if (page < data?.result.totalPages - 1) {
-  //       setIsLoaded(true);
-  //       setPage((page) => page + 1);
-  //     }
-  //     observer.observe(entry.target); // 다시 관찰요소 지정
-  //   }
-  // };
+  const onIntersect = ([entry]: any, observer: { unobserve: (arg0: any) => void; observe: (arg0: any) => void }) => {
+    if (entry.isIntersecting && !isLoaded) {
+      observer.unobserve(entry.target); // 관찰요소 리셋
+      if (page < post?.result.totalPages - 1) {
+        setIsLoaded(true);
+        setPage((page) => page + 1);
+      }
+      observer.observe(entry.target); // 다시 관찰요소 지정
+    }
+  };
 
-  // useEffect(() => {
-  //   let observer: IntersectionObserver;
-  //   if (target.current) {
-  //     observer = new IntersectionObserver(onIntersect, {
-  //       threshold: 0.2,
-  //     });
-  //     observer.observe(target.current);
-  //   }
-  //   return () => observer && observer.disconnect();
-  // }, [onIntersect]);
+  useEffect(() => {
+    let observer: IntersectionObserver;
+    if (target.current) {
+      observer = new IntersectionObserver(onIntersect, {
+        threshold: 0.2,
+      });
+      observer.observe(target.current);
+    }
+    return () => observer && observer.disconnect();
+  }, [onIntersect]);
 
   return (
     <ProfileContainer>
@@ -78,12 +80,12 @@ const Profile = () => {
         </UserInfo>
         <UserFollower>
           <article>
-            <h1>팔로워</h1>
-            <p>113</p>
+            <h1>글</h1>
+            <p>{profile?.result?.recordCnt}</p>
           </article>
           <article>
-            <h1>팔로잉</h1>
-            <p>83</p>
+            <h1>팔로워</h1>
+            <p>{profile?.result?.follower}</p>
           </article>
         </UserFollower>
       </UserConatiner>
@@ -171,8 +173,8 @@ const UserFollower = styled.section`
   flex-direction: row;
   justify-content: space-between;
 
-  padding: 8px 44px;
-  width: 239px;
+  padding: 8px 30px;
+  width: 18rem;
   border-radius: 8px;
   background-color: ${({ theme }) => theme.colors.gray200};
   ${({ theme }) => theme.fonts.body1};
