@@ -11,11 +11,16 @@ const ModifyPassword = () => {
   const [cookies] = useCookies(['user']);
   const token = cookies?.user?.userToken;
   const [newPassword, setNewPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [isActive, setIsActive] = useState(false);
 
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOldPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setOldPassword(event.target.value);
+  };
+
+  const handleNewPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewPassword(event.target.value);
   };
 
@@ -24,7 +29,7 @@ const ModifyPassword = () => {
     setPasswordError(event.target.value !== newPassword);
   };
 
-  const handleModify = useModifyUserMutation({ password: newPassword }, token); // 사용자 정보를 수정하는 Mutation
+  const handleModify = useModifyUserMutation({ oldPassword: oldPassword, newPassword: newPassword }, token);
 
   useEffect(() => {
     setIsActive(newPassword === confirmPassword && newPassword !== '');
@@ -41,10 +46,17 @@ const ModifyPassword = () => {
         }}>
         <Input
           type="password"
+          name="oldPassword"
+          placeholder="기존 비밀번호를 입력하세요."
+          value={oldPassword}
+          onChange={handleOldPasswordChange}
+        />
+        <Input
+          type="password"
           name="newPassword"
           placeholder="새 비밀번호를 입력하세요"
           value={newPassword}
-          onChange={handlePasswordChange}
+          onChange={handleNewPasswordChange}
         />
         <Input
           type="password"
@@ -102,7 +114,8 @@ const ErrorText = styled.p`
 `;
 
 interface IBody {
-  password: string;
+  oldPassword: string;
+  newPassword: string;
 }
 
 export const useModifyUserMutation = (body: IBody, token: string) => {
@@ -115,7 +128,8 @@ export const useModifyUserMutation = (body: IBody, token: string) => {
 };
 
 export const patchModifyUserInfo = async (body: IBody, token: string) => {
-  const { data } = await PATCH('/modifyPassword/data', body, token); // Changed from POST to PATCH
+  console.log('수정된 비밀번호:', body);
+  const { data } = await PATCH('/modifyPassword', body, token); // Changed from POST to PATCH
   return data;
 };
 export default ModifyPassword;
