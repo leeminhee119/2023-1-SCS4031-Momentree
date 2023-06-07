@@ -15,22 +15,22 @@ const FollowList = () => {
   const [isFollowing, setIsFollowing] = useState<boolean>(true);
   const [cookies] = useCookies(['user']);
   const { data } = useMyFollowingUserListQuery(cookies.user.userToken);
-  const tempFollowersData = [
+  const tempFollowersData: IUserFollowInfo[] = [
     {
-      userName: '융융이',
-      userImg: '#',
+      nickname: '융융이',
+      // userImg: '#',
       follower: 324,
       following: 123,
     },
     {
-      userName: '이구역맛잘알',
-      userImg: '#',
+      nickname: '이구역맛잘알',
+      // userImg: '#',
       follower: 324,
       following: 123,
     },
     {
-      userName: '데이트광',
-      userImg: '#',
+      nickname: '데이트광',
+      // userImg: '#',
       follower: 324,
       following: 123,
     },
@@ -58,7 +58,7 @@ const FollowList = () => {
                     <UserInfoBox>
                       <UserProfileImg src={profileIcon} alt="기본 프로필 아이콘" />
                       <UserTextInfo>
-                        <div>{userInfo.userName}</div>
+                        <div onClick={() => navigate(`/user/${userInfo.nickname}` as const)}>{userInfo.nickname}</div>
                         <div id="userSubInfo">
                           <div>팔로워 {userInfo.follower}</div>
                           <div>팔로잉 {userInfo.following}</div>
@@ -75,7 +75,7 @@ const FollowList = () => {
                     <UserInfoBox>
                       <UserProfileImg src={profileIcon} alt="기본 프로필 아이콘" />
                       <UserTextInfo>
-                        <div>{userInfo.userName}</div>
+                        <div>{userInfo.nickname}</div>
                         <div id="userSubInfo">
                           <div>팔로워 {userInfo.follower}</div>
                           <div>팔로잉 {userInfo.following}</div>

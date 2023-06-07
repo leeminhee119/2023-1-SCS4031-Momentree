@@ -6,6 +6,7 @@ import { useMyFollowingUserListQuery } from 'hooks/queries/useMyPage';
 import { useCookies } from 'react-cookie';
 import { IUserFollowInfo } from 'types/user';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface WriterInfoProps {
   profileImg: string;
@@ -14,6 +15,7 @@ interface WriterInfoProps {
   followerCnt: number;
 }
 const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt }: WriterInfoProps) => {
+  const navigate = useNavigate();
   const [cookies] = useCookies(['user']);
   const postFollow = usePostFollowMutation(
     {
@@ -29,7 +31,7 @@ const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt }: WriterInfo
   useEffect(() => {
     if (data) {
       const copy = data.result.map((user: IUserFollowInfo) => {
-        return user.userName;
+        return user.nickname;
       });
       if (copy.includes(nickname)) {
         setIsFollowing(true);
@@ -46,7 +48,7 @@ const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt }: WriterInfo
       <div>
         <img src={profileImg ? profileImg : defaultProfileIcon} alt="유저 이미지" />
         <Info>
-          <h1>{nickname}</h1>
+          <h1 onClick={() => navigate(`/user/${nickname}`)}>{nickname}</h1>
           <p>
             글 {recordCnt} · 팔로워 {followerCnt}
           </p>
@@ -95,6 +97,7 @@ const Info = styled.article`
   h1 {
     color: ${({ theme }) => theme.colors.gray900};
     ${({ theme }) => theme.fonts.subtitle2};
+    cursor: pointer;
   }
 
   p {

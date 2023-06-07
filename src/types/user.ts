@@ -1,5 +1,5 @@
 export interface IUserFollowInfo {
-  userName: string;
+  nickname: string;
   follower: number;
   following: number;
 }
