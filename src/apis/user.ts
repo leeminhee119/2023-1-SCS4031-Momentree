@@ -15,3 +15,13 @@ export const getUserInfo = async (token: string) => {
   const { data } = await GET(`/userInfo`, token);
   return data;
 };
+
+export const getUserProfile = async (userName: string) => {
+  const { data } = await GET(`/user?nickname=${userName}`);
+  return data;
+};
+
+export const getUserPost = async (page: number, size: number, userName: string) => {
+  const { data } = await GET(`/records?nickname=${userName}&page=${page}&size=${size}`);
+  return data;
+};
