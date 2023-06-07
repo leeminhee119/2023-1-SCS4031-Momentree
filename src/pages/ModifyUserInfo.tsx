@@ -19,7 +19,7 @@ const ModifyUserInfo = () => {
   const { data } = useUserInfoQuery(cookies?.user?.userToken);
   const [modifyInput, setModifyInput] = useState<{ newNickname: string; newImage: File | null }>({
     newNickname: data?.result?.nickname || '',
-    newImage: null,
+    newImage: data?.result?.profileImg || '',
   });
 
   // 이미지 파일을 선택했을 때의 이벤트 핸들러
@@ -160,12 +160,16 @@ interface IBody {
 }
 
 export const patchModifyUserInfo = async (body: IBody, token: string) => {
-  console.log('수정된 데이터는', body);
   const formData = new FormData();
+  // console.log(body);
   formData.append('newNickname', body.newNickname);
-  if (body.newImage) {
-    formData.append('newImage', body.newImage);
-  }
+  // if (body.newImage) {
+  //   formData.append('newImage', body.newImage);
+  // }
+  // console.log(formData.getAll('newNickname')); // newNickname에 해당하는 모든 값을 출력합니다.
+  // if (body.newImage) {
+  //   console.log(formData.getAll('newImage')); // newImage에 해당하는 모든 값을 출력합니다.
+  // }
   const { data } = await PATCH('/modifyUserInfo', formData, token);
   return data;
 };
