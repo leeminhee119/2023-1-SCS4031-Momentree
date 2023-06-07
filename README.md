@@ -6,7 +6,7 @@
 <br />
 
 ## 👩🏻‍💻 프론트엔드 팀원 소개
-|이서영|이민희|송우영|
+|신서영|이민희|송우영|
 |:-:|:-:|:-:|
 |<img src="https://avatars.githubusercontent.com/u/124651984?v=4" width="200px" />|<img src="https://avatars.githubusercontent.com/u/91667853?v=4" width="200px" />|<img src="https://avatars.githubusercontent.com/u/62867581?v=4" width="200px" />|
 |[@banban555](https://github.com/banban555)|[@leeminhee119](https://github.com/leeminhee119)|[@f0rever0](https://github.com/f0rever0)|
