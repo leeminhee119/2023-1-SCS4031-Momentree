@@ -161,15 +161,10 @@ interface IBody {
 
 export const patchModifyUserInfo = async (body: IBody, token: string) => {
   const formData = new FormData();
-  // console.log(body);
   formData.append('newNickname', body.newNickname);
-  // if (body.newImage) {
-  //   formData.append('newImage', body.newImage);
-  // }
-  // console.log(formData.getAll('newNickname')); // newNickname에 해당하는 모든 값을 출력합니다.
-  // if (body.newImage) {
-  //   console.log(formData.getAll('newImage')); // newImage에 해당하는 모든 값을 출력합니다.
-  // }
+  if (body.newImage) {
+    formData.append('newImage', body.newImage);
+  }
   const { data } = await PATCH('/modifyUserInfo', formData, token);
   return data;
 };
