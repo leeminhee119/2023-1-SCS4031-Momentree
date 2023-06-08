@@ -4,33 +4,43 @@ import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import logoIcon from '../assets/logo.png';
 import RegisterButton from 'components/register/RegisterButton';
-import { PATCH } from '../apis/api';
-import { useMutation } from '@tanstack/react-query';
 import { useCookies } from 'react-cookie';
 import { useUserInfoQuery } from 'hooks/queries/useUser';
 import defaultProfileIcon from '../assets/icons/profile_white.svg';
+import { getBase64FromImage } from 'modules/getBase64FromImage';
+import { INewUserImage } from 'types/user';
+import { useModifyUserMutation } from 'hooks/queries/useUser';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ModifyUserInfo = () => {
+  const navigate = useNavigate();
   const [cookies] = useCookies(['user']);
   const { data } = useUserInfoQuery(cookies?.user?.userToken);
   const token = cookies?.user?.userToken;
 
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [modifyInput, setModifyInput] = useState<{ nickname: string; image: File | null }>({
+  const [modifyInput, setModifyInput] = useState<INewUserImage>({
     nickname: data?.result?.nickname || '',
-    image: null,
   });
 
   // 이미지 파일을 선택했을 때의 이벤트 핸들러
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setModifyInput((prev) => ({ ...prev, image: file }));
+      getBase64FromImage(file)
+        .then((base64) => {
+          setModifyInput((prev: INewUserImage) => ({
+            ...prev,
+            imgFormData: base64,
+            fileName: file.name,
+            contentType: file.type,
+          }));
+        })
+        .catch((err) => console.log(err));
     }
   };
 
-  const handleModify = useModifyUserMutation(modifyInput, token);
+  const handleModify = useModifyUserMutation(modifyInput, token, () => navigate(`/`));
 
   // 이 useEffect는 data가 변경될 때마다 실행됩니다. 따라서 data가 로드되면 modifyInput의 nickname을 업데이트합니다.
   useEffect(() => {
@@ -87,7 +97,11 @@ const ModifyUserInfo = () => {
           }
         />
       </ModifyForm>
-      <RegisterButton label="수정완료" isActive={isActive} handleClickSave={() => handleModify.mutate()} />
+      <RegisterButton
+        label="수정완료"
+        isActive={isActive}
+        handleClickSave={() => modifyInput.imgFormData && handleModify.mutate()}
+      />
       <ModifyPassword>
         비밀번호를 변경하고 싶으신가요? <StyledLink to="/modifyPassword">비밀번호 변경</StyledLink>
       </ModifyPassword>
@@ -154,29 +168,5 @@ const UserImage = styled.img`
   border-radius: 50%;
   margin: auto;
 `;
-
-interface IBody {
-  nickname: string;
-  image: File | null;
-}
-
-export const patchModifyUserInfo = async (body: IBody, token: string) => {
-  const formData = new FormData();
-  formData.append('nickname', body.nickname);
-  if (body.image) {
-    formData.append('image', body.image);
-  }
-  const { data } = await PATCH('/modifyUserInfo/data', formData, token);
-  return data;
-};
-
-export const useModifyUserMutation = (body: IBody, token: string) => {
-  const navigator = useNavigate();
-  return useMutation(() => patchModifyUserInfo(body, token), {
-    onSuccess: () => {
-      navigator('/');
-    },
-  });
-};
 
 export default ModifyUserInfo;
