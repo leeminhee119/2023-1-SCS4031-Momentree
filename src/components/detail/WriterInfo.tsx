@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import defaultProfileIcon from '../../assets/icons/profile_white.svg';
 
@@ -8,11 +9,12 @@ interface WriterInfoProps {
   followerCnt: number;
 }
 const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt }: WriterInfoProps) => {
+  const navigate = useNavigate();
   return (
     <WriterInfoContainer>
       <div>
         <img src={profileImg ? profileImg : defaultProfileIcon} alt="유저 이미지" />
-        <Info>
+        <Info onClick={() => navigate(`/user/${nickname}`)}>
           <h1>{nickname}</h1>
           <p>
             글 {recordCnt} · 팔로워 {followerCnt}

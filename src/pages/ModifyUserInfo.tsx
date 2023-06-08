@@ -13,36 +13,35 @@ import defaultProfileIcon from '../assets/icons/profile_white.svg';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ModifyUserInfo = () => {
   const [cookies] = useCookies(['user']);
-  const { data } = useUserInfoQuery(cookies?.user?.userToken);
   const token = cookies?.user?.userToken;
 
   const [isActive, setIsActive] = useState<boolean>(false);
-  const [modifyInput, setModifyInput] = useState<{ nickname: string; image: File | null }>({
-    nickname: data?.result?.nickname || '',
-    image: null,
+  const { data } = useUserInfoQuery(cookies?.user?.userToken);
+  const [modifyInput, setModifyInput] = useState<{ newNickname: string; newImage: File | null }>({
+    newNickname: data?.result?.nickname || '',
+    newImage: data?.result?.profileImg || '',
   });
 
   // 이미지 파일을 선택했을 때의 이벤트 핸들러
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setModifyInput((prev) => ({ ...prev, image: file }));
+      setModifyInput((prev) => ({ ...prev, newImage: file }));
     }
   };
 
   const handleModify = useModifyUserMutation(modifyInput, token);
 
-  // 이 useEffect는 data가 변경될 때마다 실행됩니다. 따라서 data가 로드되면 modifyInput의 nickname을 업데이트합니다.
   useEffect(() => {
     setModifyInput((prev) => ({
       ...prev,
-      nickname: data?.result?.nickname || '',
+      newNickname: data?.result?.nickname || '',
     }));
   }, [data]);
 
   useEffect(() => {
-    const { nickname } = modifyInput;
-    if (nickname !== '') {
+    const { newNickname } = modifyInput;
+    if (newNickname !== '') {
       setIsActive(true);
     } else {
       setIsActive(false);
@@ -57,8 +56,8 @@ const ModifyUserInfo = () => {
       <ModifyForm>
         <UserImage
           src={
-            modifyInput.image
-              ? URL.createObjectURL(modifyInput.image)
+            modifyInput.newImage
+              ? URL.createObjectURL(modifyInput.newImage)
               : data?.result.profileImg
               ? data?.result.profileImg
               : defaultProfileIcon
@@ -70,18 +69,18 @@ const ModifyUserInfo = () => {
           id="upload"
           type="file"
           style={{ display: 'none' }} // 파일 업로드 창을 숨김
-          onChange={handleImageChange} // 파일 선택 시 이벤트 핸들러
+          onChange={handleImageChange} // 파일 선택 시 이벤트 핸들러ㅌ
         />
         <Input
           type="text"
           name="nickname"
           placeholder="변경할 닉네임을 입력해주세요"
-          value={modifyInput.nickname}
+          value={modifyInput.newNickname}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             setModifyInput((prev) => {
               return {
                 ...prev,
-                nickname: event.target.value,
+                newNickname: event.target.value,
               };
             })
           }
@@ -156,17 +155,17 @@ const UserImage = styled.img`
 `;
 
 interface IBody {
-  nickname: string;
-  image: File | null;
+  newNickname: string;
+  newImage: File | null;
 }
 
 export const patchModifyUserInfo = async (body: IBody, token: string) => {
   const formData = new FormData();
-  formData.append('nickname', body.nickname);
-  if (body.image) {
-    formData.append('image', body.image);
+  formData.append('newNickname', body.newNickname);
+  if (body.newImage) {
+    formData.append('newImage', body.newImage);
   }
-  const { data } = await PATCH('/modifyUserInfo/data', formData, token);
+  const { data } = await PATCH('/modifyUserInfo', formData, token);
   return data;
 };
 
