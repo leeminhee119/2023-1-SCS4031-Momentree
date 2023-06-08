@@ -6,7 +6,7 @@ import logoIcon from '../assets/logo.png';
 import RegisterButton from 'components/register/RegisterButton';
 import { useCookies } from 'react-cookie';
 import { useUserInfoQuery } from 'hooks/queries/useUser';
-import defaultProfileIcon from '../assets/icons/profile_white.svg';
+import defaultProfileIcon from '../assets/icons/profile_grey.svg';
 import { getBase64FromImage } from 'modules/getBase64FromImage';
 import { INewUserImage } from 'types/user';
 import { useModifyUserMutation } from 'hooks/queries/useUser';
@@ -50,6 +50,7 @@ const ModifyUserInfo = () => {
       ...prev,
       nickname: data?.result?.nickname || '',
     }));
+    setPreviewImg(() => data?.result.profileImg);
   }, [data]);
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const ModifyUserInfo = () => {
       </LogoRow>
       <ModifyForm>
         <UserImage
-          src={previewImg ? previewImg : data?.result.profileImg ? data?.result.profileImg : defaultProfileIcon}
+          src={previewImg ? previewImg : defaultProfileIcon}
           alt="유저 이미지"
           onClick={() => document.getElementById('upload')?.click()}
         />
