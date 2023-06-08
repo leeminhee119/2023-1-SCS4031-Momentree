@@ -22,6 +22,7 @@ const ModifyUserInfo = () => {
   const [modifyInput, setModifyInput] = useState<INewUserImage>({
     nickname: data?.result?.nickname || '',
   });
+  const [previewImg, setPreviewImg] = useState<string>('');
 
   // 이미지 파일을 선택했을 때의 이벤트 핸들러
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +38,7 @@ const ModifyUserInfo = () => {
           }));
         })
         .catch((err) => console.log(err));
+      setPreviewImg(() => URL.createObjectURL(file));
     }
   };
 
@@ -66,13 +68,7 @@ const ModifyUserInfo = () => {
       </LogoRow>
       <ModifyForm>
         <UserImage
-          src={
-            modifyInput.image
-              ? URL.createObjectURL(modifyInput.image)
-              : data?.result.profileImg
-              ? data?.result.profileImg
-              : defaultProfileIcon
-          }
+          src={previewImg ? previewImg : data?.result.profileImg ? data?.result.profileImg : defaultProfileIcon}
           alt="유저 이미지"
           onClick={() => document.getElementById('upload')?.click()}
         />
@@ -97,11 +93,7 @@ const ModifyUserInfo = () => {
           }
         />
       </ModifyForm>
-      <RegisterButton
-        label="수정완료"
-        isActive={isActive}
-        handleClickSave={() => modifyInput.imgFormData && handleModify.mutate()}
-      />
+      <RegisterButton label="수정완료" isActive={isActive} handleClickSave={() => handleModify.mutate()} />
       <ModifyPassword>
         비밀번호를 변경하고 싶으신가요? <StyledLink to="/modifyPassword">비밀번호 변경</StyledLink>
       </ModifyPassword>
