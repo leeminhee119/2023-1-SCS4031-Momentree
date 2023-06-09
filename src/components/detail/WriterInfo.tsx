@@ -1,15 +1,44 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import defaultProfileIcon from '../../assets/icons/profile_white.svg';
+import { AddFollowerButton, CancelFollowButton } from 'components/common/styled-components';
+import { usePostFollowMutation } from 'hooks/queries/useUser';
+import { useCookies } from 'react-cookie';
+import { useEffect, useState } from 'react';
 
 interface WriterInfoProps {
   profileImg: string;
   nickname: string;
   recordCnt: number;
   followerCnt: number;
+  isFollowing: number;
 }
-const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt }: WriterInfoProps) => {
+
+const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt, isFollowing }: WriterInfoProps) => {
   const navigate = useNavigate();
+  const [cookies] = useCookies(['user']);
+  const postFollow = usePostFollowMutation(
+    {
+      nickname: nickname,
+    },
+    cookies?.user?.userToken
+  );
+
+  const [isFollowingWriter, setIsFollowingWriter] = useState<number>(isFollowing);
+
+  useEffect(() => {
+    if (isFollowing) {
+      setIsFollowingWriter(() => isFollowing);
+    }
+  }, [isFollowing]);
+
+  const handleClickFollowBtn = () => {
+    setIsFollowingWriter(() => {
+      if (isFollowing == 1) return 0;
+      else return 1;
+    });
+    postFollow.mutate();
+  };
   return (
     <WriterInfoContainer>
       <div>
@@ -21,7 +50,16 @@ const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt }: WriterInfo
           </p>
         </Info>
       </div>
-      <AddFollowerButton type="button"> + 팔로우 </AddFollowerButton>
+      {isFollowingWriter == 1 ? (
+        <CancelFollowButton type="button" onClick={handleClickFollowBtn}>
+          팔로잉
+        </CancelFollowButton>
+      ) : (
+        <AddFollowerButton type="button" onClick={handleClickFollowBtn}>
+          {' '}
+          + 팔로우{' '}
+        </AddFollowerButton>
+      )}
     </WriterInfoContainer>
   );
 };
@@ -55,22 +93,11 @@ const Info = styled.article`
   h1 {
     color: ${({ theme }) => theme.colors.gray900};
     ${({ theme }) => theme.fonts.subtitle2};
+    cursor: pointer;
   }
 
   p {
     color: ${({ theme }) => theme.colors.gray400};
     ${({ theme }) => theme.fonts.caption2};
   }
-`;
-
-const AddFollowerButton = styled.button`
-  height: 26px;
-
-  border-radius: 99px;
-  color: ${({ theme }) => theme.colors.gray900};
-  background-color: ${({ theme }) => theme.colors.gray300};
-  ${({ theme }) => theme.fonts.caption1};
-  padding: 0 1rem;
-
-  cursor: pointer;
 `;

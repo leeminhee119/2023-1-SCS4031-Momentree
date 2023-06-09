@@ -16,6 +16,11 @@ export const getUserInfo = async (token: string) => {
   return data;
 };
 
+export const postFollow = async (body: object, token: string) => {
+  const { data } = await POST(`/follow`, body, token);
+  return data;
+};
+
 export const getUserProfile = async (userName: string) => {
   const { data } = await GET(`/user?nickname=${userName}`);
   return data;
