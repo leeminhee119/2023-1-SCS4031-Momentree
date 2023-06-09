@@ -1,10 +1,10 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import defaultProfileIcon from '../../assets/icons/profile_white.svg';
 import { AddFollowerButton, CancelFollowButton } from 'components/common/styled-components';
 import { usePostFollowMutation } from 'hooks/queries/useUser';
 import { useCookies } from 'react-cookie';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface WriterInfoProps {
   profileImg: string;
@@ -13,6 +13,7 @@ interface WriterInfoProps {
   followerCnt: number;
   isFollowing: number;
 }
+
 const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt, isFollowing }: WriterInfoProps) => {
   const navigate = useNavigate();
   const [cookies] = useCookies(['user']);
@@ -42,8 +43,8 @@ const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt, isFollowing 
     <WriterInfoContainer>
       <div>
         <img src={profileImg ? profileImg : defaultProfileIcon} alt="유저 이미지" />
-        <Info>
-          <h1 onClick={() => navigate(`/user/${nickname}`)}>{nickname}</h1>
+        <Info onClick={() => navigate(`/user/${nickname}`)}>
+          <h1>{nickname}</h1>
           <p>
             글 {recordCnt} · 팔로워 {followerCnt}
           </p>

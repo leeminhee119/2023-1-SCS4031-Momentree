@@ -1,11 +1,11 @@
 import { GET } from 'apis/api';
 
-export const getCommunity = async (page: number, size: number, token?: string) => {
+export const getCommunity = async (page: number, size: number, filter: string, token?: string) => {
   if (token) {
-    const { data } = await GET(`/community/login?page=${page}&size=${size}`, token);
+    const { data } = await GET(`/community/login?page=${page}&size=${size}&sort=${filter}`, token);
     return data;
   } else {
-    const { data } = await GET(`/community?page=${page}&size=${size}`);
+    const { data } = await GET(`/community?page=${page}&size=${size}&sort=${filter}`);
     return data;
   }
 };
