@@ -32,7 +32,7 @@ const ModifyUserInfo = () => {
         .then((base64) => {
           setModifyInput((prev: INewUserImage) => ({
             ...prev,
-            imgFormData: base64,
+            profileImg: base64,
             fileName: file.name,
             contentType: file.type,
           }));
