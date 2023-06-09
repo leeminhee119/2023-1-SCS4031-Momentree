@@ -53,7 +53,7 @@ const ModalBackground = styled.div`
   top: 0px;
   width: 43rem;
   margin: 0px auto;
-  min-height: calc(var(--vh) * 100);
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 999;
   padding: 47px 1.6rem 3.2rem;
@@ -97,7 +97,7 @@ const PlaceContent = styled.p`
   border: 1px solid ${({ theme }) => theme.colors.gray400};
   ${({ theme }) => theme.fonts.body1};
   width: 100%;
-  height: 50%;
+  height: 70%;
   margin: 1.5rem 0;
   padding: 1.5rem;
 `;

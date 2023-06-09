@@ -1,60 +1,56 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import defaultProfileIcon from '../../assets/icons/profile_white.svg';
 import { AddFollowerButton, CancelFollowButton } from 'components/common/styled-components';
 import { usePostFollowMutation } from 'hooks/queries/useUser';
-import { useMyFollowingUserListQuery } from 'hooks/queries/useMyPage';
 import { useCookies } from 'react-cookie';
-import { IUserFollowInfo } from 'types/user';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 interface WriterInfoProps {
   profileImg: string;
   nickname: string;
   recordCnt: number;
   followerCnt: number;
+  isFollowing: number;
 }
-const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt }: WriterInfoProps) => {
+
+const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt, isFollowing }: WriterInfoProps) => {
   const navigate = useNavigate();
   const [cookies] = useCookies(['user']);
   const postFollow = usePostFollowMutation(
     {
-      nickName: nickname,
+      nickname: nickname,
     },
     cookies?.user?.userToken
   );
 
-  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [isFollowingWriter, setIsFollowingWriter] = useState<number>(isFollowing);
 
-  //TODO: useCommunityDetailQuery의 데이터에 나의 팔로우 여부 데이터 추가되면 아래 코드 삭제
-  const { data } = useMyFollowingUserListQuery(cookies?.user?.userToken);
   useEffect(() => {
-    if (data) {
-      const copy = data.result.map((user: IUserFollowInfo) => {
-        return user.nickname;
-      });
-      if (copy.includes(nickname)) {
-        setIsFollowing(true);
-      }
+    if (isFollowing) {
+      setIsFollowingWriter(() => isFollowing);
     }
-  }, [data]);
+  }, [isFollowing]);
 
   const handleClickFollowBtn = () => {
-    setIsFollowing(() => !isFollowing);
+    setIsFollowingWriter(() => {
+      if (isFollowing == 1) return 0;
+      else return 1;
+    });
     postFollow.mutate();
   };
   return (
     <WriterInfoContainer>
       <div>
         <img src={profileImg ? profileImg : defaultProfileIcon} alt="유저 이미지" />
-        <Info>
-          <h1 onClick={() => navigate(`/user/${nickname}`)}>{nickname}</h1>
+        <Info onClick={() => navigate(`/user/${nickname}`)}>
+          <h1>{nickname}</h1>
           <p>
             글 {recordCnt} · 팔로워 {followerCnt}
           </p>
         </Info>
       </div>
-      {isFollowing ? (
+      {isFollowingWriter == 1 ? (
         <CancelFollowButton type="button" onClick={handleClickFollowBtn}>
           팔로잉
         </CancelFollowButton>

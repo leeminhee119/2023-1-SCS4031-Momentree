@@ -107,7 +107,7 @@ const NavContainer = styled.section`
   width: 271px;
   background-color: ${({ theme }) => theme.colors.gray100};
   ${({ theme }) => theme.fonts.body1};
-  padding: 47px 1.6rem 3.2rem;
+  padding: 1rem 1.6rem 3.2rem;
 `;
 
 const UserInfo = styled.section`

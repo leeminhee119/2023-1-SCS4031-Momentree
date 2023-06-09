@@ -12,8 +12,8 @@ const Community = () => {
   const target = useRef<HTMLDivElement>(null);
   const SIZE = 2;
   const [page, setPage] = useState<number>(0);
-  const { data } = useCommunityQuery(page, SIZE, cookies?.user?.userToken);
-
+  const [filter, setFilter] = useState<string>('latest');
+  const { data } = useCommunityQuery(page, SIZE, filter, cookies?.user?.userToken);
   const [communityDataList, setCommunityDataLists] = useState<CommunityData[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -24,6 +24,10 @@ const Community = () => {
     }
     setIsLoaded(false);
   }, [data]);
+
+  useEffect(() => {
+    setCommunityDataLists([]);
+  }, [filter]);
 
   const onIntersect = ([entry]: any, observer: { unobserve: (arg0: any) => void; observe: (arg0: any) => void }) => {
     if (entry.isIntersecting && !isLoaded) {
@@ -51,9 +55,12 @@ const Community = () => {
     <CommunityContainer>
       <Label>
         <img src={filterIcon} alt="필터 아이콘"></img>
-        <Filter>
-          <option>최신순</option>
-          <option>인기순</option>
+        <Filter
+          onChange={(e) => {
+            setFilter(e.target.value);
+          }}>
+          <option value={'latest'}>최신순</option>
+          <option value={'popular'}>인기순</option>
         </Filter>
       </Label>
       <CommunityList ref={target} className="Target-Element">

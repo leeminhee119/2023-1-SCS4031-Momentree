@@ -7,7 +7,7 @@ export interface IUserFollowInfo {
 export interface INewUserImage {
   nickname: string;
   image?: File;
-  imgFormData?: string;
+  profileImg?: string;
   fileName?: string;
   contentType?: string;
 }
