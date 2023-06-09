@@ -146,6 +146,7 @@ const Detail = () => {
         nickname={data?.result.nickname}
         recordCnt={data?.result.recordCnt}
         followerCnt={data?.result.followerCnt}
+        isFollowing={data?.result.isFollowing}
       />
       <MapLayout>
         <Map places={data?.result.recordedPlaces} />
