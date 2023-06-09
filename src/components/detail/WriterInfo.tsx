@@ -64,13 +64,13 @@ const Info = styled.article`
 `;
 
 const AddFollowerButton = styled.button`
-  width: 65px;
   height: 26px;
 
   border-radius: 99px;
   color: ${({ theme }) => theme.colors.gray900};
   background-color: ${({ theme }) => theme.colors.gray300};
   ${({ theme }) => theme.fonts.caption1};
+  padding: 0 1rem;
 
   cursor: pointer;
 `;
