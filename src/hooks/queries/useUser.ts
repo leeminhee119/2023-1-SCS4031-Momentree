@@ -80,7 +80,7 @@ export const useUserInfoQuery = (token: string) => {
   return data;
 };
 
-export const usePostFollowMutation = (body: object, token: string) => {
+export const usePostFollowMutation = (body: { nickname: string }, token: string) => {
   return useMutation(() => postFollow(body, token));
 };
 
