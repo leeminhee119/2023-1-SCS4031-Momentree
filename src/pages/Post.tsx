@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import closeIcon from '../assets/icons/close.svg';
-import backIcon from '../assets/icons/back.svg';
+import backIcon from '../assets/icons/left.svg';
 import HorizontalLine from '../components/post/HorizontalLine';
 import DatePicker from '../components/post/DatePicker';
 import Margin from '../components/main/Margin';
@@ -18,6 +18,7 @@ import { recordState } from '\brecoil/atoms/recordState';
 import { usePostMutation } from 'hooks/queries/usePost';
 import { useResetRecoilState } from 'recoil';
 import { useCookies } from 'react-cookie';
+import { getBase64FromImage } from 'modules/getBase64FromImage';
 const Post = () => {
   const navigate = useNavigate();
   // 로그인한 유저 토큰 값 불러오기
@@ -41,20 +42,6 @@ const Post = () => {
   });
 
   const [isSaveActive, setIsSaveActive] = useState<boolean>(false);
-  function getBase64(file: File) {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = function () {
-        // Get base64 string
-        const base64 = reader.result as string;
-        resolve(base64);
-      };
-      reader.onerror = function () {
-        reject(new Error('Error reading file'));
-      };
-      reader.readAsDataURL(file);
-    });
-  }
 
   useEffect(() => {
     const copyPlaces = places.map((place) => ({
@@ -73,12 +60,12 @@ const Post = () => {
         const copyImgObj = { ...imgObj };
 
         if (copyImgObj.imgFile instanceof File) {
-          const promise = getBase64(copyImgObj.imgFile)
+          const promise = getBase64FromImage(copyImgObj.imgFile)
             .then((base64) => {
-              copyImgObj.imgFormData = base64.replace(/^data:image\/[a-z]+;base64,/, '');
+              copyImgObj.imgFormData = base64; //TODO: 혼란 방지 위해 'imgFormData' 명칭을 'base64'로 서버와 함께 변경하는 게 좋을 것 같아요.
               copyImgObj.fileName = copyImgObj.imgFile?.name;
               copyImgObj.contentType = copyImgObj.imgFile?.type;
-              delete copyImgObj.imgFile;
+              delete copyImgObj.imgFile; // 기존 파일 객체를 담던 imgFile은 제거해줍니다.
               return { placeIdx, imgIdx, imgObj: copyImgObj };
             })
             .catch((err) => console.log(err));

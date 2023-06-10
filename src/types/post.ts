@@ -5,7 +5,7 @@ export interface IHashtag {
 export interface IImage {
   orders: number;
   imgFile?: File;
-  imgFormData?: string;
+  imgFormData?: string; //TODO: 혼란 방지 위해 'imgFormData' 명칭을 'base64'로 서버와 함께 변경하는 게 좋을 것 같아요.
   fileName?: string;
   contentType?: string;
 }

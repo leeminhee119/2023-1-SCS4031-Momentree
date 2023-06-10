@@ -4,44 +4,58 @@ import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import logoIcon from '../assets/logo.png';
 import RegisterButton from 'components/register/RegisterButton';
-import { PATCH } from '../apis/api';
-import { useMutation } from '@tanstack/react-query';
 import { useCookies } from 'react-cookie';
 import { useUserInfoQuery } from 'hooks/queries/useUser';
-import defaultProfileIcon from '../assets/icons/profile_white.svg';
+import defaultProfileIcon from '../assets/icons/profile_grey.svg';
+import { getBase64FromImage } from 'modules/getBase64FromImage';
+import { INewUserImage } from 'types/user';
+import { useModifyUserMutation } from 'hooks/queries/useUser';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ModifyUserInfo = () => {
+  const navigate = useNavigate();
   const [cookies] = useCookies(['user']);
+  const { data } = useUserInfoQuery(cookies?.user?.userToken);
   const token = cookies?.user?.userToken;
 
   const [isActive, setIsActive] = useState<boolean>(false);
-  const { data } = useUserInfoQuery(cookies?.user?.userToken);
-  const [modifyInput, setModifyInput] = useState<{ newNickname: string; newImage: File | null }>({
-    newNickname: data?.result?.nickname || '',
-    newImage: data?.result?.profileImg || '',
+  const [modifyInput, setModifyInput] = useState<INewUserImage>({
+    nickname: data?.result?.nickname || '',
   });
+  const [previewImg, setPreviewImg] = useState<string>('');
 
   // 이미지 파일을 선택했을 때의 이벤트 핸들러
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setModifyInput((prev) => ({ ...prev, newImage: file }));
+      getBase64FromImage(file)
+        .then((base64) => {
+          setModifyInput((prev: INewUserImage) => ({
+            ...prev,
+            profileImg: base64,
+            fileName: file.name,
+            contentType: file.type,
+          }));
+        })
+        .catch((err) => console.log(err));
+      setPreviewImg(() => URL.createObjectURL(file));
     }
   };
 
-  const handleModify = useModifyUserMutation(modifyInput, token);
+  const handleModify = useModifyUserMutation(modifyInput, token, () => navigate(`/`));
 
+  // 이 useEffect는 data가 변경될 때마다 실행됩니다. 따라서 data가 로드되면 modifyInput의 nickname을 업데이트합니다.
   useEffect(() => {
     setModifyInput((prev) => ({
       ...prev,
-      newNickname: data?.result?.nickname || '',
+      nickname: data?.result?.nickname || '',
     }));
+    setPreviewImg(() => data?.result.profileImg);
   }, [data]);
 
   useEffect(() => {
-    const { newNickname } = modifyInput;
-    if (newNickname !== '') {
+    const { nickname } = modifyInput;
+    if (nickname !== '') {
       setIsActive(true);
     } else {
       setIsActive(false);
@@ -55,13 +69,7 @@ const ModifyUserInfo = () => {
       </LogoRow>
       <ModifyForm>
         <UserImage
-          src={
-            modifyInput.newImage
-              ? URL.createObjectURL(modifyInput.newImage)
-              : data?.result.profileImg
-              ? data?.result.profileImg
-              : defaultProfileIcon
-          }
+          src={previewImg ? previewImg : defaultProfileIcon}
           alt="유저 이미지"
           onClick={() => document.getElementById('upload')?.click()}
         />
@@ -69,18 +77,18 @@ const ModifyUserInfo = () => {
           id="upload"
           type="file"
           style={{ display: 'none' }} // 파일 업로드 창을 숨김
-          onChange={handleImageChange} // 파일 선택 시 이벤트 핸들러ㅌ
+          onChange={handleImageChange} // 파일 선택 시 이벤트 핸들러
         />
         <Input
           type="text"
           name="nickname"
           placeholder="변경할 닉네임을 입력해주세요"
-          value={modifyInput.newNickname}
+          value={modifyInput.nickname}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
             setModifyInput((prev) => {
               return {
                 ...prev,
-                newNickname: event.target.value,
+                nickname: event.target.value,
               };
             })
           }
@@ -153,29 +161,5 @@ const UserImage = styled.img`
   border-radius: 50%;
   margin: auto;
 `;
-
-interface IBody {
-  newNickname: string;
-  newImage: File | null;
-}
-
-export const patchModifyUserInfo = async (body: IBody, token: string) => {
-  const formData = new FormData();
-  formData.append('newNickname', body.newNickname);
-  if (body.newImage) {
-    formData.append('newImage', body.newImage);
-  }
-  const { data } = await PATCH('/modifyUserInfo', formData, token);
-  return data;
-};
-
-export const useModifyUserMutation = (body: IBody, token: string) => {
-  const navigator = useNavigate();
-  return useMutation(() => patchModifyUserInfo(body, token), {
-    onSuccess: () => {
-      navigator('/');
-    },
-  });
-};
 
 export default ModifyUserInfo;

@@ -17,7 +17,7 @@ const Nav = ({ setIsNavOpen }: NavProps) => {
   const USERPAGE_LIST = [
     { title: '나의 데이트 코스', url: 'userPage/myPostList' },
     { title: '나의 북마크', url: 'userPage/myBookmarkList' },
-    { title: '팔로잉 유저', url: 'userPage/myPostList' },
+    { title: '팔로잉 유저', url: 'userPage/myFollowList' },
   ];
 
   // 로그아웃 처리 함수
@@ -120,7 +120,7 @@ const UserInfo = styled.section`
 const UserImage = styled.img`
   width: 32px;
   height: 32px;
-  border-raidous: 50%;
+  border-radius: 50%;
   margin-right: 10px;
 `;
 
