@@ -15,7 +15,7 @@ import { useModifyUserMutation } from 'hooks/queries/useUser';
 const ModifyUserInfo = () => {
   const navigate = useNavigate();
   const [cookies] = useCookies(['user']);
-  const { data } = useUserInfoQuery(cookies?.user?.userToken);
+  const { data } = useUserInfoQuery(cookies?.user?.userToken, true);
   const token = cookies?.user?.userToken;
 
   const [isActive, setIsActive] = useState<boolean>(false);

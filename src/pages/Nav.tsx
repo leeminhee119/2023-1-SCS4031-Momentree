@@ -4,6 +4,7 @@ import closeIcon from '../assets/icons/close.svg';
 import defaultProfileIcon from '../assets/icons/profile_grey.svg';
 import { useCookies } from 'react-cookie';
 import { useUserInfoQuery } from 'hooks/queries/useUser';
+import { useEffect, useState } from 'react';
 
 interface NavProps {
   setIsNavOpen(state: boolean): void;
@@ -12,7 +13,11 @@ interface NavProps {
 const Nav = ({ setIsNavOpen }: NavProps) => {
   const navigate = useNavigate();
   const [cookies, , removeCookie] = useCookies(['user']);
-  const { data } = useUserInfoQuery(cookies?.user?.userToken);
+  const [isUser, setIsUser] = useState<boolean>(false);
+  useEffect(() => {
+    if (cookies?.user?.userToken) setIsUser(true);
+  }, [cookies]);
+  const { data } = useUserInfoQuery(cookies?.user?.userToken, isUser);
 
   const USERPAGE_LIST = [
     { title: '나의 데이트 코스', url: 'userPage/myPostList' },

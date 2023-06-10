@@ -75,8 +75,10 @@ export const usePostLikekMutation = (record_id: number, body: object, token: str
   });
 };
 
-export const useUserInfoQuery = (token: string) => {
-  const data = useQuery(['getUserInfo'], () => getUserInfo(token));
+export const useUserInfoQuery = (token: string, enabled: boolean) => {
+  const data = useQuery(['getUserInfo'], () => getUserInfo(token), {
+    enabled: enabled,
+  });
   return data;
 };
 
