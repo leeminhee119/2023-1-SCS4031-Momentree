@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useMyFollowingUserListQuery } from 'hooks/queries/useMyPage';
+import { usePostFollowMutation } from 'hooks/queries/useUser';
 import styled from 'styled-components';
 import backIcon from '../assets/icons/left.svg';
 import profileIcon from '../assets/icons/profile_grey.svg';
@@ -12,25 +13,43 @@ import { useNavigate } from 'react-router-dom';
 
 const FollowList = () => {
   const navigate = useNavigate();
-  const [isFollowing, setIsFollowing] = useState<boolean>(true);
   const [cookies] = useCookies(['user']);
+  const [showFollowingList, setShowFollowingList] = useState<boolean>(true);
   const { data } = useMyFollowingUserListQuery(cookies.user.userToken);
+  const [targetUserNickname, setTargetUserNickname] = useState('');
+  const postFollowUnfollowMutation = usePostFollowMutation({ nickname: targetUserNickname }, cookies?.user?.userToken);
+  const [isFollowingUsers, setIsFollowingUsers] = useState<number[]>([]); // 팔로우 여부를 1 또는 0으로 담습니다. 초기엔 전부 1입니다.
+  useEffect(() => {
+    if (data) {
+      setIsFollowingUsers(() => new Array(data?.result.length).fill(1));
+    }
+  }, [data]);
+
+  const handleFollowUnfollow = (nickname: string, userIdx: number) => {
+    const newIsFollowingUsers = isFollowingUsers;
+    if (newIsFollowingUsers[userIdx] == 0) newIsFollowingUsers[userIdx] = 1;
+    else newIsFollowingUsers[userIdx] = 0;
+    setTargetUserNickname(nickname);
+    setIsFollowingUsers(newIsFollowingUsers);
+    postFollowUnfollowMutation.mutateAsync();
+  };
+
   const tempFollowersData: IUserFollowInfo[] = [
     {
       nickname: '융융이',
-      // userImg: '#',
+      imgUrl: '#',
       follower: 324,
       following: 123,
     },
     {
       nickname: '이구역맛잘알',
-      // userImg: '#',
+      imgUrl: '#',
       follower: 324,
       following: 123,
     },
     {
       nickname: '데이트광',
-      // userImg: '#',
+      imgUrl: '#',
       follower: 324,
       following: 123,
     },
@@ -42,21 +61,21 @@ const FollowList = () => {
         {/* <h1></h1> */}
       </FollowListHeader>
       <TypeSelectBox>
-        {/* <TypeButton isActive={!isFollowing} onClick={() => setIsFollowing(false)}>
+        {/* <TypeButton isActive={!showFollowingList} onClick={() => setShowFollowingList(false)}>
           팔로워
         </TypeButton> */}
-        <TypeButton isActive={isFollowing} onClick={() => setIsFollowing(true)}>
+        <TypeButton isActive={showFollowingList} onClick={() => setShowFollowingList(true)}>
           팔로잉
         </TypeButton>
       </TypeSelectBox>
       {data?.result.length !== 0 ? (
         <UsersList>
-          {isFollowing
-            ? data?.result.map((userInfo: IUserFollowInfo) => {
+          {showFollowingList
+            ? data?.result.map((userInfo: IUserFollowInfo, userIdx: number) => {
                 return (
                   <UserListItem>
                     <UserInfoBox>
-                      <UserProfileImg src={profileIcon} alt="기본 프로필 아이콘" />
+                      <UserProfileImg src={userInfo.imgUrl ? userInfo.imgUrl : profileIcon} alt="기본 프로필 아이콘" />
                       <UserTextInfo>
                         <div onClick={() => navigate(`/user/${userInfo.nickname}` as const)}>{userInfo.nickname}</div>
                         <div id="userSubInfo">
@@ -65,7 +84,15 @@ const FollowList = () => {
                         </div>
                       </UserTextInfo>
                     </UserInfoBox>
-                    <CancelFollowButton>팔로잉</CancelFollowButton>
+                    {isFollowingUsers[userIdx] ? (
+                      <CancelFollowButton onClick={() => handleFollowUnfollow(userInfo.nickname, userIdx)}>
+                        팔로잉
+                      </CancelFollowButton>
+                    ) : (
+                      <AddFollowerButton onClick={() => handleFollowUnfollow(userInfo.nickname, userIdx)}>
+                        팔로우
+                      </AddFollowerButton>
+                    )}
                   </UserListItem>
                 );
               })

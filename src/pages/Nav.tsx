@@ -120,7 +120,7 @@ const UserInfo = styled.section`
 const UserImage = styled.img`
   width: 32px;
   height: 32px;
-  border-raidous: 50%;
+  border-radius: 50%;
   margin-right: 10px;
 `;
 
