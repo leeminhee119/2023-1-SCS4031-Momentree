@@ -43,8 +43,7 @@ const Detail = () => {
 
   const handleCopyClipBoard = async () => {
     await navigator.clipboard
-      // TODO base url 추가
-      .writeText(`https://main.dj5b233u1e7ny.amplifyapp.com${location.pathname}`)
+      .writeText(`https://www.datebuzz.net${location.pathname}`)
       .then(() => {
         setIscopyed(true);
         setTimeout(() => {
