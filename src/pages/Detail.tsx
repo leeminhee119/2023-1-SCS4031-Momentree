@@ -85,7 +85,7 @@ const Detail = () => {
               }}
             />
           )}
-          {data?.result.bookMarkStatus ? (
+          {data?.result.isBookmark ? (
             <Icon
               src={clickbookmarkIcon}
               alt="북마크 한 아이콘"
