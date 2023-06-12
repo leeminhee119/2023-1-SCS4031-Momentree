@@ -26,10 +26,10 @@ export const usePostBookmarkMutation = (record_id: number, body: object, token: 
         queryClient.setQueryData(['getCommunityDetail'], () => {
           const previousResult: any = { ...snapshotOfPrevious };
           let result = {};
-          if (previousResult.result.bookMarkStatus === 1) {
-            result = { ...previousResult.result, bookMarkStatus: 0 };
+          if (previousResult.result.isBookmark === 1) {
+            result = { ...previousResult.result, isBookmark: 0 };
           } else {
-            result = { ...previousResult.result, bookMarkStatus: 1 };
+            result = { ...previousResult.result, isBookmark: 1 };
           }
           const data = { result };
           return data;
