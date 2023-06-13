@@ -16,7 +16,7 @@ const Map = ({ places, isEdit }: MapProps) => {
   const { kakao } = window;
   const [isOpenPlace, setIsOpenPlace] = useState<boolean>(false);
   const [clickedMarkerIdx, setClickedMarkerIdx] = useState<number>(0); // 지도에서 클릭한 마커의 인덱스
-  const [markers, setMarkers] = useState<any>([]);
+  const [, setMarkers] = useState<any>([]);
   const [map, setMap] = useState<any>(null);
 
   // 지도를 불러옵니다
@@ -41,9 +41,6 @@ const Map = ({ places, isEdit }: MapProps) => {
   }, []);
 
   useEffect(() => {
-    // 기존 마커 초기화
-    markers.forEach((marker: any) => marker.setMap(null));
-    setMarkers([]);
     // 새 마커 추가
     if (places.length !== 0 && map) {
       addMarker(map);
@@ -51,6 +48,12 @@ const Map = ({ places, isEdit }: MapProps) => {
   }, [places]);
 
   const addMarker = (newMap: any) => {
+    // 기존 마커 초기화
+    setMarkers((markers: any) => {
+      const newMarkers = markers;
+      newMarkers.forEach((marker: any) => marker.setMap(null));
+      return newMarkers;
+    });
     // 마커 이미지
     const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
       imageSize = new kakao.maps.Size(36, 37); // 마커 이미지의 크기
