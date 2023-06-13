@@ -50,16 +50,18 @@ const WriterInfo = ({ profileImg, nickname, recordCnt, followerCnt, isFollowing 
           </p>
         </Info>
       </div>
-      {isFollowingWriter == 1 ? (
-        <CancelFollowButton type="button" onClick={handleClickFollowBtn}>
-          팔로잉
-        </CancelFollowButton>
-      ) : (
-        <AddFollowerButton type="button" onClick={handleClickFollowBtn}>
-          {' '}
-          + 팔로우{' '}
-        </AddFollowerButton>
-      )}
+      {cookies?.user?.nickname !== nickname ? (
+        isFollowingWriter == 1 ? (
+          <CancelFollowButton type="button" onClick={handleClickFollowBtn}>
+            팔로잉
+          </CancelFollowButton>
+        ) : (
+          <AddFollowerButton type="button" onClick={handleClickFollowBtn}>
+            {' '}
+            + 팔로우{' '}
+          </AddFollowerButton>
+        )
+      ) : null}
     </WriterInfoContainer>
   );
 };
