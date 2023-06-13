@@ -9,6 +9,7 @@ import DatePicker from '../components/post/DatePicker';
 import Margin from '../components/main/Margin';
 import Map from 'components/common/Map';
 import KeywordPlaceSearch from 'components/post/KeywordPlaceSearch';
+import PlaceItem from 'components/post/PlaceItem';
 import SaveButton from 'components/common/SaveButton';
 import { useEffect, useState } from 'react';
 import { IEditMainPost, IEditPlaceContent, IEditPlaceOrder } from 'types/editPost';
@@ -151,7 +152,8 @@ const EditPost = () => {
         <DatePicker dateDate={data?.result.dateDate} newDate={newRecordMain.dateDate} setNewDate={setNewRecordMain} />
         <Margin />
         <Map isEdit={true} places={places} />
-        <KeywordPlaceSearch isEdit={true} />
+        <KeywordPlaceSearch />
+        {places.length > 0 && <PlaceItem isEdit={true} />}
         <Margin />
         <ContentTextBox
           placeholder="오늘 데이트가 어땠는지 알려주세요"

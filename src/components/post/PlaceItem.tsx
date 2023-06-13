@@ -116,6 +116,7 @@ export default PlaceItem;
 const PlaceItemContainer = styled.div`
   width: 100%;
   margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

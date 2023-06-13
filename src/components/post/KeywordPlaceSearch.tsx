@@ -6,11 +6,10 @@ import { IRecordedPlace } from 'types/post';
 import { useState } from 'react';
 import searchIcon from '../../assets/icons/search.svg';
 import SearchModal from './SearchModal';
-import PlaceItem from './PlaceItem';
 import { recordedPlacesState } from '\brecoil/atoms/recordedPlacesState';
 import { useRecoilState } from 'recoil';
 
-const KeywordPlaceSearch = ({ isEdit }: { isEdit?: boolean }) => {
+const KeywordPlaceSearch = () => {
   const [results, setResults] = useState<IPlaceKakao[]>([]); // 키워드 검색 결과들을 담는 배열
 
   const [isOpenSearch, setIsOpenSearch] = useState<boolean>(false);
@@ -56,7 +55,7 @@ const KeywordPlaceSearch = ({ isEdit }: { isEdit?: boolean }) => {
           handleClickListItem={handleClickListItem}
         />
       )}
-      {places.length > 0 && <PlaceItem isEdit={isEdit} />}
+      {/* {places.length > 0 && <PlaceItem isEdit={isEdit} />} */}
     </KeywordPlaceSearchLayout>
   );
 };
