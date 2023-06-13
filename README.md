@@ -8,11 +8,15 @@
 ![데이트버즈 최종발표-005](https://github.com/CSID-DGU/2023-1-SCS4031-Momentree/assets/62867581/b9e195fd-9408-4f27-b2b5-0a14f026635f)
 <br />
 
-## 👩🏻‍💻 프론트엔드 팀원 소개
-|신서영|이민희|송우영|
-|:-:|:-:|:-:|
-|<img src="https://avatars.githubusercontent.com/u/124651984?v=4" width="200px" />|<img src="https://avatars.githubusercontent.com/u/91667853?v=4" width="200px" />|<img src="https://avatars.githubusercontent.com/u/62867581?v=4" width="200px" />|
-|[@banban555](https://github.com/banban555)|[@leeminhee119](https://github.com/leeminhee119)|[@f0rever0](https://github.com/f0rever0)|
+## 👩🏻‍💻 팀원 소개
+|신서영|이민희|송우영|이중원|
+|:-:|:-:|:-:|:-:|
+|<img src="https://avatars.githubusercontent.com/u/124651984?v=4" width="200px" />|<img src="https://avatars.githubusercontent.com/u/91667853?v=4" width="200px" />|<img src="https://avatars.githubusercontent.com/u/62867581?v=4" width="200px" />|<img src="https://avatars.githubusercontent.com/u/85065626?v=4" width="200px" />|
+|[@banban555](https://github.com/banban555)|[@leeminhee119](https://github.com/leeminhee119)|[@f0rever0](https://github.com/f0rever0)|[@shoeone96](https://github.com/shoeone96)|
+
+
+[⭐️프론트엔드 repository](https://github.com/CSID-DGU/2023-1-SCS4031-Momentree)
+[⭐️백엔드 repository](https://github.com/CSID-DGU/2023-1-SCS4031-Momentree-2)
 <br />
 
 ## 🛠 기술 스택
