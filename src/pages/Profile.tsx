@@ -75,7 +75,10 @@ const Profile = () => {
       </ProfileListHeader>
       <UserConatiner>
         <UserInfo>
-          <UserImage src={defaultProfileIcon} alt="유저 이미지" />
+          <UserImage
+            src={profile?.result?.profileImg ? profile?.result?.profileImg : defaultProfileIcon}
+            alt="유저 이미지"
+          />
           <UserName>{userName}</UserName>
         </UserInfo>
         <UserFollower>
@@ -162,7 +165,7 @@ const UserInfo = styled.section`
 const UserImage = styled.img`
   width: 32px;
   height: 32px;
-  border-raidous: 50%;
+  border-radius: 50%;
   margin-right: 10px;
 `;
 
