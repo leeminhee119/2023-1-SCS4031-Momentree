@@ -19,6 +19,10 @@ https://github.com/f0rever0/2023-1-SCS4031-Momentree/assets/62867581/fcb92dc6-bc
 [⭐️백엔드 repository](https://github.com/CSID-DGU/2023-1-SCS4031-Momentree-2)
 <br />
 
+## 🏗️ 서비스 아키텍쳐
+<img width="665" alt="image" src="https://github.com/CSID-DGU/2023-1-SCS4031-Momentree/assets/62867581/020cd282-529e-4c1a-af17-b44f1bd5ac0f">
+<br />
+
 ## 🛠 기술 스택
 |역할|종류|
 |-|-|
